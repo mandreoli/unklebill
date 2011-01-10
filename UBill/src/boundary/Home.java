@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JPanel;
 import datatype.Accounts;
+import executor.Login;
+
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
@@ -18,6 +20,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.BevelBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class Home extends BaseBoundary {
@@ -79,10 +83,15 @@ public class Home extends BaseBoundary {
 	private JList getListAccounts() {
 		if (listAccounts == null) {
 			listAccounts = new JList();
-			listAccounts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);			
-			this.accounts = Accounts.loadAccounts("michele");			
-			if (this.accounts.getNumAccounts() > 0)
-				listAccounts.setListData(accounts.getAccountsNames().toArray());
+			listAccounts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			
+			this.accounts = Accounts.loadAccounts(Login.getUsername());			
+			if (this.accounts.getNumAccounts() == 0) {
+				warning("You don't have accounts");
+			}
+			else {
+				listAccounts.setListData(this.accounts.getAccountsNames().toArray());
+			}
 		}
 		return listAccounts;
 	}
@@ -90,6 +99,11 @@ public class Home extends BaseBoundary {
 	private JButton getBtnAdd() {
 		if (btnAdd == null) {
 			btnAdd = new JButton("Add");
+			btnAdd.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new InsertAccount();
+				}
+			});
 			btnAdd.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnAdd.setHorizontalTextPosition(SwingConstants.RIGHT);
 			btnAdd.setIcon(new ImageIcon(getClass().getResource("/icons/used/add16.png")));
@@ -115,6 +129,7 @@ public class Home extends BaseBoundary {
 	private JLabel getListLabel() {
 		if (listLabel == null) {
 			listLabel = new JLabel("Created accounts");
+			listLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			listLabel.setBounds(10, 32, 150, 16);
 		}
 		return listLabel;

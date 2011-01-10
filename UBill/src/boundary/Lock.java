@@ -67,25 +67,6 @@ public class Lock extends BaseBoundary {
 			lockPane.setSize(new Dimension(480, 435));
 			lockPane.setLayout(null);
 			lockPane.add(getLoginPane());
-							
-			lockTitleLabel = new JLabel("Unkle Bill says:");
-			lockTitleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-			lockTitleLabel.setBounds(190, 30, 250, 41);
-			lockPane.add(lockTitleLabel);			
-		}
-		return lockPane;
-	}
-	
-	public void addLoginPane() {
-		this.lockPane.add(getLoginPane());
-	}
-	
-	private JPanel getLoginPane() {
-		if (loginPane == null) {
-			loginPane = new JPanel();			
-			loginPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Login", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
-			loginPane.setBounds(70, 215, 340, 185);			
-			loginPane.setLayout(null);
 			
 			lockLabelImage = new JLabel();
 			lockLabelImage.setBounds(40, 40, 128, 128);
@@ -97,6 +78,27 @@ public class Lock extends BaseBoundary {
 			lockParLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 			lockParLabel.setBounds(190, 65, 250, 117);
 			lockPane.add(lockParLabel);
+			
+			lockTitleLabel = new JLabel("Unkle Bill says:");
+			lockTitleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+			lockTitleLabel.setBounds(190, 30, 250, 41);
+			lockPane.add(lockTitleLabel);			
+		}
+		return lockPane;
+	}
+	
+	public void addLoginPane() {
+		this.lockPane.add(getLoginPane());
+		lockPane.add(lockLabelImage);
+		lockPane.add(lockParLabel);
+	}
+	
+	private JPanel getLoginPane() {
+		if (loginPane == null) {
+			loginPane = new JPanel();			
+			loginPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Login", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
+			loginPane.setBounds(70, 215, 340, 185);			
+			loginPane.setLayout(null);		
 			
 			JLabel nameLabel = new JLabel("Username");
 			nameLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
