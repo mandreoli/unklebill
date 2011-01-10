@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.BevelBorder;
 
 
 public class Home extends BaseBoundary {
@@ -28,7 +29,7 @@ public class Home extends BaseBoundary {
 	private JList listAccounts = null;
 	private JButton btnAdd = null;
 	private JButton btnRemove = null;
-	private JLabel listLabel;
+	private JLabel listLabel = null;
 	
 	
 	public Home(JPanel mainPane) {
@@ -41,9 +42,9 @@ public class Home extends BaseBoundary {
 	public JPanel getHomePane() {
 		if (homePane == null) {
 			homePane = new JPanel();
-			homePane.setBorder(null);
+			homePane.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 			homePane.setLocation(new Point(120, 0));
-			homePane.setSize(new Dimension(480, 432));
+			homePane.setSize(new Dimension(480, 435));
 			homePane.setLayout(null);
 			homePane.add(getManageAccountsPane());
 		}
@@ -91,7 +92,7 @@ public class Home extends BaseBoundary {
 			btnAdd = new JButton("Add");
 			btnAdd.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnAdd.setHorizontalTextPosition(SwingConstants.RIGHT);
-			btnAdd.setIcon(new ImageIcon(Home.class.getResource("/icons/add16.png")));
+			btnAdd.setIcon(new ImageIcon(getClass().getResource("/icons/used/add16.png")));
 			btnAdd.setToolTipText("Add an account");
 			btnAdd.setBounds(10, 202, 75, 29);
 		}
@@ -103,7 +104,7 @@ public class Home extends BaseBoundary {
 			btnRemove = new JButton("Del");			
 			btnRemove.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnRemove.setHorizontalTextPosition(SwingConstants.LEFT);
-			btnRemove.setIcon(new ImageIcon(Home.class.getResource("/icons/de16.png")));
+			btnRemove.setIcon(new ImageIcon(getClass().getResource("/icons/used/del16.png")));
 			btnRemove.setToolTipText("Remove selected account");
 			btnRemove.setBounds(85, 202, 75, 29);
 			btnRemove.setEnabled(false);

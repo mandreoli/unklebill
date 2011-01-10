@@ -7,7 +7,10 @@
   <class name="User" table="USER">
     <id name="user" column="USER">    	
 	</id>
+	<property name="password" column="PASSWORD"/>
     <property name="name" column="NAME"/>
     <property name="surname" column="SURNAME"/>
+    <property name="email" column="EMAIL"/>
+    <property name="auto" column="AUTO"/>
   </class>
 </hibernate-mapping>

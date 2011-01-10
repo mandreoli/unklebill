@@ -68,7 +68,7 @@ public class Account {
 		this.usable = usable;
 	}
 	
-	public boolean getUsable() {
+	public boolean isUsable() {
 		return this.usable;
 	}	
   
@@ -85,7 +85,7 @@ public class Account {
 		Account loaded = (Account)session.createQuery("FROM Account WHERE account='"+account+"'").uniqueResult();		
 		session.getTransaction().commit();		
 		
-		Account a = new Account(loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.getUsable()); 
+		Account a = new Account(loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.isUsable()); 
 		
 		return a;
 	}
