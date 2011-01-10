@@ -1,7 +1,9 @@
-package boundary;
+package executor;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import boundary.SplashScreen;
 
 public class UBill {
 

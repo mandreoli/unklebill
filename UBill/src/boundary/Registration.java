@@ -15,17 +15,26 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 
+import executor.FieldParser;
+import executor.Login;
+
 import store.User;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Registration extends BaseBoundary {
 	
 	private JPanel signinPane = null;
 	private Lock lock = null;
 	private JPanel lockPane = null;
-	private JTextField userText;
-	private JPasswordField pwdText;
-	private JPasswordField pwd2Text;
-	private JTextField nameText;
+	private JTextField userText = null;
+	private JPasswordField pwdText = null;
+	private JPasswordField pwd2Text = null;
+	private JTextField nameText = null;
+	private JButton registerBtn = null;
+	private JButton prevBtn = null;
+	private JLabel signLabelImage = null;
+	private JLabel signParLabel = null;
 	
 	
 	public Registration(JPanel lockPane, Lock lock) {		
@@ -41,10 +50,23 @@ public class Registration extends BaseBoundary {
 			signinPane.setBounds(70, 180, 340, 220);			
 			signinPane.setLayout(null);
 			
-			JButton prevBtn = new JButton("Back");
+			signLabelImage = new JLabel();
+			signLabelImage.setBounds(40, 40, 128, 128);
+			signLabelImage.setIcon(new ImageIcon(getClass().getResource("/icons/used/uRegister.png")));
+			lockPane.add(signLabelImage);
+			
+			signParLabel = new JLabel("<html>Come on! Create your user.<br/>Remember, don't forget<br/>your data!</html>");
+			signParLabel.setVerticalAlignment(SwingConstants.TOP);
+			signParLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+			signParLabel.setBounds(190, 65, 250, 117);
+			lockPane.add(signParLabel);
+			
+			prevBtn = new JButton("Back");
 			prevBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					lockPane.remove(signinPane);
+					lockPane.remove(signLabelImage);
+					lockPane.remove(signParLabel);
 					lock.addLoginPane();
 					lockPane.repaint();
 				}
@@ -54,26 +76,29 @@ public class Registration extends BaseBoundary {
 			prevBtn.setBounds(20, 175, 90, 30);
 			signinPane.add(prevBtn);
 			
-			JButton registerBtn = new JButton("Add");
+			registerBtn = new JButton("Add");
 			registerBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//TODO controllare i campi inseriti
-					
-					User user = new User(userText.getText(), new String(pwdText.getPassword()), nameText.getText(), null, false);
-					user.saveUser();
-					ok(nameText.getText()+" added!");
-					
-					if (Login.checkUser(userText.getText(), pwdText.getPassword())) {
-						Login.login(lock.getMain(), lock.getMainPane(), lockPane);
+					if (Login.checkFreeUser(userText.getText(), pwdText.getPassword())) {
+						User user = new User(userText.getText(), new String(pwdText.getPassword()), nameText.getText(), null, false);					
+						user.saveUser();
+						ok("Congratulations!<br/>"+nameText.getText()+" is with us!");
+						
+						if (Login.checkUser(userText.getText(), pwdText.getPassword())) {
+							Login.login(lock.getMain(), lock.getMainPane(), lockPane);
+						}
+						else
+							fail("Login failed. Check fields!");
 					}
 					else
-						fail("Login failed");
+						fail("Username or password<br/>used by another user!");
 				}
 			});
 			registerBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			registerBtn.setIcon(new ImageIcon(Registration.class.getResource("/icons/used/ok16.png")));
 			registerBtn.setToolTipText("Create new user");
 			registerBtn.setBounds(238, 175, 90, 30);
+			registerBtn.setEnabled(false);
 			signinPane.add(registerBtn);
 			
 			JLabel nameLabel = new JLabel("Name");
@@ -102,6 +127,15 @@ public class Registration extends BaseBoundary {
 			signinPane.add(pwd2Label);
 			
 			nameText = new JTextField();
+			nameText.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if (FieldParser.check(userText.getText(), pwdText.getPassword(), pwd2Text.getPassword(), nameText.getText()))
+						registerBtn.setEnabled(true);
+					else
+						registerBtn.setEnabled(false);
+				}
+			});
 			nameText.setFont(new Font("Lucida Grande", Font.BOLD, 12));
 			nameText.setToolTipText("Your complete name");
 			nameText.setColumns(10);
@@ -109,6 +143,15 @@ public class Registration extends BaseBoundary {
 			signinPane.add(nameText);
 			
 			userText = new JTextField();
+			userText.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if (FieldParser.check(userText.getText(), pwdText.getPassword(), pwd2Text.getPassword(), nameText.getText()))
+						registerBtn.setEnabled(true);
+					else
+						registerBtn.setEnabled(false);
+				}
+			});
 			userText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			userText.setToolTipText("Your username");
 			userText.setBounds(118, 72, 172, 22);
@@ -116,12 +159,30 @@ public class Registration extends BaseBoundary {
 			userText.setColumns(10);
 			
 			pwdText = new JPasswordField();
+			pwdText.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if (FieldParser.check(userText.getText(), pwdText.getPassword(), pwd2Text.getPassword(), nameText.getText()))
+						registerBtn.setEnabled(true);
+					else
+						registerBtn.setEnabled(false);
+				}
+			});
 			pwdText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			pwdText.setToolTipText("Your password");
 			pwdText.setBounds(118, 106, 172, 22);
 			signinPane.add(pwdText);
 			
 			pwd2Text = new JPasswordField();
+			pwd2Text.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if (FieldParser.check(userText.getText(), pwdText.getPassword(), pwd2Text.getPassword(), nameText.getText()))
+						registerBtn.setEnabled(true);
+					else
+						registerBtn.setEnabled(false);
+				}
+			});
 			pwd2Text.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			pwd2Text.setToolTipText("Confirm your password");
 			pwd2Text.setBounds(118, 130, 172, 22);

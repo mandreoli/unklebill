@@ -1,6 +1,10 @@
-package boundary;
+package executor;
 
 import javax.swing.JPanel;
+
+import boundary.Home;
+import boundary.Lock;
+import boundary.Main;
 import store.User;
 
 public class Login {
@@ -18,6 +22,15 @@ public class Login {
 		password = loadedUser.getPassword();
 		
 		return true;
+	}
+	
+	public static boolean checkFreeUser(String user, char[] pwd) {
+		User loadedUser = User.checkFreeUser(user, new String(pwd));
+		
+		if (loadedUser == null)
+			return true;
+		
+		return false;
 	}
 	
 	public static void login(Main main, JPanel mainPane, JPanel panel) {
