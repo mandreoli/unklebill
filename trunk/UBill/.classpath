@@ -14,6 +14,6 @@
 	<classpathentry kind="lib" path="src/util/jdom.jar"/>
 	<classpathentry kind="lib" path="src/util/jta.jar"/>
 	<classpathentry kind="lib" path="src/util/log4j-1.2.11.jar"/>
-	<classpathentry kind="lib" path="src/util/jtattoo.jar"/>
+	<classpathentry kind="lib" path="src/util/iText.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -6,17 +6,23 @@ import util.HibernateUtil;
 public class User {
 	
 	private String user = null;
+	private String password = null;
 	private String name = null;
 	private String surname = null;
+	private String email = null;
+	private boolean auto = false;
 	
 	public User() {
 		
 	}
 	
-	public User(String user, String name, String surname) {
+	public User(String user, String password, String name, String surname, String email, boolean auto) {
 		this.user = user;
+		this.password = password;
 		this.name = name;
 		this.surname = surname;
+		this.email = email;
+		this.auto = auto;
 	}
 
 	public void setUser(String user) {
@@ -25,6 +31,14 @@ public class User {
 
 	public String getUser() {
 		return this.user;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getPassword() {
+		return this.password;
 	}
 
 	public void setName(String name) {
@@ -42,6 +56,22 @@ public class User {
 	public String getSurname() {
 		return this.surname;
 	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setAuto(boolean auto) {
+		this.auto = auto;
+	}
+
+	public boolean isAuto() {
+		return this.auto;
+	}
 	
 	public void saveUser() {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -56,7 +86,7 @@ public class User {
 		User loaded = (User)session.createQuery("FROM User WHERE user='"+user+"'").uniqueResult();		
 		session.getTransaction().commit();		
 		
-		User u = new User(loaded.getUser(), loaded.getName(), loaded.getSurname()); 
+		User u = new User(loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getSurname(), loaded.getEmail(), loaded.isAuto()); 
 		
 		return u;
 	}

@@ -30,7 +30,7 @@ public class Main extends BaseBoundary {
 	private JButton homeBtn = null;
 	private JButton transBtn = null;
 	private JButton exitBtn = null;
-	private JMenuBar menuBar;
+	private JMenuBar menuBar = null;
 	
 	
 	public Main(SplashScreen splash) {
@@ -73,7 +73,9 @@ public class Main extends BaseBoundary {
 		if (mainPane == null) {
 			mainPane = new JPanel();			
 			mainPane.setLayout(new BorderLayout());			
-			mainPane.add(getLeftPane(), BorderLayout.WEST);			
+			mainPane.add(getLeftPane(), BorderLayout.WEST);
+			new Lock(mainPane);
+			mainPane.repaint();
 		}
 		return mainPane;
 	}
@@ -94,11 +96,12 @@ public class Main extends BaseBoundary {
 	private JButton getHomeBtn() {
 		if (homeBtn == null) {
 			homeBtn = new JButton("Home");
-			homeBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+			homeBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			homeBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			homeBtn.setHorizontalTextPosition(SwingConstants.CENTER);
-			homeBtn.setIcon(new ImageIcon(getClass().getResource("/icons/briefcase48.png")));
+			homeBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/brief48.png")));
 			homeBtn.setBounds(10, 10, 100, 80);
+			homeBtn.setEnabled(false);
 			homeBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {					
 					if (mainPane.getComponentCount() > 1)
@@ -114,11 +117,12 @@ public class Main extends BaseBoundary {
 	private JButton getTransBtn() {
 		if (transBtn == null) {
 			transBtn = new JButton("Transactions");
-			transBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+			transBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			transBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			transBtn.setHorizontalTextPosition(SwingConstants.CENTER);
-			transBtn.setIcon(new ImageIcon(getClass().getResource("/icons/wallet48.png")));
+			transBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/coin48.png")));
 			transBtn.setBounds(10, 102, 100, 80);
+			transBtn.setEnabled(false);
 			transBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (mainPane.getComponentCount() > 1)
@@ -135,9 +139,9 @@ public class Main extends BaseBoundary {
 		if (exitBtn == null) {
 			exitBtn = new JButton("Exit");			
 			exitBtn.setToolTipText("Exit from UBill");
-			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
-			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/exit16.png")));
-			exitBtn.setBounds(10, 385, 100, 32);
+			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/exit16.png")));
+			exitBtn.setBounds(10, 395, 100, 32);
 			exitBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int flag = confirm("Are you sure to exit from UBill?");
@@ -155,11 +159,19 @@ public class Main extends BaseBoundary {
 		if (menuBar == null) {
 			menuBar = new JMenuBar();			
 			menuBar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+			
 			JMenu fileMenu = new JMenu("File");
+			fileMenu.setFont(new Font("Lucida Grande", Font.PLAIN, 12));			
 			JMenu helpMenu = new JMenu("?");
+			helpMenu.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			
 			JMenuItem exitMenuItem = new JMenuItem("Exit");			
-			exitMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/exit16.png")));
+			exitMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			exitMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/used/exit16.png")));
 			JMenuItem aboutMenuItem = new JMenuItem("About");
+			aboutMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			aboutMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/used/info16.png")));
+			
 			menuBar.add(fileMenu);
 			menuBar.add(helpMenu);
 			fileMenu.add(exitMenuItem);

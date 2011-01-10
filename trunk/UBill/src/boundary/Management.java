@@ -6,9 +6,7 @@ import java.awt.Point;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JSplitPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-
+import javax.swing.border.BevelBorder;
 
 
 public class Management {
@@ -29,9 +27,9 @@ public class Management {
 	public JPanel getManagePane() {
 		if (managePane == null) {
 			managePane = new JPanel();
-			managePane.setBorder(null);
+			managePane.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 			managePane.setLocation(new Point(120, 0));
-			managePane.setSize(new Dimension(480, 432));
+			managePane.setSize(new Dimension(480, 435));
 			managePane.setLayout(null);
 			managePane.add(getTabbedPane());
 		}
@@ -41,7 +39,7 @@ public class Management {
 	private JTabbedPane getTabbedPane() {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
-			tabbedPane.setLocation(1, 70);
+			tabbedPane.setLocation(2, 68);
 			tabbedPane.setSize(new Dimension(471, 358));
 			tabbedPane.addTab("Monthly", null, getMonthTab(), null);
 			tabbedPane.addTab("Daily", null, getDayTab(), null);
