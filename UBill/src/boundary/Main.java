@@ -10,6 +10,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.swing.BorderFactory;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
@@ -27,7 +29,7 @@ public class Main extends BaseBoundary {
 	private JPanel leftPane = null;
 	private JButton homeBtn = null;
 	private JButton transBtn = null;
-	private JButton exitBtn;
+	private JButton exitBtn = null;
 	private JMenuBar menuBar;
 	
 	
@@ -45,7 +47,7 @@ public class Main extends BaseBoundary {
 	private JFrame getMainFrame() {
 		if (mainFrame == null) {
 			mainFrame = new JFrame();
-			mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/icons/favico.png")));
+			mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/favico.png")));
 			mainFrame.setTitle("UnkleBill v1.0");
 			mainFrame.setSize(new Dimension(this.wWidth, this.wHeight));		
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -69,11 +71,9 @@ public class Main extends BaseBoundary {
 	
 	private JPanel getMainPane() {
 		if (mainPane == null) {
-			mainPane = new JPanel();
-			//mainPane.setSize(new Dimension(this.wWidth, this.wHeight));
-			mainPane.setLayout(new BorderLayout());
-			mainPane.add(getLeftPane(), BorderLayout.WEST);	
-			//new Home(mainPane);
+			mainPane = new JPanel();			
+			mainPane.setLayout(new BorderLayout());			
+			mainPane.add(getLeftPane(), BorderLayout.WEST);			
 		}
 		return mainPane;
 	}
@@ -81,9 +81,9 @@ public class Main extends BaseBoundary {
 	private JPanel getLeftPane() {
 		if (leftPane == null) {			
 			leftPane = new JPanel();
-			leftPane.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-			leftPane.setPreferredSize(new Dimension(120, 431));			
-			leftPane.setLayout(null);			
+			leftPane.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+			leftPane.setLayout(null);
+			leftPane.setPreferredSize(new Dimension(120, 431));				
 			leftPane.add(getHomeBtn());
 			leftPane.add(getTransBtn());
 			leftPane.add(getExitBtn());
@@ -97,18 +97,13 @@ public class Main extends BaseBoundary {
 			homeBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
 			homeBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			homeBtn.setHorizontalTextPosition(SwingConstants.CENTER);
-			homeBtn.setIcon(new ImageIcon(Main.class.getResource("/icons/briefcase48.png")));
+			homeBtn.setIcon(new ImageIcon(getClass().getResource("/icons/briefcase48.png")));
 			homeBtn.setBounds(10, 10, 100, 80);
 			homeBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					//mainPane.remove(mainPane.getComponent(1));					
-					JPanel p = new JPanel();
-					JButton b = new JButton("center");
-					p.setLocation(new Point(120, 0));
-					p.setSize(new Dimension(480, 432));
-					p.setLayout(new BorderLayout());
-					p.add(b, BorderLayout.NORTH);
-					mainPane.add(p, BorderLayout.CENTER);
+				public void actionPerformed(ActionEvent arg0) {					
+					if (mainPane.getComponentCount() > 1)
+						mainPane.remove(mainPane.getComponent(1));					
+					new Home(mainPane);
 					mainPane.repaint();
 				}
 			});
@@ -122,12 +117,13 @@ public class Main extends BaseBoundary {
 			transBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
 			transBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			transBtn.setHorizontalTextPosition(SwingConstants.CENTER);
-			transBtn.setIcon(new ImageIcon(Main.class.getResource("/icons/wallet48.png")));
+			transBtn.setIcon(new ImageIcon(getClass().getResource("/icons/wallet48.png")));
 			transBtn.setBounds(10, 102, 100, 80);
 			transBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					mainPane.remove(mainPane.getComponent(1));
-					//new Management(mainPane);
+				public void actionPerformed(ActionEvent e) {
+					if (mainPane.getComponentCount() > 1)
+						mainPane.remove(mainPane.getComponent(1));
+					new Management(mainPane);
 					mainPane.repaint();
 				}
 			});
@@ -140,10 +136,10 @@ public class Main extends BaseBoundary {
 			exitBtn = new JButton("Exit");			
 			exitBtn.setToolTipText("Exit from UBill");
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
-			exitBtn.setIcon(new ImageIcon(Main.class.getResource("/icons/exit16.png")));
+			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/exit16.png")));
 			exitBtn.setBounds(10, 385, 100, 32);
 			exitBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
+				public void actionPerformed(ActionEvent e) {
 					int flag = confirm("Are you sure to exit from UBill?");
 					if (flag == 0) {
 						getMainFrame().dispose();
@@ -162,14 +158,14 @@ public class Main extends BaseBoundary {
 			JMenu fileMenu = new JMenu("File");
 			JMenu helpMenu = new JMenu("?");
 			JMenuItem exitMenuItem = new JMenuItem("Exit");			
-			exitMenuItem.setIcon(new ImageIcon(Main.class.getResource("/icons/exit16.png")));
+			exitMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/exit16.png")));
 			JMenuItem aboutMenuItem = new JMenuItem("About");
 			menuBar.add(fileMenu);
 			menuBar.add(helpMenu);
 			fileMenu.add(exitMenuItem);
 			helpMenu.add(aboutMenuItem);
 			exitMenuItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
+				public void actionPerformed(ActionEvent e) {
 					int flag = confirm("Are you sure to exit from UBill?");
 					if (flag == 0) {
 						getMainFrame().dispose();
@@ -178,7 +174,7 @@ public class Main extends BaseBoundary {
 				}
 			});
 			aboutMenuItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
+				public void actionPerformed(ActionEvent e) {
 					
 				}
 			});

@@ -32,7 +32,7 @@ public class Home extends BaseBoundary {
 	
 	
 	public Home(JPanel mainPane) {
-		//mainPane.add(getHomePane(), BorderLayout.CENTER);
+		mainPane.add(getHomePane(), BorderLayout.CENTER);
 	}
 	
 	/**
@@ -78,7 +78,6 @@ public class Home extends BaseBoundary {
 	private JList getListAccounts() {
 		if (listAccounts == null) {
 			listAccounts = new JList();
-			//listAccounts.setBounds(10, 50, 150, 148);
 			listAccounts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);			
 			this.accounts = Accounts.loadAccounts("michele");			
 			if (this.accounts.getNumAccounts() > 0)
