@@ -93,7 +93,9 @@ public class Transaction {
 		Transaction loaded = (Transaction)session.createQuery("FROM transaction WHERE id="+id).uniqueResult();		
 		session.getTransaction().commit();		
 		
-		Transaction t = new Transaction(loaded.getId(), loaded.getAccount(), loaded.getEntry(), loaded.getType(), loaded.getPayment(), loaded.getDate()); 
+		Transaction t = null;
+		if (loaded != null)
+			t = new Transaction(loaded.getId(), loaded.getAccount(), loaded.getEntry(), loaded.getType(), loaded.getPayment(), loaded.getDate()); 
 		
 		return t;
 	}
