@@ -15,8 +15,14 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+
+import executor.FieldParser;
+import executor.Login;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Lock extends BaseBoundary {
 	
@@ -28,6 +34,10 @@ public class Lock extends BaseBoundary {
 	private JPasswordField pwdText = null;
 	private Lock lock = null;
 	private Main main = null;
+	private JButton loginBtn = null;
+	private JButton newBtn = null;
+	private JLabel lockTitleLabel = null;
+	private JLabel lockParLabel = null;
 
 	
 	
@@ -56,11 +66,12 @@ public class Lock extends BaseBoundary {
 			lockPane.setLocation(new Point(120, 0));
 			lockPane.setSize(new Dimension(480, 435));
 			lockPane.setLayout(null);
-			lockLabelImage = new JLabel();
-			lockLabelImage.setBounds(176, 40, 128, 128);
-			lockLabelImage.setIcon(new ImageIcon(getClass().getResource("/icons/used/lock128.png")));
-			lockPane.add(lockLabelImage);
-			lockPane.add(getLoginPane());			
+			lockPane.add(getLoginPane());
+							
+			lockTitleLabel = new JLabel("Unkle Bill says:");
+			lockTitleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+			lockTitleLabel.setBounds(190, 30, 250, 41);
+			lockPane.add(lockTitleLabel);			
 		}
 		return lockPane;
 	}
@@ -76,6 +87,17 @@ public class Lock extends BaseBoundary {
 			loginPane.setBounds(70, 215, 340, 185);			
 			loginPane.setLayout(null);
 			
+			lockLabelImage = new JLabel();
+			lockLabelImage.setBounds(40, 40, 128, 128);
+			lockLabelImage.setIcon(new ImageIcon(getClass().getResource("/icons/used/uLock.png")));
+			lockPane.add(lockLabelImage);
+			
+			lockParLabel = new JLabel("<html>Type your username and<br/>password to login!<br/><br/>If you don't have credentials<br/>you can create a new user.</html>");
+			lockParLabel.setVerticalAlignment(SwingConstants.TOP);
+			lockParLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+			lockParLabel.setBounds(190, 65, 250, 117);
+			lockPane.add(lockParLabel);
+			
 			JLabel nameLabel = new JLabel("Username");
 			nameLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			nameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -89,6 +111,15 @@ public class Lock extends BaseBoundary {
 			loginPane.add(pwdLabel);
 			
 			userText = new JTextField();
+			userText.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if (FieldParser.check(userText.getText(), pwdText.getPassword()))
+						loginBtn.setEnabled(true);
+					else
+						loginBtn.setEnabled(false);
+				}
+			});
 			userText.setToolTipText("Your username");
 			userText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			userText.setBounds(118, 41, 172, 22);
@@ -96,33 +127,43 @@ public class Lock extends BaseBoundary {
 			userText.setColumns(10);
 			
 			pwdText = new JPasswordField();
+			pwdText.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if (FieldParser.check(userText.getText(), pwdText.getPassword()))
+						loginBtn.setEnabled(true);
+					else
+						loginBtn.setEnabled(false);
+				}
+			});
 			pwdText.setToolTipText("Your password");
 			pwdText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			pwdText.setBounds(118, 81, 172, 22);
 			loginPane.add(pwdText);
 			
-			JButton loginBtn = new JButton("Login");
+			loginBtn = new JButton("Login");
 			loginBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					//TODO controllare i campi					
+				public void actionPerformed(ActionEvent e) {								
 					if (Login.checkUser(userText.getText(), pwdText.getPassword())) {
 						Login.login(main, mainPane, lockPane);
 					}
 					else
-						fail("Login failed");
+						fail("Login failed. Check fields!");
 				}
 			});
 			loginBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			loginBtn.setIcon(new ImageIcon(Lock.class.getResource("/icons/used/login16.png")));
 			loginBtn.setToolTipText("Login");
 			loginBtn.setBounds(230, 140, 90, 30);
-			loginBtn.setEnabled(true);
+			loginBtn.setEnabled(false);
 			loginPane.add(loginBtn);
 			
-			JButton newBtn = new JButton("New user");
+			newBtn = new JButton("New user");
 			newBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					lockPane.remove(loginPane);
+					lockPane.remove(lockLabelImage);
+					lockPane.remove(lockParLabel);
 					new Registration(lockPane, lock);
 					lockPane.repaint();
 				}

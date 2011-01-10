@@ -19,6 +19,8 @@ import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
+import executor.Login;
+
 public class Main extends BaseBoundary {
 	
 	private int wWidth = 600;
@@ -142,6 +144,7 @@ public class Main extends BaseBoundary {
 	private JButton getStatBtn() {
 		if (statBtn == null) {
 			statBtn = new JButton("Statistics");
+			statBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/stats48.png")));
 			statBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			statBtn.setHorizontalTextPosition(SwingConstants.CENTER);
 			statBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
@@ -154,6 +157,7 @@ public class Main extends BaseBoundary {
 	private JButton getLogoutBtn() {
 		if (logoutBtn == null) {
 			logoutBtn = new JButton("Logout");
+			logoutBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/logout16.png")));
 			logoutBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Login.logout(main, mainPane, (JPanel)mainPane.getComponent(1));

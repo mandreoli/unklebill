@@ -82,4 +82,17 @@ public class User {
 		
 		return u;
 	}
+	
+	public static User checkFreeUser(String user, String password) {		
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		User loaded = (User)session.createQuery("FROM User WHERE user='"+user+"' OR password='"+password+"'").uniqueResult();		
+		session.getTransaction().commit();		
+		
+		User u = null;
+		if (loaded != null)
+			u = new User(loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getEmail(), loaded.isAuto()); 
+		
+		return u;
+	}
 }
