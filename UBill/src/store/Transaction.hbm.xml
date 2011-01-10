@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="store">
+  <class name="Transaction" table="TRANSACTION">
+    <id name="id" column="ID">
+    	<generator class="native"/>
+    </id>
+	<property name="account" column="ACCOUNT"/>
+    <property name="entry" column="ENTRY"/>
+    <property name="type" column="TYPE"/>
+    <property name="payment" column="PAYMENT"/>
+    <property name="date" column="DATE"/>
+  </class>
+</hibernate-mapping>
