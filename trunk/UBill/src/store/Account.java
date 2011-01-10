@@ -85,7 +85,9 @@ public class Account {
 		Account loaded = (Account)session.createQuery("FROM Account WHERE account='"+account+"'").uniqueResult();		
 		session.getTransaction().commit();		
 		
-		Account a = new Account(loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.isUsable()); 
+		Account a = null;
+		if (loaded != null)
+			a = new Account(loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.isUsable()); 
 		
 		return a;
 	}

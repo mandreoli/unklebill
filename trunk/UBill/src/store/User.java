@@ -8,7 +8,6 @@ public class User {
 	private String user = null;
 	private String password = null;
 	private String name = null;
-	private String surname = null;
 	private String email = null;
 	private boolean auto = false;
 	
@@ -16,11 +15,10 @@ public class User {
 		
 	}
 	
-	public User(String user, String password, String name, String surname, String email, boolean auto) {
+	public User(String user, String password, String name, String email, boolean auto) {
 		this.user = user;
 		this.password = password;
 		this.name = name;
-		this.surname = surname;
 		this.email = email;
 		this.auto = auto;
 	}
@@ -49,14 +47,6 @@ public class User {
 		return this.name;
 	}
 
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-	public String getSurname() {
-		return this.surname;
-	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -80,13 +70,15 @@ public class User {
 		session.getTransaction().commit();
 	}
 	
-	public static User loadUser(String user) {		
+	public static User loadUser(String user, String password) {		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		User loaded = (User)session.createQuery("FROM User WHERE user='"+user+"'").uniqueResult();		
+		User loaded = (User)session.createQuery("FROM User WHERE user='"+user+"' AND password='"+password+"'").uniqueResult();		
 		session.getTransaction().commit();		
 		
-		User u = new User(loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getSurname(), loaded.getEmail(), loaded.isAuto()); 
+		User u = null;
+		if (loaded != null)
+			u = new User(loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getEmail(), loaded.isAuto()); 
 		
 		return u;
 	}

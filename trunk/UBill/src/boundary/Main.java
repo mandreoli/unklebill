@@ -31,14 +31,18 @@ public class Main extends BaseBoundary {
 	private JButton transBtn = null;
 	private JButton exitBtn = null;
 	private JMenuBar menuBar = null;
+	private JButton statBtn = null;
+	private JButton logoutBtn = null;
+	private Main main = null;
 	
 	
 	public Main(SplashScreen splash) {
 		this.splash = splash;
+		this.main = this;
 	}
 	
 	public void START() {
-		getMainFrame();
+		getMainFrame().setVisible(true);
 	}
 	
 	/**
@@ -56,6 +60,7 @@ public class Main extends BaseBoundary {
 			mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			mainFrame.setJMenuBar(getMenuBar());
 			mainFrame.setContentPane(getMainPane());
+			enableNavigationButtons(false);
 			mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
 				public void windowClosing(java.awt.event.WindowEvent e) {
 					int flag = confirm("Are you sure to exit from UBill?");
@@ -63,8 +68,7 @@ public class Main extends BaseBoundary {
 						getMainFrame().dispose();
 						splash.dispose();
 				}
-			});
-			mainFrame.setVisible(true);
+			});			
 		}
 		return mainFrame;
 	}
@@ -74,7 +78,7 @@ public class Main extends BaseBoundary {
 			mainPane = new JPanel();			
 			mainPane.setLayout(new BorderLayout());			
 			mainPane.add(getLeftPane(), BorderLayout.WEST);
-			new Lock(mainPane);
+			new Lock(mainPane, this);
 			mainPane.repaint();
 		}
 		return mainPane;
@@ -88,6 +92,8 @@ public class Main extends BaseBoundary {
 			leftPane.setPreferredSize(new Dimension(120, 431));				
 			leftPane.add(getHomeBtn());
 			leftPane.add(getTransBtn());
+			leftPane.add(getStatBtn());
+			leftPane.add(getLogoutBtn());
 			leftPane.add(getExitBtn());
 		}
 		return leftPane;
@@ -100,8 +106,7 @@ public class Main extends BaseBoundary {
 			homeBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			homeBtn.setHorizontalTextPosition(SwingConstants.CENTER);
 			homeBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/brief48.png")));
-			homeBtn.setBounds(10, 10, 100, 80);
-			homeBtn.setEnabled(false);
+			homeBtn.setBounds(10, 6, 100, 80);
 			homeBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {					
 					if (mainPane.getComponentCount() > 1)
@@ -121,8 +126,7 @@ public class Main extends BaseBoundary {
 			transBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			transBtn.setHorizontalTextPosition(SwingConstants.CENTER);
 			transBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/coin48.png")));
-			transBtn.setBounds(10, 102, 100, 80);
-			transBtn.setEnabled(false);
+			transBtn.setBounds(10, 90, 100, 80);
 			transBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (mainPane.getComponentCount() > 1)
@@ -133,6 +137,40 @@ public class Main extends BaseBoundary {
 			});
 		}
 		return transBtn;
+	}
+	
+	private JButton getStatBtn() {
+		if (statBtn == null) {
+			statBtn = new JButton("Statistics");
+			statBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
+			statBtn.setHorizontalTextPosition(SwingConstants.CENTER);
+			statBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			statBtn.setEnabled(false);
+			statBtn.setBounds(10, 178, 100, 80);
+		}
+		return statBtn;
+	}
+	
+	private JButton getLogoutBtn() {
+		if (logoutBtn == null) {
+			logoutBtn = new JButton("Logout");
+			logoutBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Login.logout(main, mainPane, (JPanel)mainPane.getComponent(1));
+				}
+			});
+			logoutBtn.setToolTipText("Logout");
+			logoutBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			logoutBtn.setBounds(10, 270, 100, 32);
+		}
+		return logoutBtn;
+	}
+	
+	public void enableNavigationButtons(boolean flag) {
+		this.homeBtn.setEnabled(flag);
+		this.transBtn.setEnabled(flag);
+		this.statBtn.setEnabled(flag);
+		this.logoutBtn.setEnabled(flag);
 	}
 	
 	private JButton getExitBtn() {
@@ -193,4 +231,5 @@ public class Main extends BaseBoundary {
 		}
 		return menuBar;
 	}
+	
 }

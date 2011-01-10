@@ -18,22 +18,38 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Lock {
+public class Lock extends BaseBoundary {
 	
 	private JPanel lockPane = null;
 	private JPanel loginPane = null;
-	private JPanel signinPane = null; 
+	private JPanel mainPane = null;
 	private JLabel lockLabelImage = null;
-	
+	private JTextField userText = null;
+	private JPasswordField pwdText = null;
+	private Lock lock = null;
+	private Main main = null;
 
-	public Lock(JPanel mainPane) {
-		mainPane.add(getLockPane(), BorderLayout.CENTER);
+	
+	
+	public Lock(JPanel mainPane, Main main) {
+		this.mainPane = mainPane;
+		this.main = main;
+		this.mainPane.add(getLockPane(), BorderLayout.CENTER);
+		this.lock = this;
+	}
+	
+	public JPanel getMainPane() {
+		return this.mainPane;
+	}
+	
+	public Main getMain() {
+		return this.main;
 	}
 	
 	/**
 	 * @wbp.parser.entryPoint
 	 */
-	public JPanel getLockPane() {
+	private JPanel getLockPane() {
 		if (lockPane == null) {
 			lockPane = new JPanel();
 			lockPane.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -49,14 +65,18 @@ public class Lock {
 		return lockPane;
 	}
 	
-	public JPanel getLoginPane() {
+	public void addLoginPane() {
+		this.lockPane.add(getLoginPane());
+	}
+	
+	private JPanel getLoginPane() {
 		if (loginPane == null) {
 			loginPane = new JPanel();			
 			loginPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Login", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
 			loginPane.setBounds(70, 215, 340, 185);			
 			loginPane.setLayout(null);
 			
-			JLabel nameLabel = new JLabel("Name");
+			JLabel nameLabel = new JLabel("Username");
 			nameLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			nameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			nameLabel.setBounds(45, 44, 61, 16);
@@ -68,51 +88,51 @@ public class Lock {
 			pwdLabel.setBounds(45, 84, 61, 16);
 			loginPane.add(pwdLabel);
 			
-			JTextField textField = new JTextField();
-			textField.setToolTipText("Your name");
-			textField.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			textField.setBounds(118, 41, 172, 22);
-			loginPane.add(textField);
-			textField.setColumns(10);
+			userText = new JTextField();
+			userText.setToolTipText("Your username");
+			userText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			userText.setBounds(118, 41, 172, 22);
+			loginPane.add(userText);
+			userText.setColumns(10);
 			
-			JPasswordField passwordField = new JPasswordField();
-			passwordField.setToolTipText("Your password");
-			passwordField.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			passwordField.setBounds(118, 81, 172, 22);
-			loginPane.add(passwordField);
+			pwdText = new JPasswordField();
+			pwdText.setToolTipText("Your password");
+			pwdText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			pwdText.setBounds(118, 81, 172, 22);
+			loginPane.add(pwdText);
 			
 			JButton loginBtn = new JButton("Login");
+			loginBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//TODO controllare i campi					
+					if (Login.checkUser(userText.getText(), pwdText.getPassword())) {
+						Login.login(main, mainPane, lockPane);
+					}
+					else
+						fail("Login failed");
+				}
+			});
 			loginBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			loginBtn.setIcon(new ImageIcon(Lock.class.getResource("/icons/used/login16.png")));
 			loginBtn.setToolTipText("Login");
-			loginBtn.setBounds(230, 138, 90, 30);
-			loginBtn.setEnabled(false);
+			loginBtn.setBounds(230, 140, 90, 30);
+			loginBtn.setEnabled(true);
 			loginPane.add(loginBtn);
 			
 			JButton newBtn = new JButton("New user");
 			newBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					lockPane.remove(loginPane);
-					lockPane.add(getSigninPane());
+					new Registration(lockPane, lock);
 					lockPane.repaint();
 				}
 			});
 			newBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			newBtn.setIcon(new ImageIcon(Lock.class.getResource("/icons/used/sign16.png")));
 			newBtn.setToolTipText("Add a new user");
-			newBtn.setBounds(20, 138, 90, 30);
+			newBtn.setBounds(20, 140, 90, 30);
 			loginPane.add(newBtn);
 		}
 		return loginPane;
-	}
-	
-	public JPanel getSigninPane() {
-		if (signinPane == null) {
-			signinPane = new JPanel();			
-			signinPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "New user", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
-			signinPane.setBounds(70, 215, 340, 185);			
-			signinPane.setLayout(null);
-		}
-		return signinPane;
 	}
 }
