@@ -16,6 +16,10 @@ public abstract class BaseBoundary {
 		JOptionPane.showMessageDialog(new JInternalFrame(), "<html><b>Unkle Bill says:</b><br/>"+message+"</html>", "Success", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/icons/used/uSuccess64.png")));
 	};
 	
+	public void warning(String message) {
+		JOptionPane.showMessageDialog(new JInternalFrame(), "<html><b>Unkle Bill says:</b><br/>"+message+"</html>", "Warning", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/icons/used/uWarning64.png")));
+	};
+	
 	public void fail(String message) {
 		JOptionPane.showMessageDialog(new JInternalFrame(), "<html><b>Unkle Bill says:</b><br/>"+message+"</html>", "Error", JOptionPane.ERROR_MESSAGE, new ImageIcon(getClass().getResource("/icons/used/uError64.png")));
 	};
