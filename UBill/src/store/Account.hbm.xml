@@ -5,8 +5,10 @@
 
 <hibernate-mapping package="store">
   <class name="Account" table="ACCOUNT">
-    <id name="account" column="ACCOUNT">    	
+    <id name="id" column="ID">
+    	<generator class="native"/>
 	</id>
+	<property name="account" column="ACCOUNT"/>
 	<property name="user" column="USER"/>
 	<property name="description" column="DESCRIPTION"/>
     <property name="balance" column="BALANCE"/>

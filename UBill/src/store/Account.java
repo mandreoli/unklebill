@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import util.HibernateUtil;
 
 public class Account {
+	private int id = 0;
 	private String account = null;
 	private String user = null;
 	private String description = null;
@@ -22,6 +23,24 @@ public class Account {
 		this.balance = balance;
 		this.creation = creation;
 		this.usable = usable;
+	}
+	
+	public Account(int id, String account, String user, String description, double balance, String creation, boolean usable) {
+		this.id = id;
+		this.account = account;		
+		this.user = user;
+		this.description = description;
+		this.balance = balance;
+		this.creation = creation;
+		this.usable = usable;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
   
 	public String getAccount() {
@@ -79,6 +98,13 @@ public class Account {
 		session.getTransaction().commit();
 	}
 	
+	public void removeAccount() {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.delete(this);
+		session.getTransaction().commit();
+	}
+	
 	public static Account loadAccount(String account, String user) {		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
@@ -87,7 +113,7 @@ public class Account {
 		
 		Account a = null;
 		if (loaded != null)
-			a = new Account(loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.isUsable()); 
+			a = new Account(loaded.getId(), loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.isUsable()); 
 		
 		return a;
 	}

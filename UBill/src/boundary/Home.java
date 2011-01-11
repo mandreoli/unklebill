@@ -5,8 +5,8 @@ import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JPanel;
 import datatype.Accounts;
+import datatype.Transactions;
 import executor.Login;
-
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
@@ -53,6 +53,13 @@ public class Home extends BaseBoundary {
 			homePane.setSize(new Dimension(480, 435));
 			homePane.setLayout(null);
 			homePane.add(getManageAccountsPane());
+			
+			JLabel userLabel = new JLabel(" "+Login.getFullname());
+			userLabel.setIcon(new ImageIcon(getClass().getResource("/icons/used/user24.png")));
+			userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 24));
+			userLabel.setToolTipText("Logged user");
+			userLabel.setBounds(20, 20, 442, 30);
+			homePane.add(userLabel);
 		}
 		return homePane;
 	}
@@ -68,6 +75,28 @@ public class Home extends BaseBoundary {
 			manageAccountsPane.add(getBtnAdd());
 			manageAccountsPane.add(getListLabel());
 			manageAccountsPane.add(getScrollAccountPane());
+			
+			JButton showBtn = new JButton("");
+			showBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			showBtn.setEnabled(false);
+			showBtn.setToolTipText("Show account details");
+			showBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/viewAccount24.png")));
+			showBtn.setBounds(165, 50, 32, 32);
+			manageAccountsPane.add(showBtn);
+			
+			JButton modBtn = new JButton("");
+			modBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			modBtn.setEnabled(false);
+			modBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/modAccount24.png")));
+			modBtn.setToolTipText("Edit account");
+			modBtn.setBounds(165, 85, 32, 32);
+			manageAccountsPane.add(modBtn);
 		}
 		return manageAccountsPane;
 	}
@@ -102,6 +131,7 @@ public class Home extends BaseBoundary {
 		if (this.accounts.getNumAccounts() > 0) {
 			listAccounts.setListData(this.accounts.getAccountsNames().toArray());
 		}
+		this.homePane.repaint();
 	}
 	
 	private JButton getBtnAdd() {
@@ -125,6 +155,23 @@ public class Home extends BaseBoundary {
 	private JButton getBtnRemove() {
 		if (btnRemove == null) {
 			btnRemove = new JButton("Del");			
+			btnRemove.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (confirm("You are deleting <i>"+listAccounts.getSelectedValue().toString()+"</i>.<br/>Are you sure?") == 0) {
+						String accountaName = accounts.getAccount(listAccounts.getSelectedValue().toString()).getAccount();
+						if (Transactions.loadTransactions(Login.getUsername(), accountaName).getNumTransactions() > 0) {
+							if (abort("You are deleting all<br/>transtactions for this account.<br/>Continue anyway?") == 0) {
+								accounts.getAccount(listAccounts.getSelectedValue().toString()).removeAccount();
+								//TODO cancellare tutte le transazioni dell'account per quell'utente
+							}
+						}
+						else {
+							accounts.getAccount(listAccounts.getSelectedValue().toString()).removeAccount();
+						}
+					}
+					populateListAccounts();					
+				}
+			});
 			btnRemove.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnRemove.setHorizontalTextPosition(SwingConstants.LEFT);
 			btnRemove.setIcon(new ImageIcon(getClass().getResource("/icons/used/del16.png")));
@@ -138,9 +185,10 @@ public class Home extends BaseBoundary {
 	private JLabel getListLabel() {
 		if (listLabel == null) {
 			listLabel = new JLabel("Created accounts");
+			listLabel.setVerticalAlignment(SwingConstants.BOTTOM);
 			listLabel.setIcon(new ImageIcon(Home.class.getResource("/icons/used/accounts16.png")));
 			listLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			listLabel.setBounds(10, 30, 150, 16);
+			listLabel.setBounds(10, 23, 150, 24);
 		}
 		return listLabel;
 	}
