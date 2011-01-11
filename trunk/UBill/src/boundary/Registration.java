@@ -192,6 +192,11 @@ public class Registration extends BaseBoundary {
 			pwd2Text.setToolTipText("Confirm your password");
 			pwd2Text.setBounds(118, 130, 172, 27);
 			signinPane.add(pwd2Text);
+			
+			JLabel iconLabel = new JLabel("");
+			iconLabel.setIcon(new ImageIcon(getClass().getResource("/icons/used/user24.png")));
+			iconLabel.setBounds(10, 20, 24, 24);
+			signinPane.add(iconLabel);
 		}
 		return signinPane;
 	}
