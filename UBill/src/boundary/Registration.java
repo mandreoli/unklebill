@@ -52,7 +52,7 @@ public class Registration extends BaseBoundary {
 			
 			signLabelImage = new JLabel();
 			signLabelImage.setBounds(40, 40, 128, 128);
-			signLabelImage.setIcon(new ImageIcon(getClass().getResource("/icons/used/uRegister.png")));
+			signLabelImage.setIcon(new ImageIcon(getClass().getResource("/icons/uRegister.png")));
 			lockPane.add(signLabelImage);
 			
 			signParLabel = new JLabel("<html>Come on! Create your user.<br/>Remember, don't forget<br/>your data!</html>");
@@ -72,7 +72,7 @@ public class Registration extends BaseBoundary {
 				}
 			});
 			prevBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			prevBtn.setIcon(new ImageIcon(Registration.class.getResource("/icons/used/prev16.png")));			
+			prevBtn.setIcon(new ImageIcon(Registration.class.getResource("/icons/prev16.png")));			
 			prevBtn.setBounds(20, 175, 90, 30);
 			signinPane.add(prevBtn);
 			
@@ -95,7 +95,7 @@ public class Registration extends BaseBoundary {
 				}
 			});
 			registerBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			registerBtn.setIcon(new ImageIcon(Registration.class.getResource("/icons/used/ok16.png")));
+			registerBtn.setIcon(new ImageIcon(Registration.class.getResource("/icons/ok16.png")));
 			registerBtn.setToolTipText("Create new user");
 			registerBtn.setBounds(238, 175, 90, 30);
 			registerBtn.setEnabled(false);
@@ -190,11 +190,11 @@ public class Registration extends BaseBoundary {
 			});
 			pwd2Text.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			pwd2Text.setToolTipText("Confirm your password");
-			pwd2Text.setBounds(118, 130, 172, 27);
+			pwd2Text.setBounds(118, 132, 172, 27);
 			signinPane.add(pwd2Text);
 			
 			JLabel iconLabel = new JLabel("");
-			iconLabel.setIcon(new ImageIcon(getClass().getResource("/icons/used/user24.png")));
+			iconLabel.setIcon(new ImageIcon(getClass().getResource("/icons/user24.png")));
 			iconLabel.setBounds(10, 20, 24, 24);
 			signinPane.add(iconLabel);
 		}

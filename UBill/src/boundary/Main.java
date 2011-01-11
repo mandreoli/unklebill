@@ -121,7 +121,7 @@ public class Main extends BaseBoundary {
 			homeBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			homeBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			homeBtn.setHorizontalTextPosition(SwingConstants.CENTER);
-			homeBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/brief48.png")));
+			homeBtn.setIcon(new ImageIcon(getClass().getResource("/icons/brief48.png")));
 			homeBtn.setBounds(10, 6, 100, 80);
 			homeBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {					
@@ -141,7 +141,7 @@ public class Main extends BaseBoundary {
 			transBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			transBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			transBtn.setHorizontalTextPosition(SwingConstants.CENTER);
-			transBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/coin48.png")));
+			transBtn.setIcon(new ImageIcon(getClass().getResource("/icons/coin48.png")));
 			transBtn.setBounds(10, 90, 100, 80);
 			transBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -158,7 +158,7 @@ public class Main extends BaseBoundary {
 	private JButton getStatBtn() {
 		if (statBtn == null) {
 			statBtn = new JButton("Statistics");
-			statBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/stats48.png")));
+			statBtn.setIcon(new ImageIcon(getClass().getResource("/icons/stats48.png")));
 			statBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			statBtn.setHorizontalTextPosition(SwingConstants.CENTER);
 			statBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
@@ -171,7 +171,7 @@ public class Main extends BaseBoundary {
 	private JButton getLogoutBtn() {
 		if (logoutBtn == null) {
 			logoutBtn = new JButton("Logout");
-			logoutBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/logout16.png")));
+			logoutBtn.setIcon(new ImageIcon(getClass().getResource("/icons/logout16.png")));
 			logoutBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Login.logout(main, mainPane, (JPanel)mainPane.getComponent(1));
@@ -196,7 +196,7 @@ public class Main extends BaseBoundary {
 			exitBtn = new JButton("Exit");			
 			exitBtn.setToolTipText("Exit from UBill");
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/exit16.png")));
+			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/exit16.png")));
 			exitBtn.setBounds(10, 395, 100, 32);
 			exitBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -223,10 +223,10 @@ public class Main extends BaseBoundary {
 			
 			JMenuItem exitMenuItem = new JMenuItem("Exit");			
 			exitMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			exitMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/used/exit16.png")));
+			exitMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/exit16.png")));
 			JMenuItem aboutMenuItem = new JMenuItem("About");
 			aboutMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			aboutMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/used/info16.png")));
+			aboutMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/info16.png")));
 			
 			menuBar.add(fileMenu);
 			menuBar.add(helpMenu);

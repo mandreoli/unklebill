@@ -158,7 +158,7 @@ public class InsertAccount extends BaseBoundary {
 				}
 			});
 			exitBtn.setToolTipText("Back to home");
-			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/error16.png")));
+			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/error16.png")));
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			exitBtn.setBounds(20, 183, 90, 30);
 		}
@@ -181,7 +181,7 @@ public class InsertAccount extends BaseBoundary {
 				}
 			});
 			saveBtn.setToolTipText("Add new account");
-			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/ok16.png")));
+			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/ok16.png")));
 			saveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			saveBtn.setLocation(210, 183);
 			saveBtn.setEnabled(false);

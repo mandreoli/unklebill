@@ -55,7 +55,7 @@ public class Home extends BaseBoundary {
 			homePane.add(getManageAccountsPane());
 			
 			JLabel userLabel = new JLabel(" "+Login.getFullname());
-			userLabel.setIcon(new ImageIcon(getClass().getResource("/icons/used/user24.png")));
+			userLabel.setIcon(new ImageIcon(getClass().getResource("/icons/user24.png")));
 			userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 24));
 			userLabel.setToolTipText("Logged user");
 			userLabel.setBounds(20, 20, 442, 30);
@@ -83,7 +83,7 @@ public class Home extends BaseBoundary {
 			});
 			showBtn.setEnabled(false);
 			showBtn.setToolTipText("Show account details");
-			showBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/viewAccount24.png")));
+			showBtn.setIcon(new ImageIcon(getClass().getResource("/icons/viewAccount24.png")));
 			showBtn.setBounds(165, 50, 32, 32);
 			manageAccountsPane.add(showBtn);
 			
@@ -93,7 +93,7 @@ public class Home extends BaseBoundary {
 				}
 			});
 			modBtn.setEnabled(false);
-			modBtn.setIcon(new ImageIcon(getClass().getResource("/icons/used/modAccount24.png")));
+			modBtn.setIcon(new ImageIcon(getClass().getResource("/icons/modAccount24.png")));
 			modBtn.setToolTipText("Edit account");
 			modBtn.setBounds(165, 85, 32, 32);
 			manageAccountsPane.add(modBtn);
@@ -145,7 +145,7 @@ public class Home extends BaseBoundary {
 			});
 			btnAdd.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnAdd.setHorizontalTextPosition(SwingConstants.RIGHT);
-			btnAdd.setIcon(new ImageIcon(getClass().getResource("/icons/used/add16.png")));
+			btnAdd.setIcon(new ImageIcon(getClass().getResource("/icons/add16.png")));
 			btnAdd.setToolTipText("Add an account");
 			btnAdd.setBounds(10, 200, 75, 29);
 		}
@@ -174,7 +174,7 @@ public class Home extends BaseBoundary {
 			});
 			btnRemove.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnRemove.setHorizontalTextPosition(SwingConstants.LEFT);
-			btnRemove.setIcon(new ImageIcon(getClass().getResource("/icons/used/del16.png")));
+			btnRemove.setIcon(new ImageIcon(getClass().getResource("/icons/del16.png")));
 			btnRemove.setToolTipText("Remove selected account");
 			btnRemove.setBounds(85, 200, 75, 29);
 			btnRemove.setEnabled(false);
@@ -186,7 +186,7 @@ public class Home extends BaseBoundary {
 		if (listLabel == null) {
 			listLabel = new JLabel("Created accounts");
 			listLabel.setVerticalAlignment(SwingConstants.BOTTOM);
-			listLabel.setIcon(new ImageIcon(Home.class.getResource("/icons/used/accounts16.png")));
+			listLabel.setIcon(new ImageIcon(Home.class.getResource("/icons/accounts16.png")));
 			listLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			listLabel.setBounds(10, 23, 150, 24);
 		}
