@@ -70,7 +70,7 @@ public class Lock extends BaseBoundary {
 			
 			lockLabelImage = new JLabel();
 			lockLabelImage.setBounds(40, 40, 128, 128);
-			lockLabelImage.setIcon(new ImageIcon(getClass().getResource("/icons/used/uLock.png")));
+			lockLabelImage.setIcon(new ImageIcon(getClass().getResource("/icons/uLock.png")));
 			lockPane.add(lockLabelImage);
 			
 			lockParLabel = new JLabel("<html>Type your username and<br/>password to login!<br/><br/>If you don't have credentials<br/>you can create a new user.</html>");
@@ -156,7 +156,7 @@ public class Lock extends BaseBoundary {
 				}
 			});
 			loginBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			loginBtn.setIcon(new ImageIcon(Lock.class.getResource("/icons/used/login16.png")));
+			loginBtn.setIcon(new ImageIcon(Lock.class.getResource("/icons/login16.png")));
 			loginBtn.setToolTipText("Login");
 			loginBtn.setBounds(230, 140, 90, 30);
 			loginBtn.setEnabled(false);
@@ -173,7 +173,7 @@ public class Lock extends BaseBoundary {
 				}
 			});
 			newBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			newBtn.setIcon(new ImageIcon(Lock.class.getResource("/icons/used/sign16.png")));
+			newBtn.setIcon(new ImageIcon(Lock.class.getResource("/icons/sign16.png")));
 			newBtn.setToolTipText("Add a new user");
 			newBtn.setBounds(20, 140, 90, 30);
 			loginPane.add(newBtn);
