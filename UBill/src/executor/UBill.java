@@ -2,13 +2,13 @@ package executor;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
 import boundary.SplashScreen;
 
 public class UBill {
 
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {		
-		try {			
+		try {
+			//UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception e) {
         	UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");

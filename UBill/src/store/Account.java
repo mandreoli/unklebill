@@ -1,6 +1,8 @@
 package store;
 
 import org.hibernate.Session;
+
+import datatype.Accounts;
 import util.HibernateUtil;
 
 public class Account {
@@ -92,6 +94,24 @@ public class Account {
 	}	
   
 	public void saveAccount() {
+		Accounts accounts = Accounts.loadAccounts(this.getUser());
+		
+		if (this.isUsable() == true) {
+			for (Account a : accounts.getAccounts()) {
+				if (a.isUsable()) {
+					a.setUsable(false);
+					Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+					session.beginTransaction();
+					session.update(a);
+					session.getTransaction().commit();
+				}
+			}
+		}
+		else {
+			if (accounts.getNumAccounts() == 0)
+				this.setUsable(true);
+		}
+		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		session.save(this);
@@ -109,6 +129,19 @@ public class Account {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		Account loaded = (Account)session.createQuery("FROM Account WHERE account='"+account+"' AND user='"+user+"'").uniqueResult();		
+		session.getTransaction().commit();		
+		
+		Account a = null;
+		if (loaded != null)
+			a = new Account(loaded.getId(), loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.isUsable()); 
+		
+		return a;
+	}
+	
+	public static Account loadDefaultAccount(String user) {		
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		Account loaded = (Account)session.createQuery("FROM Account WHERE user='"+user+"' AND usable=true").uniqueResult();		
 		session.getTransaction().commit();		
 		
 		Account a = null;
