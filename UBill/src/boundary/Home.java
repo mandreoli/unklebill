@@ -62,7 +62,7 @@ public class Home extends BaseBoundary {
 			manageAccountsPane = new JPanel();
 			manageAccountsPane.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
 			manageAccountsPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Manage accounts", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
-			manageAccountsPane.setBounds(6, 189, 468, 237);
+			manageAccountsPane.setBounds(6, 195, 468, 235);
 			manageAccountsPane.setLayout(null);			
 			manageAccountsPane.add(getBtnRemove());
 			manageAccountsPane.add(getBtnAdd());
@@ -75,7 +75,7 @@ public class Home extends BaseBoundary {
 	private JScrollPane getScrollAccountPane() {
 		if (scrollAccountPane == null) {
 			scrollAccountPane = new JScrollPane();
-			scrollAccountPane.setBounds(10, 52, 150, 148);
+			scrollAccountPane.setBounds(10, 50, 150, 148);
 			scrollAccountPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			scrollAccountPane.setViewportView(getListAccounts());
 		}
@@ -117,7 +117,7 @@ public class Home extends BaseBoundary {
 			btnAdd.setHorizontalTextPosition(SwingConstants.RIGHT);
 			btnAdd.setIcon(new ImageIcon(getClass().getResource("/icons/used/add16.png")));
 			btnAdd.setToolTipText("Add an account");
-			btnAdd.setBounds(10, 202, 75, 29);
+			btnAdd.setBounds(10, 200, 75, 29);
 		}
 		return btnAdd;
 	}
@@ -129,7 +129,7 @@ public class Home extends BaseBoundary {
 			btnRemove.setHorizontalTextPosition(SwingConstants.LEFT);
 			btnRemove.setIcon(new ImageIcon(getClass().getResource("/icons/used/del16.png")));
 			btnRemove.setToolTipText("Remove selected account");
-			btnRemove.setBounds(85, 202, 75, 29);
+			btnRemove.setBounds(85, 200, 75, 29);
 			btnRemove.setEnabled(false);
 		}
 		return btnRemove;
@@ -138,8 +138,9 @@ public class Home extends BaseBoundary {
 	private JLabel getListLabel() {
 		if (listLabel == null) {
 			listLabel = new JLabel("Created accounts");
+			listLabel.setIcon(new ImageIcon(Home.class.getResource("/icons/used/accounts16.png")));
 			listLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			listLabel.setBounds(10, 32, 150, 16);
+			listLabel.setBounds(10, 30, 150, 16);
 		}
 		return listLabel;
 	}
