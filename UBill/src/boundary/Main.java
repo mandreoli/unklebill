@@ -19,6 +19,8 @@ import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
+import datatype.Users;
+
 import executor.Login;
 
 public class Main extends BaseBoundary {
@@ -61,8 +63,7 @@ public class Main extends BaseBoundary {
 			mainFrame.setResizable(false);
 			mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			mainFrame.setJMenuBar(getMenuBar());
-			mainFrame.setContentPane(getMainPane());
-			enableNavigationButtons(false);
+			mainFrame.setContentPane(getMainPane());			
 			mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
 				public void windowClosing(java.awt.event.WindowEvent e) {
 					int flag = confirm("Are you sure to exit from UBill?");
@@ -80,7 +81,20 @@ public class Main extends BaseBoundary {
 			mainPane = new JPanel();			
 			mainPane.setLayout(new BorderLayout());			
 			mainPane.add(getLeftPane(), BorderLayout.WEST);
-			new Lock(mainPane, this);
+			enableNavigationButtons(false);
+			Users users = Users.loadUsers();
+			if (users.getNumUsers() == 1) {
+				if (!users.getUsers().getFirst().isAuto())
+					new Lock(mainPane, this);
+				else {
+					Login.setUsername(users.getUsers().getFirst().getUser());
+					Login.setPassword(users.getUsers().getFirst().getPassword());
+					Login.login(main, mainPane, new JPanel());				
+				}
+			}
+			else
+				new Lock(mainPane, this);
+			
 			mainPane.repaint();
 		}
 		return mainPane;

@@ -22,6 +22,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.BevelBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 
 public class Home extends BaseBoundary {
@@ -82,18 +84,24 @@ public class Home extends BaseBoundary {
 	
 	private JList getListAccounts() {
 		if (listAccounts == null) {
-			listAccounts = new JList();
+			listAccounts = new JList();			
 			listAccounts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			
-			this.accounts = Accounts.loadAccounts(Login.getUsername());			
-			if (this.accounts.getNumAccounts() == 0) {
-				warning("You don't have accounts");
-			}
-			else {
-				listAccounts.setListData(this.accounts.getAccountsNames().toArray());
-			}
+			listAccounts.addListSelectionListener(new ListSelectionListener() {
+				public void valueChanged(ListSelectionEvent e) {
+					if (listAccounts.getSelectedIndex() > -1)
+						btnRemove.setEnabled(true);
+				}
+			});			
+			populateListAccounts();
 		}
 		return listAccounts;
+	}
+	
+	private void populateListAccounts() {
+		this.accounts = Accounts.loadAccounts(Login.getUsername());			
+		if (this.accounts.getNumAccounts() > 0) {
+			listAccounts.setListData(this.accounts.getAccountsNames().toArray());
+		}
 	}
 	
 	private JButton getBtnAdd() {
@@ -102,6 +110,7 @@ public class Home extends BaseBoundary {
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					new InsertAccount();
+					populateListAccounts();
 				}
 			});
 			btnAdd.setFont(new Font("Lucida Grande", Font.PLAIN, 12));

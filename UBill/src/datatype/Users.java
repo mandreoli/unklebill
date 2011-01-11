@@ -18,7 +18,7 @@ public class Users {
 		this.users = users;
 	}
 	
-	public LinkedList<User> getUserss() {
+	public LinkedList<User> getUsers() {
 		return this.users;
 	}
 	
