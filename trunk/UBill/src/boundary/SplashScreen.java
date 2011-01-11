@@ -75,7 +75,7 @@ public class SplashScreen extends JWindow {
         	Main main = new Main(this);
     		main.START();    		
         } catch (Exception e) {
-        	System.err.println("Error: splahscreen");
+        	System.err.println("Error: splahscreen\n"+e);
         	this.dispose();
         }
         setVisible(false); 

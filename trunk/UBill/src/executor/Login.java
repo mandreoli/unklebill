@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import boundary.Home;
 import boundary.Lock;
 import boundary.Main;
+import store.Account;
 import store.User;
 
 public class Login {
@@ -12,6 +13,7 @@ public class Login {
 	private static String username = null;
 	private static String password = null;
 	private static String fullname = null;
+	private static Account account = null;
 	
 	public static boolean checkUser(String user, char[] pwd) {
 		User loadedUser = User.loadUser(user, new String(pwd));
@@ -74,5 +76,13 @@ public class Login {
 
 	public static String getFullname() {
 		return fullname;
+	}
+
+	public static void setAccount(Account account) {
+		Login.account = account;
+	}
+
+	public static Account getAccount() {
+		return account;
 	}
 }

@@ -24,6 +24,7 @@ import executor.Login;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JCheckBox;
 
 
 
@@ -40,6 +41,7 @@ public class InsertAccount extends BaseBoundary {
 	private JTextArea descrText = null;
 	private Color errorColor = new Color(255, 99, 99);
 	private Color normalColor = new Color(255, 255, 255);
+	private JCheckBox primaryBox = null;
 
 	
 	
@@ -145,6 +147,7 @@ public class InsertAccount extends BaseBoundary {
 			balanceText.setColumns(10);
 			balanceText.setBounds(120, 131, 90, 27);
 			mainPane.add(balanceText);
+			mainPane.add(getPrimaryBox());
 		}
 		return mainPane;
 	}
@@ -171,7 +174,7 @@ public class InsertAccount extends BaseBoundary {
 			saveBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (Account.loadAccount(nameText.getText(), Login.getUsername()) == null) {
-						Account account = new Account(nameText.getText(), Login.getUsername(), descrText.getText(), Double.valueOf(balanceText.getText()), null, false);
+						Account account = new Account(nameText.getText(), Login.getUsername(), descrText.getText(), Double.valueOf(balanceText.getText()), null, primaryBox.isSelected());
 						account.saveAccount();
 						ok("Account added<br/>with success.");
 						mainDialog.dispose();
@@ -198,6 +201,18 @@ public class InsertAccount extends BaseBoundary {
 		else {
 			saveBtn.setEnabled(false);
 		}
+	}
+	
+	private JCheckBox getPrimaryBox() {
+		if (primaryBox == null) {
+			primaryBox = new JCheckBox("Primary");
+			primaryBox.setToolTipText("Set default account");
+			primaryBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			primaryBox.setHorizontalTextPosition(SwingConstants.LEFT);
+			primaryBox.setHorizontalAlignment(SwingConstants.RIGHT);
+			primaryBox.setBounds(210, 133, 90, 23);
+		}
+		return primaryBox;
 	}
 }	
 
