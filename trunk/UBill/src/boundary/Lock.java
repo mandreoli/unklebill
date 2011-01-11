@@ -15,10 +15,8 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
-
 import executor.FieldParser;
 import executor.Login;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -38,6 +36,8 @@ public class Lock extends BaseBoundary {
 	private JButton newBtn = null;
 	private JLabel lockTitleLabel = null;
 	private JLabel lockParLabel = null;
+	private Color errorColor = new Color(255, 99, 99);
+	private Color normalColor = new Color(255, 255, 255);
 
 	
 	
@@ -116,15 +116,16 @@ public class Lock extends BaseBoundary {
 			userText.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					if (FieldParser.check(userText.getText(), pwdText.getPassword()))
-						loginBtn.setEnabled(true);
+					catchTypedField(userText, pwdText);
+					if (FieldParser.checkUser(userText.getText()))
+						userText.setBackground(normalColor);
 					else
-						loginBtn.setEnabled(false);
+						userText.setBackground(errorColor);
 				}
 			});
 			userText.setToolTipText("Your username");
 			userText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			userText.setBounds(118, 41, 172, 22);
+			userText.setBounds(118, 39, 172, 27);
 			loginPane.add(userText);
 			userText.setColumns(10);
 			
@@ -132,15 +133,16 @@ public class Lock extends BaseBoundary {
 			pwdText.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					if (FieldParser.check(userText.getText(), pwdText.getPassword()))
-						loginBtn.setEnabled(true);
+					catchTypedField(userText, pwdText);
+					if (FieldParser.checkPassword(pwdText.getPassword()))
+						pwdText.setBackground(normalColor);
 					else
-						loginBtn.setEnabled(false);
+						pwdText.setBackground(errorColor);
 				}
 			});
 			pwdText.setToolTipText("Your password");
 			pwdText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			pwdText.setBounds(118, 81, 172, 22);
+			pwdText.setBounds(118, 79, 172, 27);
 			loginPane.add(pwdText);
 			
 			loginBtn = new JButton("Login");
@@ -160,7 +162,7 @@ public class Lock extends BaseBoundary {
 			loginBtn.setEnabled(false);
 			loginPane.add(loginBtn);
 			
-			newBtn = new JButton("New user");
+			newBtn = new JButton("New");
 			newBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					lockPane.remove(loginPane);
@@ -177,5 +179,15 @@ public class Lock extends BaseBoundary {
 			loginPane.add(newBtn);
 		}
 		return loginPane;
+	}		
+	
+	private void catchTypedField(JTextField user, JPasswordField pwd) {
+		
+		if (FieldParser.checkUser(user.getText()) && FieldParser.checkPassword(pwd.getPassword())) {
+			loginBtn.setEnabled(true);
+		}
+		else {
+			loginBtn.setEnabled(false);
+		}
 	}
 }

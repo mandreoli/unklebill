@@ -79,10 +79,10 @@ public class Account {
 		session.getTransaction().commit();
 	}
 	
-	public static Account loadClient(String account) {		
+	public static Account loadAccount(String account, String user) {		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Account loaded = (Account)session.createQuery("FROM Account WHERE account='"+account+"'").uniqueResult();		
+		Account loaded = (Account)session.createQuery("FROM Account WHERE account='"+account+"' AND user='"+user+"'").uniqueResult();		
 		session.getTransaction().commit();		
 		
 		Account a = null;
