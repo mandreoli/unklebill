@@ -4,8 +4,9 @@ import org.hibernate.Session;
 import util.HibernateUtil;
 
 public class Transaction {
-	private int id = 0;
-	private String account = null;
+	private int id = 0;	
+	private String user = null;
+	private String account = null;	
 	private String entry = null;
 	private String type = null;
 	private double payment = 0.0;
@@ -15,7 +16,8 @@ public class Transaction {
 	  
 	}
 	
-	public Transaction(String account, String entry, String type, double payment, String date) {
+	public Transaction(String user, String account, String entry, String type, double payment, String date) {
+		this.user = user;
 		this.account = account;
 		this.entry = entry;
 		this.type = type;
@@ -23,8 +25,9 @@ public class Transaction {
 		this.date = date;
 	}
 	
-	public Transaction(int id, String account, String entry, String type, double payment, String date) {
+	public Transaction(int id, String user, String account, String entry, String type, double payment, String date) {
 		this.id = id;
+		this.user = user;
 		this.account = account;
 		this.entry = entry;
 		this.type = type;
@@ -38,6 +41,14 @@ public class Transaction {
 	
 	public int getId() {
 		return this.id;
+	}
+	
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getUser() {
+		return this.user;
 	}
 	
 	public void setAccount(String account) {
@@ -95,7 +106,7 @@ public class Transaction {
 		
 		Transaction t = null;
 		if (loaded != null)
-			t = new Transaction(loaded.getId(), loaded.getAccount(), loaded.getEntry(), loaded.getType(), loaded.getPayment(), loaded.getDate()); 
+			t = new Transaction(loaded.getId(), loaded.getUser(), loaded.getAccount(), loaded.getEntry(), loaded.getType(), loaded.getPayment(), loaded.getDate()); 
 		
 		return t;
 	}

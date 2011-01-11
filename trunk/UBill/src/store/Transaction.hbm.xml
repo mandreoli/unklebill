@@ -7,8 +7,9 @@
   <class name="Transaction" table="TRANSACTION">
     <id name="id" column="ID">
     	<generator class="native"/>
-    </id>
-	<property name="account" column="ACCOUNT"/>
+    </id>    
+    <property name="user" column="USER"/>
+	<property name="account" column="ACCOUNT"/>	
     <property name="entry" column="ENTRY"/>
     <property name="type" column="TYPE"/>
     <property name="payment" column="PAYMENT"/>

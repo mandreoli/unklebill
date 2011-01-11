@@ -11,6 +11,7 @@ public class Login {
 	
 	private static String username = null;
 	private static String password = null;
+	private static String fullname = null;
 	
 	public static boolean checkUser(String user, char[] pwd) {
 		User loadedUser = User.loadUser(user, new String(pwd));
@@ -20,6 +21,7 @@ public class Login {
 		
 		username = loadedUser.getUser();
 		password = loadedUser.getPassword();
+		fullname = loadedUser.getName();
 		
 		return true;
 	}
@@ -43,6 +45,7 @@ public class Login {
 	public static void logout(Main main, JPanel mainPane, JPanel panel) {
 		Login.username = null;
 		Login.password = null;
+		Login.fullname = null;
 		main.enableNavigationButtons(false);
 		mainPane.remove(panel);
 		new Lock(mainPane, main);
@@ -63,5 +66,13 @@ public class Login {
 
 	public static String getPassword() {
 		return password;
+	}
+	
+	public static void setFullname(String fullname) {
+		Login.fullname = fullname;
+	}
+
+	public static String getFullname() {
+		return fullname;
 	}
 }
