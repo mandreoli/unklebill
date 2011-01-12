@@ -8,18 +8,18 @@ public class User {
 	private String user = null;
 	private String password = null;
 	private String name = null;
-	private String email = null;
+	private String currency = null;
 	private boolean auto = false;
 	
 	public User() {
 		
 	}
 	
-	public User(String user, String password, String name, String email, boolean auto) {
+	public User(String user, String password, String name, String currency, boolean auto) {
 		this.user = user;
 		this.password = password;
 		this.name = name;
-		this.email = email;
+		this.currency = currency;
 		this.auto = auto;
 	}
 
@@ -47,12 +47,12 @@ public class User {
 		return this.name;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
-	public String getEmail() {
-		return this.email;
+	public String getCurrency() {
+		return this.currency;
 	}
 
 	public void setAuto(boolean auto) {
@@ -78,7 +78,7 @@ public class User {
 		
 		User u = null;
 		if (loaded != null)
-			u = new User(loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getEmail(), loaded.isAuto()); 
+			u = new User(loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getCurrency(), loaded.isAuto()); 
 		
 		return u;
 	}
@@ -91,7 +91,7 @@ public class User {
 		
 		User u = null;
 		if (loaded != null)
-			u = new User(loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getEmail(), loaded.isAuto()); 
+			u = new User(loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getCurrency(), loaded.isAuto()); 
 		
 		return u;
 	}
