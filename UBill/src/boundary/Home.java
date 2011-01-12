@@ -46,12 +46,12 @@ public class Home extends BaseBoundary {
 	private JButton modBtn = null;
 	private JButton showBtn = null;
 	private JLabel primaryLabel = null;
-	private JButton transBtn = null;
+	private Main main = null;
 	
 	
 	
-	public Home(JPanel mainPane, JButton transBtn) {
-		this.transBtn = transBtn;
+	public Home(JPanel mainPane, Main main) {
+		this.main = main;
 		mainPane.add(getHomePane(), BorderLayout.CENTER);
 	}
 	
@@ -155,7 +155,7 @@ public class Home extends BaseBoundary {
 	private void populateListAccounts() {
 		this.listAccounts.setSelectedIndex(-1);
 		enableAccountsBtn(false);
-		this.transBtn.setEnabled(false);
+		this.main.enableLogButtons(false);
 		Login.setAccount(null);
 		
 		this.accounts = Accounts.loadAccounts(Login.getUsername());
@@ -168,7 +168,7 @@ public class Home extends BaseBoundary {
 		Account account = Account.loadDefaultAccount(Login.getUsername());
 		if (account != null) {
 			Login.setAccount(account);
-			this.transBtn.setEnabled(true);
+			this.main.enableLogButtons(true);
 			this.listAccounts.setSelectedValue(Login.getAccount().getAccount(), true);
 		}
 		

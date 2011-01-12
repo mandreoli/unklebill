@@ -80,6 +80,17 @@ public class Date {
 		return false;
 	}
 	
+	public static String getMonth(int month) {
+		int i = 1;
+		
+		for (Month m : Month.values()) {
+			if (i == month)
+				return m.toString();
+		}
+		
+		return null;
+	}
+	
 	public static boolean checkDate(int year, int month, int day) {
 		//TODO da fare il controllo della data
 		return true;
