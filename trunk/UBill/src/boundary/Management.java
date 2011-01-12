@@ -21,10 +21,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import java.awt.Font;
+import java.util.Vector;
+
 import javax.swing.JComboBox;
 
 import datatype.Date;
 import datatype.Month;
+import executor.Login;
+import javax.swing.SwingConstants;
+import java.awt.Color;
 
 
 public class Management {
@@ -50,6 +55,12 @@ public class Management {
 	private JComboBox monthBox = null;
 	private JComboBox yearBox = null;
 	private JButton delTransBtn = null;
+	private JLabel accountLabel = null;
+	private JLabel balanceLabel = null;
+	private JLabel accountBalanceLabel = null;
+	private Color active = new Color(0, 128, 0);
+	private Color neutro = new Color(0, 0, 0);
+	private Color passive = new Color(128, 0, 0);
 	
 	
 	public Management(JPanel mainPane) {		
@@ -67,8 +78,47 @@ public class Management {
 			managePane.setSize(new Dimension(480, 435));
 			managePane.setLayout(null);
 			managePane.add(getTabbedPane());
+			managePane.add(getAccountLabel());
+			managePane.add(getBalanceLabel());
+			managePane.add(getAccountBalanceLabel());
 		}
 		return managePane;
+	}
+	
+	private JLabel getAccountLabel() {
+		if (accountLabel == null) {
+			accountLabel = new JLabel(Login.getAccount().getAccount());
+			accountLabel.setFont(new Font("Lucida Grande", Font.BOLD, 24));
+			accountLabel.setBounds(20, 20, 300, 41);
+		}
+		return accountLabel;
+	}
+	
+	private JLabel getAccountBalanceLabel() {
+		if (accountBalanceLabel == null) {
+			accountBalanceLabel = new JLabel("Account balance");
+			accountBalanceLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			accountBalanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			accountBalanceLabel.setBounds(312, 45, 149, 16);
+		}
+		return accountBalanceLabel;
+	}
+	
+	private JLabel getBalanceLabel() {
+		if (balanceLabel == null) {
+			double value = Login.getAccount().getBalance();			
+			balanceLabel = new JLabel(String.valueOf(value)+" "+Login.getAccount().getCurrency());
+			if (value < 0)
+				balanceLabel.setForeground(passive);
+			else if (value > 0)
+				balanceLabel.setForeground(active);
+			else
+				balanceLabel.setForeground(neutro);
+			balanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			balanceLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
+			balanceLabel.setBounds(180, 60, 281, 30);
+		}
+		return balanceLabel;
 	}
 	
 	private JTabbedPane getTabbedPane() {
@@ -308,16 +358,15 @@ public class Management {
 	
 	private JComboBox getYearBox() {
 		if (yearBox == null) {
-			int[] years = new int[50];
-			int curr = 2010;
-			for (int i = 0; i < 50; i++) {
-				years[i] = curr;
-				curr++;
+			Vector<Integer> years = new Vector<Integer>();			
+			for (int i = 2010; i < 2061; i++) {
+				years.add(i);				
 			}
-			yearBox = new JComboBox();
+			yearBox = new JComboBox(years);
 			yearBox.setFont(new Font("Lucida Grande", Font.BOLD, 12));
-			yearBox.setBounds(140, 14, 89, 24);
-			Date date = new Date(Date.getCurrentDate());			
+			yearBox.setBounds(140, 14, 71, 24);
+			Date date = new Date(Date.getCurrentDate());
+			yearBox.setSelectedItem(date.getYear());
 		}
 		return yearBox;
 	}
@@ -333,4 +382,6 @@ public class Management {
 		}
 		return delTransBtn;
 	}
+	
+	
 }

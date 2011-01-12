@@ -12,28 +12,31 @@ public class Account {
 	private String description = null;
 	private double balance = 0.0;
 	private String creation = null;
+	private String currency = null;
 	private boolean usable = false;
 
 	public Account() {
 	  
 	}
 	
-	public Account(String account, String user, String description, double balance, String creation, boolean usable) {
+	public Account(String account, String user, String description, double balance, String creation, String currency, boolean usable) {
 		this.account = account;		
 		this.user = user;
 		this.description = description;
 		this.balance = balance;
 		this.creation = creation;
+		this.currency = currency;
 		this.usable = usable;
 	}
 	
-	public Account(int id, String account, String user, String description, double balance, String creation, boolean usable) {
+	public Account(int id, String account, String user, String description, double balance, String creation, String currency, boolean usable) {
 		this.id = id;
 		this.account = account;		
 		this.user = user;
 		this.description = description;
 		this.balance = balance;
 		this.creation = creation;
+		this.currency = currency;
 		this.usable = usable;
 	}
 	
@@ -83,6 +86,14 @@ public class Account {
 
 	public void setCreation(String creation) {
 		this.creation = creation;
+	}
+	
+	public String getCurrency() {
+		return this.currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 	
 	public void setUsable(boolean usable) {
@@ -158,7 +169,7 @@ public class Account {
 		
 		Account a = null;
 		if (loaded != null)
-			a = new Account(loaded.getId(), loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.isUsable()); 
+			a = new Account(loaded.getId(), loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.getCurrency(), loaded.isUsable()); 
 		
 		return a;
 	}
@@ -171,7 +182,7 @@ public class Account {
 		
 		Account a = null;
 		if (loaded != null)
-			a = new Account(loaded.getId(), loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.isUsable()); 
+			a = new Account(loaded.getId(), loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.getCurrency(), loaded.isUsable()); 
 		
 		return a;
 	}

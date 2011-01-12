@@ -85,9 +85,7 @@ public class Main extends BaseBoundary {
 				if (!users.getUsers().getFirst().isAuto())
 					new Lock(mainPane, this);
 				else {
-					Login.setUsername(users.getUsers().getFirst().getUser());
-					Login.setPassword(users.getUsers().getFirst().getPassword());
-					Login.setFullname(users.getUsers().getFirst().getName());
+					Login.setUser(users.getUsers().getFirst());
 					Login.login(main, mainPane, new JPanel());				
 				}
 			}

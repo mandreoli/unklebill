@@ -67,7 +67,7 @@ public class Home extends BaseBoundary {
 			homePane.setLayout(null);
 			homePane.add(getManageAccountsPane());
 			
-			JLabel userLabel = new JLabel(" "+Login.getFullname());
+			JLabel userLabel = new JLabel(" "+Login.getUser().getName());
 			userLabel.setIcon(new ImageIcon(getClass().getResource("/icons/user24.png")));
 			userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 24));
 			userLabel.setToolTipText("Logged user");
@@ -158,14 +158,14 @@ public class Home extends BaseBoundary {
 		this.main.enableLogButtons(false);
 		Login.setAccount(null);
 		
-		this.accounts = Accounts.loadAccounts(Login.getUsername());
+		this.accounts = Accounts.loadAccounts(Login.getUser().getUser());
 		
 		if (this.accounts.getNumAccounts() > 0)
 			this.listAccounts.setListData(this.accounts.getAccountsNames().toArray());		
 		else
 			this.listAccounts.setListData(new Object[0]);
 		
-		Account account = Account.loadDefaultAccount(Login.getUsername());
+		Account account = Account.loadDefaultAccount(Login.getUser().getUser());
 		if (account != null) {
 			Login.setAccount(account);
 			this.main.enableLogButtons(true);
@@ -242,7 +242,7 @@ public class Home extends BaseBoundary {
 					}
 					
 					if (confirm("You are deleting <i>"+listAccounts.getSelectedValue().toString()+"</i>.<br/>"+primaryString+"Are you sure?") == 0) {						
-						if (Transactions.loadTransactions(Login.getUsername(), accountName).getNumTransactions() > 0) {
+						if (Transactions.loadTransactions(Login.getUser().getUser(), accountName).getNumTransactions() > 0) {
 							if (abort("You are deleting all<br/>transtactions for this account.<br/>Continue anyway?") == 0) {
 								accounts.getAccount(accountName).removeAccount();
 								//TODO cancellare tutte le transazioni dell'account per quell'utente
@@ -288,7 +288,7 @@ public class Home extends BaseBoundary {
 			this.accountLabel.setText(account.getAccount());
 			this.createLabel.setText("<html><b>Last modified:</b> "+date.getDate('/')+"</html>");
 			this.primaryLabel.setText("<html><b>Primary:</b> "+prim+"</html>");
-			this.balanceLabel.setText("<html><b>Current balance</b><br/>"+account.getBalance()+"</html>");
+			this.balanceLabel.setText("<html><b>Current balance</b><br/>"+account.getBalance()+" "+account.getCurrency()+"</html>");
 			this.descrLabel.setText("<html><b>Description</b><br/>"+account.getDescription()+"</html>");
 		}
 		else {

@@ -13,6 +13,7 @@
 	<property name="description" column="DESCRIPTION"/>
     <property name="balance" column="BALANCE"/>
     <property name="creation" column="CREATION"/>
+    <property name="currency" column="CURRENCY"/>
     <property name="usable" column="USABLE"/>
   </class>
 </hibernate-mapping>

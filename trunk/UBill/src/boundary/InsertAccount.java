@@ -18,19 +18,21 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import store.Account;
+import datatype.Currency;
 import datatype.Date;
 import executor.FieldParser;
 import executor.Login;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 
 
 
 public class InsertAccount extends BaseBoundary {
 
 	private int wWidth = 320;
-	private int wHeight = 240;
+	private int wHeight = 260;
 	private JDialog mainDialog = null;
 	private JPanel mainPane = null;
 	private JButton exitBtn = null;
@@ -42,6 +44,7 @@ public class InsertAccount extends BaseBoundary {
 	private Color normalColor = new Color(255, 255, 255);
 	private JCheckBox primaryBox = null;
 	private Account account = null;
+	private JComboBox currencyBox = null;
 
 	
 	
@@ -49,6 +52,9 @@ public class InsertAccount extends BaseBoundary {
 		getMainDialog().setVisible(true);
 	}
 	
+	/**
+	 * @wbp.parser.constructor
+	 **/
 	public InsertAccount(Account account) {
 		this.account = account;
 		getMainDialog().setVisible(true);		
@@ -165,6 +171,7 @@ public class InsertAccount extends BaseBoundary {
 			}
 			
 			mainPane.add(getPrimaryBox());
+			mainPane.add(getCurrencyBox());
 		}
 		return mainPane;
 	}
@@ -180,7 +187,7 @@ public class InsertAccount extends BaseBoundary {
 			exitBtn.setToolTipText("Back to home");
 			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/error16.png")));
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			exitBtn.setBounds(20, 183, 90, 30);
+			exitBtn.setBounds(20, 200, 90, 30);
 		}
 		return exitBtn;
 	}
@@ -191,8 +198,8 @@ public class InsertAccount extends BaseBoundary {
 			saveBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (account == null) {
-						if (Account.loadAccount(nameText.getText(), Login.getUsername()) == null) {
-							Account account = new Account(nameText.getText(), Login.getUsername(), descrText.getText(), Double.valueOf(balanceText.getText()), Date.getCurrentDate(), primaryBox.isSelected());
+						if (Account.loadAccount(nameText.getText(), Login.getUser().getUser()) == null) {
+							Account account = new Account(nameText.getText(), Login.getUser().getUser(), descrText.getText(), Double.valueOf(balanceText.getText()), Date.getCurrentDate(), currencyBox.getSelectedItem().toString(), primaryBox.isSelected());
 							account.saveAccount();
 							ok("Account added<br/>with success.");
 							mainDialog.dispose();
@@ -206,6 +213,7 @@ public class InsertAccount extends BaseBoundary {
 						account.setBalance(Double.valueOf(balanceText.getText()));
 						account.setUsable(primaryBox.isSelected());
 						account.setCreation(Date.getCurrentDate());
+						account.setCurrency(currencyBox.getSelectedItem().toString());
 						account.updateAccount();
 						ok("Account modified<br/>with success.");
 						mainDialog.dispose();
@@ -222,7 +230,7 @@ public class InsertAccount extends BaseBoundary {
 			}
 			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/ok16.png")));
 			saveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			saveBtn.setLocation(210, 183);
+			saveBtn.setLocation(210, 200);
 			saveBtn.setEnabled(false);
 			saveBtn.setSize(new Dimension(90, 30));
 		}
@@ -241,17 +249,28 @@ public class InsertAccount extends BaseBoundary {
 	
 	private JCheckBox getPrimaryBox() {
 		if (primaryBox == null) {
-			primaryBox = new JCheckBox("Primary");
+			primaryBox = new JCheckBox("Primary  ");
 			primaryBox.setToolTipText("Set default account");
 			primaryBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			primaryBox.setHorizontalTextPosition(SwingConstants.LEFT);
 			primaryBox.setHorizontalAlignment(SwingConstants.RIGHT);
-			primaryBox.setBounds(210, 133, 90, 23);
+			primaryBox.setBounds(28, 162, 117, 23);
 			if (this.account != null) {				
 				primaryBox.setSelected(this.account.isUsable());
 			}
 		}
 		return primaryBox;
+	}
+	
+	private JComboBox getCurrencyBox() {
+		if (currencyBox == null) {
+			currencyBox = new JComboBox(Currency.values());
+			currencyBox.setBounds(210, 131, 90, 27);
+			if (this.account != null) {	
+				currencyBox.setSelectedItem(this.account.getCurrency());
+			}
+		}
+		return currencyBox;
 	}
 }	
 
