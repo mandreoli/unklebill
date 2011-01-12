@@ -126,7 +126,7 @@ public class Main extends BaseBoundary {
 				public void actionPerformed(ActionEvent arg0) {					
 					if (mainPane.getComponentCount() > 1)
 						mainPane.remove(mainPane.getComponent(1));					
-					new Home(mainPane, transBtn);
+					new Home(mainPane, main);
 					mainPane.repaint();
 				}
 			});
@@ -153,10 +153,6 @@ public class Main extends BaseBoundary {
 			});
 		}
 		return transBtn;
-	}
-	
-	public JButton getTrans() {
-		return this.transBtn;
 	}
 	
 	private JButton getStatBtn() {
@@ -190,7 +186,14 @@ public class Main extends BaseBoundary {
 	
 	public void enableNavigationButtons(boolean flag) {
 		this.homeBtn.setEnabled(flag);
+		this.transBtn.setEnabled(flag);
+		this.statBtn.setEnabled(flag);
 		this.logoutBtn.setEnabled(flag);
+	}
+	
+	public void enableLogButtons(boolean flag) {
+		this.statBtn.setEnabled(flag);
+		this.transBtn.setEnabled(flag);
 	}
 	
 	private JButton getExitBtn() {

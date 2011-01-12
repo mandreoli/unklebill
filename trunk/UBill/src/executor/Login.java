@@ -40,7 +40,7 @@ public class Login {
 	public static void login(Main main, JPanel mainPane, JPanel panel) {
 		main.enableNavigationButtons(true);
 		mainPane.remove(panel);
-		new Home(mainPane, main.getTrans());
+		new Home(mainPane, main);
 		mainPane.repaint();
 	}
 	
