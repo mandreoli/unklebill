@@ -47,6 +47,9 @@ public class Home extends BaseBoundary {
 	private JButton showBtn = null;
 	private JLabel primaryLabel = null;
 	private Main main = null;
+	private Color active = new Color(0, 128, 0);
+	private Color neutro = new Color(0, 0, 0);
+	private Color passive = new Color(128, 0, 0);
 	
 	
 	
@@ -283,11 +286,23 @@ public class Home extends BaseBoundary {
 		if (account != null) {
 			Date date = new Date(account.getCreation());
 			String prim = "NO";
+			
 			if (account.isUsable())
 				prim = "YES";
+			
 			this.accountLabel.setText(account.getAccount());
 			this.createLabel.setText("<html><b>Last modified:</b> "+date.getDate('/')+"</html>");
 			this.primaryLabel.setText("<html><b>Primary:</b> "+prim+"</html>");
+			
+			double value = Double.valueOf(account.getBalance());
+			
+			if (value < 0)
+				this.balanceLabel.setForeground(passive);
+			else if (value > 0)
+				this.balanceLabel.setForeground(active);
+			else
+				this.balanceLabel.setForeground(neutro);
+			
 			this.balanceLabel.setText("<html><b>Current balance</b><br/>"+account.getBalance()+" "+account.getCurrency()+"</html>");
 			this.descrLabel.setText("<html><b>Description</b><br/>"+account.getDescription()+"</html>");
 		}

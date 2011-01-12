@@ -282,7 +282,7 @@ public class Management {
 			addEntranceBtn.setIcon(new ImageIcon(getClass().getResource("/icons/entrance16.png")));
 			addEntranceBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					entranceTableModel.addRow(new String[]{"100", "12", "prva"});
+					new InsertTransaction(0);
 				}
 			});
 		}
@@ -297,7 +297,7 @@ public class Management {
 			addExitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/output16.png")));
 			addExitBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					exitTableModel.addRow(new String[]{"100", "12", "prva"});
+					new InsertTransaction(1);
 				}
 			});
 		}
