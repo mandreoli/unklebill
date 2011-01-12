@@ -134,7 +134,7 @@ public class Main extends BaseBoundary {
 	
 	private JButton getTransBtn() {
 		if (transBtn == null) {
-			transBtn = new JButton("Transactions");
+			transBtn = new JButton("Payments");
 			transBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			transBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			transBtn.setHorizontalTextPosition(SwingConstants.CENTER);
