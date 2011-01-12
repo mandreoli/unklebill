@@ -17,11 +17,10 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
-
 import store.Account;
+import datatype.Date;
 import executor.FieldParser;
 import executor.Login;
-
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JCheckBox;
@@ -42,11 +41,17 @@ public class InsertAccount extends BaseBoundary {
 	private Color errorColor = new Color(255, 99, 99);
 	private Color normalColor = new Color(255, 255, 255);
 	private JCheckBox primaryBox = null;
+	private Account account = null;
 
 	
 	
 	public InsertAccount() {
 		getMainDialog().setVisible(true);
+	}
+	
+	public InsertAccount(Account account) {
+		this.account = account;
+		getMainDialog().setVisible(true);		
 	}
 	
 	private JDialog getMainDialog() {
@@ -60,6 +65,8 @@ public class InsertAccount extends BaseBoundary {
 			mainDialog.setResizable(false);
 			mainDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);			
 			mainDialog.setContentPane(getMainPane());
+			if (this.account != null)
+				catchTypedField(nameText, descrText, balanceText);
 			mainDialog.setModal(true);
 		}
 		return mainDialog;
@@ -109,6 +116,9 @@ public class InsertAccount extends BaseBoundary {
 			nameText.setBounds(120, 12, 180, 27);
 			mainPane.add(nameText);
 			nameText.setColumns(10);
+			if (this.account != null) {
+				nameText.setText(this.account.getAccount());
+			}
 			
 			JScrollPane scrollDescrPane = new JScrollPane();
 			scrollDescrPane.setBounds(122, 44, 175, 82);
@@ -128,6 +138,9 @@ public class InsertAccount extends BaseBoundary {
 				}
 			});
 			descrText.setToolTipText("Optional description");
+			if (this.account != null) {
+				descrText.setText(this.account.getDescription());
+			}
 			scrollDescrPane.setViewportView(descrText);
 			
 			balanceText = new JTextField("0.0");
@@ -147,6 +160,10 @@ public class InsertAccount extends BaseBoundary {
 			balanceText.setColumns(10);
 			balanceText.setBounds(120, 131, 90, 27);
 			mainPane.add(balanceText);
+			if (this.account != null) {
+				balanceText.setText(String.valueOf(this.account.getBalance()));
+			}
+			
 			mainPane.add(getPrimaryBox());
 		}
 		return mainPane;
@@ -170,20 +187,39 @@ public class InsertAccount extends BaseBoundary {
 
 	private JButton getSaveBtn() {
 		if (saveBtn == null) {
-			saveBtn = new JButton("Add");
+			saveBtn = new JButton();
 			saveBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (Account.loadAccount(nameText.getText(), Login.getUsername()) == null) {
-						Account account = new Account(nameText.getText(), Login.getUsername(), descrText.getText(), Double.valueOf(balanceText.getText()), null, primaryBox.isSelected());
-						account.saveAccount();
-						ok("Account added<br/>with success.");
+					if (account == null) {
+						if (Account.loadAccount(nameText.getText(), Login.getUsername()) == null) {
+							Account account = new Account(nameText.getText(), Login.getUsername(), descrText.getText(), Double.valueOf(balanceText.getText()), Date.getCurrentDate(), primaryBox.isSelected());
+							account.saveAccount();
+							ok("Account added<br/>with success.");
+							mainDialog.dispose();
+						}
+						else
+							fail("The account name<br/>is already in use!");
+					}
+					else {
+						account.setAccount(nameText.getText());
+						account.setDescription(descrText.getText());
+						account.setBalance(Double.valueOf(balanceText.getText()));
+						account.setUsable(primaryBox.isSelected());
+						account.setCreation(Date.getCurrentDate());
+						account.updateAccount();
+						ok("Account modified<br/>with success.");
 						mainDialog.dispose();
 					}
-					else
-						fail("The account name<br/>is already in use!");
 				}
 			});
-			saveBtn.setToolTipText("Add new account");
+			if (this.account == null) {
+				saveBtn.setToolTipText("Add new account");
+				saveBtn.setText("Add");
+			}
+			else {
+				saveBtn.setToolTipText("Modify this account");
+				saveBtn.setText("Modify");
+			}
 			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/ok16.png")));
 			saveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			saveBtn.setLocation(210, 183);
@@ -211,6 +247,9 @@ public class InsertAccount extends BaseBoundary {
 			primaryBox.setHorizontalTextPosition(SwingConstants.LEFT);
 			primaryBox.setHorizontalAlignment(SwingConstants.RIGHT);
 			primaryBox.setBounds(210, 133, 90, 23);
+			if (this.account != null) {				
+				primaryBox.setSelected(this.account.isUsable());
+			}
 		}
 		return primaryBox;
 	}

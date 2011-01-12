@@ -10,7 +10,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
 import javax.swing.BorderFactory;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -18,7 +17,6 @@ import javax.swing.JMenu;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-
 import datatype.Users;
 
 import executor.Login;
@@ -46,7 +44,7 @@ public class Main extends BaseBoundary {
 	}
 	
 	public void START() {
-		getMainFrame().setVisible(true);
+		getMainFrame().setVisible(true);		
 	}
 	
 	/**
@@ -128,7 +126,7 @@ public class Main extends BaseBoundary {
 				public void actionPerformed(ActionEvent arg0) {					
 					if (mainPane.getComponentCount() > 1)
 						mainPane.remove(mainPane.getComponent(1));					
-					new Home(mainPane);
+					new Home(mainPane, transBtn);
 					mainPane.repaint();
 				}
 			});
@@ -144,6 +142,7 @@ public class Main extends BaseBoundary {
 			transBtn.setHorizontalTextPosition(SwingConstants.CENTER);
 			transBtn.setIcon(new ImageIcon(getClass().getResource("/icons/coin48.png")));
 			transBtn.setBounds(10, 90, 100, 80);
+			transBtn.setEnabled(false);
 			transBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (mainPane.getComponentCount() > 1)
@@ -154,6 +153,10 @@ public class Main extends BaseBoundary {
 			});
 		}
 		return transBtn;
+	}
+	
+	public JButton getTrans() {
+		return this.transBtn;
 	}
 	
 	private JButton getStatBtn() {
@@ -187,8 +190,6 @@ public class Main extends BaseBoundary {
 	
 	public void enableNavigationButtons(boolean flag) {
 		this.homeBtn.setEnabled(flag);
-		this.transBtn.setEnabled(flag);
-		this.statBtn.setEnabled(flag);
 		this.logoutBtn.setEnabled(flag);
 	}
 	

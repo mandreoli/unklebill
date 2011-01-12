@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JPanel;
 import datatype.Accounts;
+import datatype.Date;
 import datatype.Transactions;
 import executor.Login;
 import javax.swing.JScrollPane;
@@ -39,9 +40,18 @@ public class Home extends BaseBoundary {
 	private JButton btnRemove = null;
 	private JLabel listLabel = null;
 	private JLabel accountLabel = null;
+	private JLabel createLabel = null;
+	private JLabel descrLabel = null;
+	private JLabel balanceLabel = null;
+	private JButton modBtn = null;
+	private JButton showBtn = null;
+	private JLabel primaryLabel = null;
+	private JButton transBtn = null;
 	
 	
-	public Home(JPanel mainPane) {
+	
+	public Home(JPanel mainPane, JButton transBtn) {
+		this.transBtn = transBtn;
 		mainPane.add(getHomePane(), BorderLayout.CENTER);
 	}
 	
@@ -73,36 +83,49 @@ public class Home extends BaseBoundary {
 			manageAccountsPane.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
 			manageAccountsPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Manage accounts", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
 			manageAccountsPane.setBounds(6, 195, 468, 235);
-			manageAccountsPane.setLayout(null);
-			manageAccountsPane.add(getAccountLabel());
+			manageAccountsPane.setLayout(null);			
 			manageAccountsPane.add(getBtnRemove());
 			manageAccountsPane.add(getBtnAdd());
+			manageAccountsPane.add(getShowBtn());
+			manageAccountsPane.add(getModBtn());
+			addingInfoLabels();
 			manageAccountsPane.add(getListLabel());
-			manageAccountsPane.add(getScrollAccountPane());
-			
-			JButton showBtn = new JButton("");
-			showBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-			showBtn.setEnabled(false);
-			showBtn.setToolTipText("Show account details");
-			showBtn.setIcon(new ImageIcon(getClass().getResource("/icons/viewAccount24.png")));
-			showBtn.setBounds(165, 50, 32, 32);
-			manageAccountsPane.add(showBtn);
-			
-			JButton modBtn = new JButton("");
-			modBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-			modBtn.setEnabled(false);
-			modBtn.setIcon(new ImageIcon(getClass().getResource("/icons/modAccount24.png")));
-			modBtn.setToolTipText("Edit account");
-			modBtn.setBounds(165, 85, 32, 32);
-			manageAccountsPane.add(modBtn);	
+			manageAccountsPane.add(getScrollAccountPane());				
 		}
 		return manageAccountsPane;
+	}
+	
+	private void addingInfoLabels() {
+		accountLabel = new JLabel("");
+		accountLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		accountLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
+		accountLabel.setBounds(209, 25, 253, 32);
+		
+		createLabel = new JLabel("");
+		createLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		createLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+		createLabel.setBounds(209, 59, 253, 16);
+		
+		primaryLabel = new JLabel("");
+		primaryLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		primaryLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+		primaryLabel.setBounds(209, 78, 253, 16);
+		
+		descrLabel = new JLabel("");
+		descrLabel.setVerticalAlignment(SwingConstants.TOP);
+		descrLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		descrLabel.setBounds(209, 142, 253, 83);
+		
+		balanceLabel = new JLabel("");
+		balanceLabel.setVerticalAlignment(SwingConstants.TOP);
+		balanceLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		balanceLabel.setBounds(209, 105, 253, 30);
+		
+		manageAccountsPane.add(accountLabel);
+		manageAccountsPane.add(createLabel);
+		manageAccountsPane.add(primaryLabel);
+		manageAccountsPane.add(balanceLabel);		
+		manageAccountsPane.add(descrLabel);	
 	}
 	
 	private JScrollPane getScrollAccountPane() {
@@ -122,7 +145,7 @@ public class Home extends BaseBoundary {
 			listAccounts.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
 					if (listAccounts.getSelectedIndex() > -1)
-						btnRemove.setEnabled(true);
+						enableAccountsBtn(true);
 				}
 			});			
 			populateListAccounts();
@@ -131,25 +154,60 @@ public class Home extends BaseBoundary {
 	}
 	
 	private void populateListAccounts() {
-		listAccounts.setSelectedIndex(-1);
-		btnRemove.setEnabled(false);
+		this.listAccounts.setSelectedIndex(-1);
+		enableAccountsBtn(false);
+		this.transBtn.setEnabled(false);
+		Login.setAccount(null);
 		
 		this.accounts = Accounts.loadAccounts(Login.getUsername());
+		
+		if (this.accounts.getNumAccounts() > 0)
+			this.listAccounts.setListData(this.accounts.getAccountsNames().toArray());		
+		else
+			this.listAccounts.setListData(new Object[0]);
 		
 		Account account = Account.loadDefaultAccount(Login.getUsername());
 		if (account != null) {
 			Login.setAccount(account);
-			System.out.println("default: "+Login.getAccount().getAccount());
+			this.transBtn.setEnabled(true);
+			this.listAccounts.setSelectedValue(Login.getAccount().getAccount(), true);
 		}
-		
-		if (this.accounts.getNumAccounts() > 0) {
-			listAccounts.setListData(this.accounts.getAccountsNames().toArray());		
-		}
-		else
-			listAccounts.setListData(new Object[0]);
 		
 		showAccountInfo(Login.getAccount());		
-		listAccounts.repaint();
+		this.listAccounts.repaint();
+	}
+	
+	private JButton getModBtn() {
+		if (modBtn == null) {
+			modBtn = new JButton("");
+			modBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new InsertAccount(accounts.getAccount(listAccounts.getSelectedValue().toString()));
+					populateListAccounts();
+				}
+			});
+			modBtn.setEnabled(false);
+			modBtn.setIcon(new ImageIcon(getClass().getResource("/icons/modAccount24.png")));
+			modBtn.setToolTipText("Edit account");
+			modBtn.setBounds(165, 85, 32, 32);
+		}
+		return modBtn;
+	}
+	
+	private JButton getShowBtn() {
+		if (showBtn == null) {
+			showBtn = new JButton("");
+			showBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					showAccountInfo(accounts.getAccount(listAccounts.getSelectedValue().toString()));
+				}
+			});
+			showBtn.setEnabled(false);
+			showBtn.setToolTipText("Show account details");
+			showBtn.setIcon(new ImageIcon(getClass().getResource("/icons/viewAccount24.png")));
+			showBtn.setBounds(165, 50, 32, 32);
+		}
+		return showBtn;
 	}
 	
 	private JButton getBtnAdd() {
@@ -175,8 +233,16 @@ public class Home extends BaseBoundary {
 			btnRemove = new JButton("Del");			
 			btnRemove.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (confirm("You are deleting <i>"+listAccounts.getSelectedValue().toString()+"</i>.<br/>Are you sure?") == 0) {
-						String accountName = accounts.getAccount(listAccounts.getSelectedValue().toString()).getAccount();
+					boolean isPrimary = false;
+					String accountName = accounts.getAccount(listAccounts.getSelectedValue().toString()).getAccount();
+					String primaryString = "";
+					
+					if (Login.getAccount() != null && accountName.equals(Login.getAccount().getAccount())) {
+							isPrimary = true;
+							primaryString = "This is your primary account.<br/>";
+					}
+					
+					if (confirm("You are deleting <i>"+listAccounts.getSelectedValue().toString()+"</i>.<br/>"+primaryString+"Are you sure?") == 0) {						
 						if (Transactions.loadTransactions(Login.getUsername(), accountName).getNumTransactions() > 0) {
 							if (abort("You are deleting all<br/>transtactions for this account.<br/>Continue anyway?") == 0) {
 								accounts.getAccount(accountName).removeAccount();
@@ -187,7 +253,7 @@ public class Home extends BaseBoundary {
 							accounts.getAccount(accountName).removeAccount();
 						}
 						
-						if (Login.getAccount() != null && accountName.equals(Login.getAccount().getAccount()))
+						if (isPrimary)
 							Login.setAccount(null);
 						
 						populateListAccounts();
@@ -214,21 +280,30 @@ public class Home extends BaseBoundary {
 		return listLabel;
 	}
 	
-	private JLabel getAccountLabel() {
-		if (accountLabel == null) {
-			accountLabel = new JLabel("");
-			accountLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-			accountLabel.setBounds(221, 25, 225, 32);
-		}
-		return accountLabel;
-	}
-	
 	private void showAccountInfo(Account account) {
 		if (account != null) {
+			Date date = new Date(account.getCreation());
+			String prim = "NO";
+			if (account.isUsable())
+				prim = "YES";
 			this.accountLabel.setText(account.getAccount());
+			this.createLabel.setText("<html><b>Last modified:</b> "+date.getDate('/')+"</html>");
+			this.primaryLabel.setText("<html><b>Primary:</b> "+prim+"</html>");
+			this.balanceLabel.setText("<html><b>Current balance</b><br/>"+account.getBalance()+"</html>");
+			this.descrLabel.setText("<html><b>Description</b><br/>"+account.getDescription()+"</html>");
 		}
 		else {
-			this.accountLabel.setText("");
+			this.accountLabel.setText("No primary account");			
+			this.createLabel.setText("<html>Select an account and set it to primary</html>");
+			this.primaryLabel.setText("<html></html>");
+			this.balanceLabel.setText("<html></html>");
+			this.descrLabel.setText("<html></html>");
 		}
+	}
+	
+	private void enableAccountsBtn(boolean flag) {
+		btnRemove.setEnabled(flag);
+		showBtn.setEnabled(flag);
+		modBtn.setEnabled(flag);
 	}
 }

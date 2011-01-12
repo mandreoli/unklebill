@@ -118,6 +118,31 @@ public class Account {
 		session.getTransaction().commit();
 	}
 	
+	public void updateAccount() {
+		Accounts accounts = Accounts.loadAccounts(this.getUser());
+		
+		if (this.isUsable() == true) {
+			for (Account a : accounts.getAccounts()) {
+				if (a.isUsable()) {
+					a.setUsable(false);
+					Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+					session.beginTransaction();
+					session.update(a);
+					session.getTransaction().commit();
+				}
+			}
+		}
+		else {
+			if (accounts.getNumAccounts() == 0)
+				this.setUsable(true);
+		}
+		
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update(this);
+		session.getTransaction().commit();
+	}
+	
 	public void removeAccount() {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
