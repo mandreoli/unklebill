@@ -130,10 +130,9 @@ public class Home extends BaseBoundary {
 	
 	private JScrollPane getScrollAccountPane() {
 		if (scrollAccountPane == null) {
-			scrollAccountPane = new JScrollPane();
+			scrollAccountPane = new JScrollPane(getListAccounts());
 			scrollAccountPane.setBounds(10, 50, 150, 148);
 			scrollAccountPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			scrollAccountPane.setViewportView(getListAccounts());
 		}
 		return scrollAccountPane;
 	}
