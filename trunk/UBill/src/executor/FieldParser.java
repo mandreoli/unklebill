@@ -6,7 +6,7 @@ public class FieldParser {
 	
 	public static boolean checkUser(String user) {
 		String text = user.trim();
-		String regex = "^[A-Za-z0-9]{4,15}";
+		String regex = "^[A-Za-z0-9]{4,20}";
 		
 		if (!Pattern.matches(regex, text))
 			return false;
