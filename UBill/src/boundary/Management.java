@@ -22,17 +22,15 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import java.util.Vector;
-
 import javax.swing.JComboBox;
-
 import datatype.Date;
 import datatype.Month;
 import datatype.Transactions;
 import executor.Login;
 import javax.swing.SwingConstants;
 
+import store.Account;
 import store.Transaction;
-
 import java.awt.Color;
 
 
@@ -67,6 +65,10 @@ public class Management {
 	private Color passive = new Color(128, 0, 0);
 	private Transactions transactions = null;
 	private Date date = new Date(Date.getCurrentDate());
+	private Transactions entranceTrans = null;
+	private Transactions exitTrans = null;
+	private double entranceTot = 0.0;
+	private double exitTot = 0.0;
 	
 	
 	public Management(JPanel mainPane) {		
@@ -288,9 +290,17 @@ public class Management {
 			addEntranceBtn.setIcon(new ImageIcon(getClass().getResource("/icons/entrance16.png")));
 			addEntranceBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					InsertTransaction ins = new InsertTransaction(0);
-					if (ins.getTransaction() != null)
+					InsertTransaction ins = new InsertTransaction(0, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
+					if (ins.getTransaction() != null) {
 						addRowsInTables(ins.getTransaction());
+						double tot = Login.getAccount().getBalance();
+						if (ins.getTransaction().getType() == '+')
+							tot += ins.getTransaction().getPayment();
+						else
+							tot -= ins.getTransaction().getPayment();
+						Login.getAccount().setBalance(tot);
+						Login.getAccount().updateAccount();
+					}
 				}
 			});
 		}
@@ -305,9 +315,17 @@ public class Management {
 			addExitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/output16.png")));
 			addExitBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					InsertTransaction ins = new InsertTransaction(1);
-					if (ins.getTransaction() != null)
+					InsertTransaction ins = new InsertTransaction(1, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
+					if (ins.getTransaction() != null) {
 						addRowsInTables(ins.getTransaction());
+						double tot = Login.getAccount().getBalance();
+						if (ins.getTransaction().getType() == '+')
+							tot += ins.getTransaction().getPayment();
+						else
+							tot -= ins.getTransaction().getPayment();
+						Login.getAccount().setBalance(tot);
+						Login.getAccount().updateAccount();
+					}
 				}
 			});
 		}
@@ -357,10 +375,17 @@ public class Management {
 	
 	private JComboBox getMonthBox() {
 		if (monthBox == null) {
-			monthBox = new JComboBox(Month.values());
+			monthBox = new JComboBox(Month.values());					
 			monthBox.setFont(new Font("Lucida Grande", Font.BOLD, 12));
-			monthBox.setBounds(50, 14, 89, 24);			
+			monthBox.setBounds(50, 14, 99, 24);			
 			monthBox.setSelectedIndex(date.getMonth()-1);
+			monthBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					entranceTableModel.setRowCount(0);
+					exitTableModel.setRowCount(0);
+					populateTables();
+				}
+			});
 		}
 		return monthBox;
 	}
@@ -373,8 +398,15 @@ public class Management {
 			}
 			yearBox = new JComboBox(years);
 			yearBox.setFont(new Font("Lucida Grande", Font.BOLD, 12));
-			yearBox.setBounds(140, 14, 71, 24);			
+			yearBox.setBounds(150, 14, 71, 24);			
 			yearBox.setSelectedItem(date.getYear());
+			yearBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					entranceTableModel.setRowCount(0);
+					exitTableModel.setRowCount(0);
+					populateTables();					
+				}
+			});			
 		}
 		return yearBox;
 	}
@@ -384,7 +416,12 @@ public class Management {
 			delTransBtn = new JButton("Delete");
 			delTransBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					if (entranceTable.getSelectedRowCount() > 0) {
+						System.out.println(entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getPayment());
+					}
+					else {
+						System.out.println(exitTrans.getTransactions().get(exitTable.getSelectedRow()).getPayment());
+					}
 				}
 			});
 			delTransBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
@@ -397,8 +434,12 @@ public class Management {
 	}
 	
 	private void populateTables() {
-		this.transactions = Transactions.loadTransactions(Login.getUser().getName(), Login.getAccount().getAccount());
-				
+		this.transactions = Transactions.loadTransactions(Login.getUser().getName(), Login.getAccount().getAccount(), Integer.valueOf(yearBox.getSelectedItem().toString()), Date.getMonth(monthBox.getSelectedItem().toString()));
+		this.entranceTrans = new Transactions();
+		this.exitTrans = new Transactions();
+		this.entranceTot = 0.0;
+		this.exitTot = 0.0;
+		
 		if (this.transactions.getNumTransactions() > 0) {			
 			for (Transaction t : this.transactions.getTransactions()) {
 				addRowsInTables(t);
@@ -413,10 +454,16 @@ public class Management {
 		vect.add(t.getEntry());		
 		
 		if (t.getType() == '+') {					
-			entranceTableModel.addRow(vect);
+			this.entranceTableModel.addRow(vect);
+			this.entranceTrans.addTransaction(t);
+			this.entranceTot += t.getPayment();
+			this.entranceAmount.setText(String.valueOf(this.entranceTot));
 		}
 		else {
-			exitTableModel.addRow(vect);
-		}
+			this.exitTableModel.addRow(vect);
+			this.exitTrans.addTransaction(t);
+			this.exitTot += t.getPayment();
+			this.exitAmount.setText(String.valueOf(this.exitTot));
+		}		
 	}
 }

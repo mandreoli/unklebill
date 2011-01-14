@@ -44,6 +44,20 @@ public class Transactions {
 		return loaded;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static Transactions loadTransactions(String user, String account, int year, int month) {
+		List<Transaction> transactions = new LinkedList<Transaction>();
+		Transactions loaded = null;
+		
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();		
+		transactions = session.createQuery("FROM Transaction WHERE user='"+user+"' AND account='"+account+"' AND year="+year+" AND month="+month).list();
+		session.getTransaction().commit();
+		loaded = new Transactions(new LinkedList<Transaction>(transactions));
+		
+		return loaded;
+	}
+	
 	public Transaction getTransaction(int id) {
 		for (Transaction t : this.transactions) {
 			if (t.getId() == id)
