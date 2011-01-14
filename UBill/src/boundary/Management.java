@@ -28,8 +28,6 @@ import datatype.Month;
 import datatype.Transactions;
 import executor.Login;
 import javax.swing.SwingConstants;
-
-import store.Account;
 import store.Transaction;
 import java.awt.Color;
 
@@ -57,6 +55,7 @@ public class Management {
 	private JComboBox monthBox = null;
 	private JComboBox yearBox = null;
 	private JButton delTransBtn = null;
+	private JButton modTransBtn = null;
 	private JLabel accountLabel = null;
 	private JLabel balanceLabel = null;
 	private JLabel accountBalanceLabel = null;
@@ -68,7 +67,7 @@ public class Management {
 	private Transactions entranceTrans = null;
 	private Transactions exitTrans = null;
 	private double entranceTot = 0.0;
-	private double exitTot = 0.0;
+	private double exitTot = 0.0;	
 	
 	
 	public Management(JPanel mainPane) {		
@@ -149,6 +148,7 @@ public class Management {
 			monthTab.add(getMonthBox());
 			monthTab.add(getYearBox());
 			monthTab.add(getDelTransBtn());
+			monthTab.add(getModTransBtn());
 			populateTables();
 		}
 		return monthTab;
@@ -226,10 +226,13 @@ public class Management {
 				public void mousePressed(MouseEvent e) {
 					if (entranceTable.getSelectedRowCount() > 0) {
 						delTransBtn.setEnabled(true);
+						modTransBtn.setEnabled(true);
 						exitTable.clearSelection();
 					}
-					else
+					else {
+						modTransBtn.setEnabled(false);
 						delTransBtn.setEnabled(false);
+					}
 				}
 			});
 		}
@@ -248,10 +251,13 @@ public class Management {
 				public void mousePressed(MouseEvent e) {					
 					if (exitTable.getSelectedRowCount() > 0) {
 						delTransBtn.setEnabled(true);
+						modTransBtn.setEnabled(true);
 						entranceTable.clearSelection();
 					}
-					else
+					else {
 						delTransBtn.setEnabled(false);
+						modTransBtn.setEnabled(false);
+					}
 				}
 			});
 		}
@@ -291,16 +297,7 @@ public class Management {
 			addEntranceBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					InsertTransaction ins = new InsertTransaction(0, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
-					if (ins.getTransaction() != null) {
-						addRowsInTables(ins.getTransaction());
-						double tot = Login.getAccount().getBalance();
-						if (ins.getTransaction().getType() == '+')
-							tot += ins.getTransaction().getPayment();
-						else
-							tot -= ins.getTransaction().getPayment();
-						Login.getAccount().setBalance(tot);
-						Login.getAccount().updateAccount();
-					}
+					calculateBalance(ins);
 				}
 			});
 		}
@@ -316,20 +313,29 @@ public class Management {
 			addExitBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					InsertTransaction ins = new InsertTransaction(1, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
-					if (ins.getTransaction() != null) {
-						addRowsInTables(ins.getTransaction());
-						double tot = Login.getAccount().getBalance();
-						if (ins.getTransaction().getType() == '+')
-							tot += ins.getTransaction().getPayment();
-						else
-							tot -= ins.getTransaction().getPayment();
-						Login.getAccount().setBalance(tot);
-						Login.getAccount().updateAccount();
-					}
+					calculateBalance(ins);
 				}
 			});
 		}
 		return addExitBtn;
+	}
+	
+	private void calculateBalance(InsertTransaction ins) {
+		if (ins.getTransaction() != null) {
+			addRowsInTables(ins.getTransaction());
+			
+			double tot = Login.getAccount().getBalance();
+			
+			if (ins.getTransaction().getType() == '+')
+				tot += ins.getTransaction().getPayment();
+			else
+				tot -= ins.getTransaction().getPayment();
+			
+			Login.getAccount().setBalance(tot);
+			Login.getAccount().updateAccount();
+			
+			this.balanceLabel.setText(String.valueOf(Login.getAccount().getBalance())+" "+Login.getAccount().getCurrency());
+		}
 	}
 	
 	private JScrollPane getEntranceScrollPane() {
@@ -383,6 +389,8 @@ public class Management {
 				public void actionPerformed(ActionEvent e) {
 					entranceTableModel.setRowCount(0);
 					exitTableModel.setRowCount(0);
+					delTransBtn.setEnabled(false);
+					modTransBtn.setEnabled(false);
 					populateTables();
 				}
 			});
@@ -404,6 +412,8 @@ public class Management {
 				public void actionPerformed(ActionEvent e) {
 					entranceTableModel.setRowCount(0);
 					exitTableModel.setRowCount(0);
+					delTransBtn.setEnabled(false);
+					modTransBtn.setEnabled(false);
 					populateTables();					
 				}
 			});			
@@ -427,10 +437,55 @@ public class Management {
 			delTransBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			delTransBtn.setEnabled(false);
 			delTransBtn.setToolTipText("Delete selected transaction");
-			delTransBtn.setIcon(new ImageIcon(Management.class.getResource("/icons/del16.png")));
+			delTransBtn.setIcon(new ImageIcon(getClass().getResource("/icons/del16.png")));
 			delTransBtn.setBounds(376, 11, 90, 30);
 		}
 		return delTransBtn;
+	}
+	
+	private JButton getModTransBtn() {
+		if (modTransBtn == null) {
+			modTransBtn = new JButton("Modify");
+			modTransBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Transaction t = null;
+					
+					if (entranceTable.getSelectedRowCount() > 0)
+						t = Transaction.loadTransaction(entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getId());
+					else
+						t = Transaction.loadTransaction(exitTrans.getTransactions().get(exitTable.getSelectedRow()).getId());
+					
+					Transaction oldT = new Transaction(t.getId(), t.getUser(), t.getAccount(), t.getEntry(), t.getType(), t.getPayment(), t.getYear(), t.getMonth(), t.getDay());					
+					InsertTransaction ins = new InsertTransaction(t);									
+					
+					if (ins.getTransaction() != null) {
+						if (entranceTable.getSelectedRowCount() > 0)
+							updateRowsInTables(ins.getTransaction(), oldT, entranceTable.getSelectedRow());
+						else
+							updateRowsInTables(ins.getTransaction(), oldT, exitTable.getSelectedRow());
+						
+						double tot = Login.getAccount().getBalance() - oldT.getPayment();
+						
+						if (ins.getTransaction().getType() == '+')
+							tot += ins.getTransaction().getPayment();
+						else
+							tot -= ins.getTransaction().getPayment();																	
+						
+						Login.getAccount().setBalance(tot);
+						Login.getAccount().updateAccount();
+						
+						balanceLabel.setText(String.valueOf(Login.getAccount().getBalance())+" "+Login.getAccount().getCurrency());
+					}					
+				}
+			});
+			modTransBtn.setIcon(new ImageIcon(getClass().getResource("/icons/edit16.png")));
+			modTransBtn.setEnabled(false);
+			modTransBtn.setToolTipText("Modify selected transaction");
+			modTransBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			modTransBtn.setEnabled(false);
+			modTransBtn.setBounds(285, 11, 90, 30);
+		}
+		return modTransBtn;
 	}
 	
 	private void populateTables() {
@@ -450,7 +505,7 @@ public class Management {
 	private void addRowsInTables(Transaction t) {
 		Vector<String> vect = new Vector<String>();
 		vect.add(String.valueOf(t.getPayment()));
-		vect.add(String.valueOf(date.getDay()));
+		vect.add(String.valueOf(t.getDay()));
 		vect.add(t.getEntry());		
 		
 		if (t.getType() == '+') {					
@@ -466,4 +521,31 @@ public class Management {
 			this.exitAmount.setText(String.valueOf(this.exitTot));
 		}		
 	}
+	
+	private void updateRowsInTables(Transaction t, Transaction old, int row) {
+		
+		if (t.getType() == '+') {
+			this.entranceTableModel.setValueAt(String.valueOf(old.getPayment()), row, 0);
+			this.entranceTableModel.setValueAt(String.valueOf(old.getDay()), row, 1);
+			this.entranceTableModel.setValueAt(old.getEntry(), row, 2);			
+			this.entranceTrans.getTransactions().get(row).setPayment(old.getPayment());
+			this.entranceTrans.getTransactions().get(row).setDay(old.getDay());
+			this.entranceTrans.getTransactions().get(row).setEntry(old.getEntry());
+			this.entranceTot -= old.getPayment();
+			this.entranceTot += t.getPayment();			
+			this.entranceAmount.setText(String.valueOf(this.entranceTot));			
+		}
+		else {
+			this.exitTableModel.setValueAt(String.valueOf(old.getPayment()), row, 0);
+			this.exitTableModel.setValueAt(String.valueOf(old.getDay()), row, 1);
+			this.exitTableModel.setValueAt(old.getEntry(), row, 2);
+			this.exitTrans.getTransactions().get(row).setPayment(old.getPayment());
+			this.exitTrans.getTransactions().get(row).setDay(old.getDay());
+			this.exitTrans.getTransactions().get(row).setEntry(old.getEntry());			
+			this.exitTot -= old.getPayment();
+			this.exitTot += t.getPayment();
+			this.exitAmount.setText(String.valueOf(this.exitTot));
+		}		
+	}
+	
 }
