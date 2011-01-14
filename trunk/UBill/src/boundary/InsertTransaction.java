@@ -58,7 +58,7 @@ public class InsertTransaction extends BaseBoundary {
 	private JTextField amountText = null;
 	private JLabel currencyLabel = null;
 	private JComboBox comboBox = null;
-	private JButton btnAddNewCausal = null;
+	private JButton causalBtn = null;
 	private JLabel monthLabel = null;
 	private JLabel yearLabel = null;
 	private int year = 0;
@@ -78,7 +78,7 @@ public class InsertTransaction extends BaseBoundary {
 	
 	public InsertTransaction(Transaction transaction) {
 		this.transaction = transaction;
-		getMainDialog().setVisible(true);
+		getMainDialog().setVisible(true);		
 	}
 	
 	private JDialog getMainDialog() {
@@ -149,8 +149,7 @@ public class InsertTransaction extends BaseBoundary {
 					}
 					else {											
 						transaction.setDay(Integer.valueOf(dateText.getText()));
-						transaction.setPayment(Double.valueOf(amountText.getText()));
-						transaction.setType(type);
+						transaction.setPayment(Double.valueOf(amountText.getText()));						
 						transaction.updateTransaction();
 						ok("Transaction modified<br/>with success.");
 						mainDialog.dispose();
@@ -225,7 +224,7 @@ public class InsertTransaction extends BaseBoundary {
 			transPane.add(getDateText());
 			transPane.add(getAmountText());
 			transPane.add(getComboBox());
-			transPane.add(getBtnAddNewCausal());
+			transPane.add(getCausalBtn());
 			transPane.add(getMonthLabel());
 			transPane.add(getYearLabel());
 		}
@@ -257,7 +256,11 @@ public class InsertTransaction extends BaseBoundary {
 			});
 			entranceRadio.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			entranceRadio.setBounds(47, 22, 82, 23);
-			
+			if (transaction != null) {
+				entranceRadio.setEnabled(false);
+				if (transaction.getType() == '+')
+					entranceRadio.setSelected(true);
+			}
 		}
 		return entranceRadio;
 	}
@@ -291,7 +294,7 @@ public class InsertTransaction extends BaseBoundary {
 	private JLabel getEntranceIconLabel() {
 		if (entranceIconLabel == null) {
 			entranceIconLabel = new JLabel("");
-			entranceIconLabel.setIcon(new ImageIcon(InsertTransaction.class.getResource("/icons/entrance16.png")));
+			entranceIconLabel.setIcon(new ImageIcon(getClass().getResource("/icons/entrance16.png")));
 			entranceIconLabel.setBounds(130, 26, 16, 16);
 		}
 		return entranceIconLabel;
@@ -300,7 +303,7 @@ public class InsertTransaction extends BaseBoundary {
 	private JLabel getExitIconLabel() {
 		if (exitIconLabel == null) {
 			exitIconLabel = new JLabel("");
-			exitIconLabel.setIcon(new ImageIcon(InsertTransaction.class.getResource("/icons/output16.png")));
+			exitIconLabel.setIcon(new ImageIcon(getClass().getResource("/icons/output16.png")));
 			exitIconLabel.setBounds(242, 26, 16, 16);
 		}
 		return exitIconLabel;
@@ -323,7 +326,9 @@ public class InsertTransaction extends BaseBoundary {
 			dateText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			dateText.setBounds(155, 23, 30, 27);
 			dateText.setColumns(10);			
-			dateText.setText(String.valueOf(date.getDay()));			
+			dateText.setText(String.valueOf(date.getDay()));
+			if (transaction != null)
+				dateText.setText(String.valueOf(transaction.getDay()));
 		}
 		return dateText;
 	}
@@ -334,6 +339,8 @@ public class InsertTransaction extends BaseBoundary {
 			monthLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			monthLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			monthLabel.setBounds(90, 28, 63, 16);
+			if (transaction != null)
+				monthLabel.setText(Date.getMonth(transaction.getMonth()));
 		}
 		return monthLabel;
 	}
@@ -344,6 +351,8 @@ public class InsertTransaction extends BaseBoundary {
 			yearLabel.setHorizontalAlignment(SwingConstants.LEFT);
 			yearLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			yearLabel.setBounds(185, 28, 69, 16);
+			if (transaction != null)
+				yearLabel.setText(String.valueOf(transaction.getYear()));
 		}
 		return yearLabel;
 	}
@@ -367,6 +376,8 @@ public class InsertTransaction extends BaseBoundary {
 			amountText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			amountText.setColumns(10);
 			amountText.setBounds(90, 49, 90, 27);
+			if (transaction != null)
+				amountText.setText(String.valueOf(transaction.getPayment()));
 		}
 		return amountText;
 	}
@@ -389,18 +400,18 @@ public class InsertTransaction extends BaseBoundary {
 		return comboBox;
 	}
 	
-	private JButton getBtnAddNewCausal() {
-		if (btnAddNewCausal == null) {
-			btnAddNewCausal = new JButton("");
-			btnAddNewCausal.addActionListener(new ActionListener() {
+	private JButton getCausalBtn() {
+		if (causalBtn == null) {
+			causalBtn = new JButton("");
+			causalBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				}
 			});
-			btnAddNewCausal.setToolTipText("Add new causal");
-			btnAddNewCausal.setIcon(new ImageIcon(InsertTransaction.class.getResource("/icons/add16.png")));
-			btnAddNewCausal.setBounds(224, 73, 30, 30);
+			causalBtn.setToolTipText("Add new causal");
+			causalBtn.setIcon(new ImageIcon(getClass().getResource("/icons/add16.png")));
+			causalBtn.setBounds(224, 73, 30, 30);
 		}
-		return btnAddNewCausal;
+		return causalBtn;
 	}
 	
 	public Transaction getTransaction() {

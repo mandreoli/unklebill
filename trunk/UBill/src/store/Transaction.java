@@ -130,7 +130,7 @@ public class Transaction {
 	public static Transaction loadTransaction(int id) {		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Transaction loaded = (Transaction)session.createQuery("FROM transaction WHERE id="+id).uniqueResult();		
+		Transaction loaded = (Transaction)session.createQuery("FROM Transaction WHERE id="+id).uniqueResult();		
 		session.getTransaction().commit();		
 		
 		Transaction t = null;
