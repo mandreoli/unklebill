@@ -1,6 +1,5 @@
 package datatype;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -62,13 +61,11 @@ public class Date {
 	}
 	
 	public String getDate(char c) {
-		String month = null;
-		String day = null;
-
-		month = String.valueOf(this.month);
-		day = String.valueOf(this.day);
+		String month = String.valueOf(this.month);
+		String day = String.valueOf(this.day);
+		String year = String.valueOf(this.year);
 			
-		return month+c+day+c+String.valueOf(this.year);
+		return month+c+day+c+year;
 	}
 	
 	public String getFormattedDate() {

@@ -58,6 +58,16 @@ public class FieldParser {
 		return true;
 	}
 	
+	public static boolean checkInt(String number) {
+		String text = number.trim();
+		String regex = "^[0-9]+$";	
+		
+		if (!Pattern.matches(regex, text))
+			return false;
+		
+		return true;
+	}
+	
 	public static boolean checkDate(String date) {
 		String text = date.trim();
 		String regex = "^(0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])[-/.](19|20)\\d\\d$";	
