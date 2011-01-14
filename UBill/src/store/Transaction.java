@@ -8,7 +8,7 @@ public class Transaction {
 	private String user = null;
 	private String account = null;	
 	private String entry = null;
-	private String type = null;
+	private char type = '+';
 	private double payment = 0.0;
 	private String date = null;
 
@@ -16,7 +16,7 @@ public class Transaction {
 	  
 	}
 	
-	public Transaction(String user, String account, String entry, String type, double payment, String date) {
+	public Transaction(String user, String account, String entry, char type, double payment, String date) {
 		this.user = user;
 		this.account = account;
 		this.entry = entry;
@@ -25,7 +25,7 @@ public class Transaction {
 		this.date = date;
 	}
 	
-	public Transaction(int id, String user, String account, String entry, String type, double payment, String date) {
+	public Transaction(int id, String user, String account, String entry, char type, double payment, String date) {
 		this.id = id;
 		this.user = user;
 		this.account = account;
@@ -67,11 +67,11 @@ public class Transaction {
 		return this.entry;
 	}
 
-	public void setType(String type) {
+	public void setType(char type) {
 		this.type = type;
 	}
 
-	public String getType() {
+	public char getType() {
 		return this.type;
 	}
 
@@ -95,6 +95,13 @@ public class Transaction {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		session.save(this);
+		session.getTransaction().commit();
+	}
+	
+	public void updateTransaction() {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update(this);
 		session.getTransaction().commit();
 	}
 	

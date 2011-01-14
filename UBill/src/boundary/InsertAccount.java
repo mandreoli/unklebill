@@ -155,7 +155,7 @@ public class InsertAccount extends BaseBoundary {
 				@Override
 				public void keyReleased(KeyEvent e) {
 					catchTypedField(nameText, descrText, balanceText);										
-					if (FieldParser.checkFloat(balanceText.getText()))
+					if (FieldParser.checkFloat(balanceText.getText(), true))
 						balanceText.setBackground(normalColor);
 					else
 						balanceText.setBackground(errorColor);
@@ -196,8 +196,8 @@ public class InsertAccount extends BaseBoundary {
 		if (saveBtn == null) {
 			saveBtn = new JButton();
 			saveBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (account == null) {
+				public void actionPerformed(ActionEvent e) {					
+					if (account == null) {						
 						if (Account.loadAccount(nameText.getText(), Login.getUser().getUser()) == null) {
 							Account account = new Account(nameText.getText(), Login.getUser().getUser(), descrText.getText(), Double.valueOf(balanceText.getText()), Date.getCurrentDate(), currencyBox.getSelectedItem().toString(), primaryBox.isSelected());
 							account.saveAccount();
@@ -221,7 +221,7 @@ public class InsertAccount extends BaseBoundary {
 				}
 			});
 			if (this.account == null) {
-				saveBtn.setToolTipText("Add new account");
+				saveBtn.setToolTipText("Add this account");
 				saveBtn.setText("Add");
 			}
 			else {
@@ -239,7 +239,7 @@ public class InsertAccount extends BaseBoundary {
 	
 	private void catchTypedField(JTextField account, JTextArea descr, JTextField balance) {
 		
-		if (FieldParser.checkUser(account.getText()) && descr.getText().length() <= 160 && FieldParser.checkFloat(balance.getText())) {
+		if (FieldParser.checkUser(account.getText()) && descr.getText().length() <= 160 && FieldParser.checkFloat(balance.getText(), true)) {
 			saveBtn.setEnabled(true);
 		}
 		else {

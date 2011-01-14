@@ -27,6 +27,7 @@ import javax.swing.JComboBox;
 
 import datatype.Date;
 import datatype.Month;
+import datatype.Transactions;
 import executor.Login;
 import javax.swing.SwingConstants;
 import java.awt.Color;
@@ -64,7 +65,8 @@ public class Management {
 	
 	
 	public Management(JPanel mainPane) {		
-		mainPane.add(getManagePane(), BorderLayout.CENTER);		
+		mainPane.add(getManagePane(), BorderLayout.CENTER);	
+		System.out.println(Transactions.loadTransactions(Login.getUser().getName(), Login.getAccount().getAccount()).getNumTransactions());
 	}
 	
 	/**
