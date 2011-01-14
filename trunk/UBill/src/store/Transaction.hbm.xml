@@ -13,6 +13,8 @@
     <property name="entry" column="ENTRY"/>
     <property name="type" column="TYPE"/>
     <property name="payment" column="PAYMENT"/>
-    <property name="date" column="DATE"/>
+    <property name="year" column="YEAR"/>
+    <property name="month" column="MONTH"/>
+    <property name="day" column="DAY"/>
   </class>
 </hibernate-mapping>

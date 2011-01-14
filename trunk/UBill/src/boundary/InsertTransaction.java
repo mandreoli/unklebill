@@ -59,15 +59,19 @@ public class InsertTransaction extends BaseBoundary {
 	private JLabel currencyLabel = null;
 	private JComboBox comboBox = null;
 	private JButton btnAddNewCausal = null;
-	private JLabel monthLabel;
-	private JLabel yearLabel;
+	private JLabel monthLabel = null;
+	private JLabel yearLabel = null;
+	private int year = 0;
+	private int month = 0;
 	private Date date = new Date(Date.getCurrentDate());
 	
 	
 	/**
 	 * @wbp.parser.constructor
 	 **/
-	public InsertTransaction(int flag) {
+	public InsertTransaction(int flag, int month, int year) {
+		this.year = year;
+		this.month = month;
 		this.flag = flag;
 		getMainDialog().setVisible(true);
 	}
@@ -137,14 +141,14 @@ public class InsertTransaction extends BaseBoundary {
 					else
 						type = '-';
 					if (transaction == null) {											
-						Transaction trans = new Transaction(Login.getUser().getName(), Login.getAccount().getAccount(), null, type, Double.valueOf(amountText.getText()), dateText.getText());
+						Transaction trans = new Transaction(Login.getUser().getName(), Login.getAccount().getAccount(), null, type, Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()));
 						transaction = trans;
 						trans.saveTransaction();
 						ok("Transaction added<br/>with success.");
 						mainDialog.dispose();
 					}
-					else {
-						transaction.setDate(dateText.getText());
+					else {											
+						transaction.setDay(Integer.valueOf(dateText.getText()));
 						transaction.setPayment(Double.valueOf(amountText.getText()));
 						transaction.setType(type);
 						transaction.updateTransaction();
@@ -326,7 +330,7 @@ public class InsertTransaction extends BaseBoundary {
 	
 	private JLabel getMonthLabel() {
 		if (monthLabel == null) {
-			monthLabel = new JLabel(Date.getMonth(date.getMonth()));
+			monthLabel = new JLabel(Date.getMonth(month));
 			monthLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			monthLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			monthLabel.setBounds(90, 28, 63, 16);
@@ -336,7 +340,7 @@ public class InsertTransaction extends BaseBoundary {
 	
 	private JLabel getYearLabel() {
 		if (yearLabel == null) {
-			yearLabel = new JLabel(", "+String.valueOf(date.getYear()));
+			yearLabel = new JLabel(", "+String.valueOf(year));
 			yearLabel.setHorizontalAlignment(SwingConstants.LEFT);
 			yearLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			yearLabel.setBounds(185, 28, 69, 16);

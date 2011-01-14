@@ -85,14 +85,23 @@ public class Date {
 	}
 	
 	public static String getMonth(int month) {
-		int i = 1;
 		
 		for (Month m : Month.values()) {
-			if (i == month)
+			if (m.ordinal() == month-1)
 				return m.toString();
 		}
 		
 		return null;
+	}
+	
+	public static int getMonth(String month) {
+		
+		for (Month m : Month.values()) {
+			if (m.toString().equals(month))
+				return m.ordinal()+1;
+		}
+		
+		return -1;
 	}
 	
 	public static String getDay(int day) {

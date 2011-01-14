@@ -10,29 +10,35 @@ public class Transaction {
 	private String entry = null;
 	private char type = '+';
 	private double payment = 0.0;
-	private String date = null;
+	private int year = 0;
+	private int month = 0;
+	private int day = 0;
 
 	public Transaction() {
 	  
 	}
 	
-	public Transaction(String user, String account, String entry, char type, double payment, String date) {
+	public Transaction(String user, String account, String entry, char type, double payment, int year, int month, int day) {
 		this.user = user;
 		this.account = account;
 		this.entry = entry;
 		this.type = type;
 		this.payment = payment;
-		this.date = date;
+		this.year = year;
+		this.month = month;
+		this.day = day;
 	}
 	
-	public Transaction(int id, String user, String account, String entry, char type, double payment, String date) {
+	public Transaction(int id, String user, String account, String entry, char type, double payment, int year, int month, int day) {
 		this.id = id;
 		this.user = user;
 		this.account = account;
 		this.entry = entry;
 		this.type = type;
 		this.payment = payment;
-		this.date = date;
+		this.year = year;
+		this.month = month;
+		this.day = day;
 	}
 	
 	public void setId(int id) {
@@ -83,12 +89,28 @@ public class Transaction {
 		return this.payment;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public int getYear() {
+		return this.year;
 	}
 
-	public String getDate() {
-		return this.date;
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	public int getMonth() {
+		return this.month;
+	}
+
+	public void setMonth(int month) {
+		this.month = month;
+	}
+
+	public int getDay() {
+		return this.day;
+	}
+
+	public void setDay(int day) {
+		this.day = day;
 	}
   
 	public void saveTransaction() {
@@ -113,7 +135,7 @@ public class Transaction {
 		
 		Transaction t = null;
 		if (loaded != null)
-			t = new Transaction(loaded.getId(), loaded.getUser(), loaded.getAccount(), loaded.getEntry(), loaded.getType(), loaded.getPayment(), loaded.getDate()); 
+			t = new Transaction(loaded.getId(), loaded.getUser(), loaded.getAccount(), loaded.getEntry(), loaded.getType(), loaded.getPayment(), loaded.getYear(), loaded.getMonth(), loaded.getDay()); 
 		
 		return t;
 	}
