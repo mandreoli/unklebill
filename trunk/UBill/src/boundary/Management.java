@@ -30,6 +30,9 @@ import datatype.Month;
 import datatype.Transactions;
 import executor.Login;
 import javax.swing.SwingConstants;
+
+import store.Transaction;
+
 import java.awt.Color;
 
 
@@ -62,11 +65,12 @@ public class Management {
 	private Color active = new Color(0, 128, 0);
 	private Color neutro = new Color(0, 0, 0);
 	private Color passive = new Color(128, 0, 0);
+	private Transactions transactions = null;
+	private Date date = new Date(Date.getCurrentDate());
 	
 	
 	public Management(JPanel mainPane) {		
 		mainPane.add(getManagePane(), BorderLayout.CENTER);	
-		System.out.println(Transactions.loadTransactions(Login.getUser().getName(), Login.getAccount().getAccount()).getNumTransactions());
 	}
 	
 	/**
@@ -143,7 +147,7 @@ public class Management {
 			monthTab.add(getMonthBox());
 			monthTab.add(getYearBox());
 			monthTab.add(getDelTransBtn());
-			
+			populateTables();
 		}
 		return monthTab;
 	}
@@ -181,7 +185,7 @@ public class Management {
 			};
 			Object[] headers = new Object[3];
 			headers[0] = "Amount";
-			headers[1] = "Date";
+			headers[1] = "Day";
 			headers[2] = "Causal";
 			entranceTableModel.setColumnIdentifiers(headers);
 		}
@@ -200,7 +204,7 @@ public class Management {
 			};
 			Object[] headers = new Object[3];
 			headers[0] = "Amount";
-			headers[1] = "Date";
+			headers[1] = "Day";
 			headers[2] = "Causal";
 			exitTableModel.setColumnIdentifiers(headers);
 		}
@@ -214,7 +218,7 @@ public class Management {
 			entranceTable.setBounds(new Rectangle(20, 70, 216, 235));			
 			entranceTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			entranceTable.getColumnModel().getColumn(0).setPreferredWidth(50);
-			entranceTable.getColumnModel().getColumn(1).setPreferredWidth(30);
+			entranceTable.getColumnModel().getColumn(1).setPreferredWidth(10);
 			//entranceTable.getColumnModel().getColumn(2).setPreferredWidth(entranceTable.getWidth() - 150);			
 			entranceTable.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
@@ -236,7 +240,7 @@ public class Management {
 			exitTable.setBounds(new Rectangle(20, 70, 216, 235));			
 			exitTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			exitTable.getColumnModel().getColumn(0).setPreferredWidth(50);
-			exitTable.getColumnModel().getColumn(1).setPreferredWidth(30);
+			exitTable.getColumnModel().getColumn(1).setPreferredWidth(10);
 			//exitTable.getColumnModel().getColumn(2).setPreferredWidth(exitTable.getWidth() - 150);
 			exitTable.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {					
@@ -284,7 +288,9 @@ public class Management {
 			addEntranceBtn.setIcon(new ImageIcon(getClass().getResource("/icons/entrance16.png")));
 			addEntranceBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					new InsertTransaction(0);
+					InsertTransaction ins = new InsertTransaction(0);
+					if (ins.getTransaction() != null)
+						addRowsInTables(ins.getTransaction());
 				}
 			});
 		}
@@ -299,7 +305,9 @@ public class Management {
 			addExitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/output16.png")));
 			addExitBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					new InsertTransaction(1);
+					InsertTransaction ins = new InsertTransaction(1);
+					if (ins.getTransaction() != null)
+						addRowsInTables(ins.getTransaction());
 				}
 			});
 		}
@@ -351,8 +359,7 @@ public class Management {
 		if (monthBox == null) {
 			monthBox = new JComboBox(Month.values());
 			monthBox.setFont(new Font("Lucida Grande", Font.BOLD, 12));
-			monthBox.setBounds(50, 14, 89, 24);
-			Date date = new Date(Date.getCurrentDate());
+			monthBox.setBounds(50, 14, 89, 24);			
 			monthBox.setSelectedIndex(date.getMonth()-1);
 		}
 		return monthBox;
@@ -366,8 +373,7 @@ public class Management {
 			}
 			yearBox = new JComboBox(years);
 			yearBox.setFont(new Font("Lucida Grande", Font.BOLD, 12));
-			yearBox.setBounds(140, 14, 71, 24);
-			Date date = new Date(Date.getCurrentDate());
+			yearBox.setBounds(140, 14, 71, 24);			
 			yearBox.setSelectedItem(date.getYear());
 		}
 		return yearBox;
@@ -376,6 +382,11 @@ public class Management {
 	private JButton getDelTransBtn() {
 		if (delTransBtn == null) {
 			delTransBtn = new JButton("Delete");
+			delTransBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+			});
 			delTransBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			delTransBtn.setEnabled(false);
 			delTransBtn.setToolTipText("Delete selected transaction");
@@ -385,5 +396,27 @@ public class Management {
 		return delTransBtn;
 	}
 	
+	private void populateTables() {
+		this.transactions = Transactions.loadTransactions(Login.getUser().getName(), Login.getAccount().getAccount());
+				
+		if (this.transactions.getNumTransactions() > 0) {			
+			for (Transaction t : this.transactions.getTransactions()) {
+				addRowsInTables(t);
+			}
+		}		
+	}
 	
+	private void addRowsInTables(Transaction t) {
+		Vector<String> vect = new Vector<String>();
+		vect.add(String.valueOf(t.getPayment()));
+		vect.add(String.valueOf(date.getDay()));
+		vect.add(t.getEntry());		
+		
+		if (t.getType() == '+') {					
+			entranceTableModel.addRow(vect);
+		}
+		else {
+			exitTableModel.addRow(vect);
+		}
+	}
 }

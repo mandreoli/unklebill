@@ -57,9 +57,11 @@ public class InsertTransaction extends BaseBoundary {
 	private JTextField dateText = null;
 	private JTextField amountText = null;
 	private JLabel currencyLabel = null;
-	private JLabel formatLabel = null;
 	private JComboBox comboBox = null;
 	private JButton btnAddNewCausal = null;
+	private JLabel monthLabel;
+	private JLabel yearLabel;
+	private Date date = new Date(Date.getCurrentDate());
 	
 	
 	/**
@@ -102,7 +104,7 @@ public class InsertTransaction extends BaseBoundary {
 			mainPane.add(getExitRadio());
 			getRadioGroup();
 			mainPane.add(getEntranceIconLabel());
-			mainPane.add(getExitIconLabel());
+			mainPane.add(getExitIconLabel());			
 			catchTypedField(dateText, amountText);
 		}
 		return mainPane;
@@ -135,8 +137,9 @@ public class InsertTransaction extends BaseBoundary {
 					else
 						type = '-';
 					if (transaction == null) {											
-						Transaction transaction = new Transaction(Login.getUser().getName(), Login.getAccount().getAccount(), null, type, Double.valueOf(amountText.getText()), dateText.getText());
-						transaction.saveTransaction();
+						Transaction trans = new Transaction(Login.getUser().getName(), Login.getAccount().getAccount(), null, type, Double.valueOf(amountText.getText()), dateText.getText());
+						transaction = trans;
+						trans.saveTransaction();
 						ok("Transaction added<br/>with success.");
 						mainDialog.dispose();
 					}
@@ -168,7 +171,7 @@ public class InsertTransaction extends BaseBoundary {
 	}
 	
 	private void catchTypedField(JTextField date, JTextField amount) {
-		if (FieldParser.checkDate(date.getText()) && Date.checkDate(date.getText()) && FieldParser.checkFloat(amount.getText(), false) && Double.valueOf(amount.getText()) > 0) {
+		if (FieldParser.checkInt(date.getText()) && Integer.valueOf(dateText.getText()) > 0 && FieldParser.checkFloat(amount.getText(), false) && Double.valueOf(amount.getText()) > 0) {
 			saveBtn.setEnabled(true);
 		}
 		else {			 
@@ -215,11 +218,12 @@ public class InsertTransaction extends BaseBoundary {
 			transPane.add(getAmountLabel());
 			transPane.add(getTypeLabel());
 			transPane.add(getCurrencyLabel());
-			transPane.add(getFormatLabel());
 			transPane.add(getDateText());
 			transPane.add(getAmountText());
 			transPane.add(getComboBox());
 			transPane.add(getBtnAddNewCausal());
+			transPane.add(getMonthLabel());
+			transPane.add(getYearLabel());
 		}
 		return transPane;
 	}
@@ -305,7 +309,7 @@ public class InsertTransaction extends BaseBoundary {
 				@Override
 				public void keyReleased(KeyEvent e) {
 					catchTypedField(dateText, amountText);
-					if (FieldParser.checkDate(dateText.getText()) && Date.checkDate(dateText.getText()))
+					if (FieldParser.checkInt(dateText.getText()) && Integer.valueOf(dateText.getText()) > 0)
 						dateText.setBackground(normalColor);
 					else
 						dateText.setBackground(errorColor);
@@ -313,12 +317,31 @@ public class InsertTransaction extends BaseBoundary {
 			});
 			dateText.setToolTipText("Insert date of transaction");
 			dateText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			dateText.setBounds(90, 23, 90, 27);
-			dateText.setColumns(10);
-			Date date = new Date(Date.getCurrentDate());
-			dateText.setText(date.getDate('/'));			
+			dateText.setBounds(155, 23, 30, 27);
+			dateText.setColumns(10);			
+			dateText.setText(String.valueOf(date.getDay()));			
 		}
 		return dateText;
+	}
+	
+	private JLabel getMonthLabel() {
+		if (monthLabel == null) {
+			monthLabel = new JLabel(Date.getMonth(date.getMonth()));
+			monthLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			monthLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			monthLabel.setBounds(90, 28, 63, 16);
+		}
+		return monthLabel;
+	}
+	
+	private JLabel getYearLabel() {
+		if (yearLabel == null) {
+			yearLabel = new JLabel(", "+String.valueOf(date.getYear()));
+			yearLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			yearLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			yearLabel.setBounds(185, 28, 69, 16);
+		}
+		return yearLabel;
 	}
 	
 	private JTextField getAmountText() {
@@ -353,16 +376,6 @@ public class InsertTransaction extends BaseBoundary {
 		return currencyLabel;
 	}
 	
-	private JLabel getFormatLabel() {
-		if (formatLabel == null) {
-			formatLabel = new JLabel("mm/dd/yyyy");
-			formatLabel.setForeground(Color.DARK_GRAY);
-			formatLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-			formatLabel.setBounds(180, 28, 74, 16);
-		}
-		return formatLabel;
-	}
-	
 	private JComboBox getComboBox() {
 		if (comboBox == null) {
 			comboBox = new JComboBox();
@@ -385,5 +398,11 @@ public class InsertTransaction extends BaseBoundary {
 		}
 		return btnAddNewCausal;
 	}
+	
+	public Transaction getTransaction() {
+		return this.transaction;
+	}
+	
+	
 }	
 

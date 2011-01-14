@@ -284,14 +284,14 @@ public class Home extends BaseBoundary {
 	
 	private void showAccountInfo(Account account) {
 		if (account != null) {
-			Date date = new Date(account.getCreation());			
+			Date date = new Date(account.getCreation());
 			String prim = "NO";
 			
 			if (account.isUsable())
 				prim = "YES";
 			
 			this.accountLabel.setText(account.getAccount());
-			this.createLabel.setText("<html><b>Last modified:</b>  "+date.getFormattedDate()+"</html>");
+			this.createLabel.setText("<html><b>Last modified:</b> "+date.getDate('/')+"</html>");
 			this.primaryLabel.setText("<html><b>Primary:</b> "+prim+"</html>");
 			
 			double value = Double.valueOf(account.getBalance());
