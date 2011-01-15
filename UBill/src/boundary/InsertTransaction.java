@@ -1,7 +1,6 @@
 package boundary;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -78,6 +77,12 @@ public class InsertTransaction extends BaseBoundary {
 	
 	public InsertTransaction(Transaction transaction) {
 		this.transaction = transaction;
+		
+		if (transaction.getType() == '+')
+			this.flag = 0;
+		else
+			this.flag = 1;
+		
 		getMainDialog().setVisible(true);		
 	}
 	
@@ -89,8 +94,13 @@ public class InsertTransaction extends BaseBoundary {
 			mainDialog.setSize(new Dimension(this.wWidth, this.wHeight));		
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 			mainDialog.setLocation(new Point((d.width-wWidth)/2, (d.height-wHeight)/2));
-			mainDialog.setResizable(false);
-			mainDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);			
+			mainDialog.setResizable(false);			
+			mainDialog.addWindowListener(new java.awt.event.WindowAdapter() {
+				public void windowClosing(java.awt.event.WindowEvent e) {
+					transaction = null;
+					mainDialog.dispose();
+				}
+			});	
 			mainDialog.setContentPane(getMainPane());
 			mainDialog.setModal(true);
 		}
@@ -119,6 +129,7 @@ public class InsertTransaction extends BaseBoundary {
 			exitBtn = new JButton("Cancel");
 			exitBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					transaction = null;
 					getMainDialog().dispose();
 				}
 			});
@@ -241,6 +252,12 @@ public class InsertTransaction extends BaseBoundary {
 				entranceRadio.setSelected(true);
 			else
 				exitRadio.setSelected(true);
+			
+			if (this.transaction != null) {
+				this.entranceRadio.setEnabled(false);
+				this.exitRadio.setEnabled(false);
+			}
+				
 		}
 		return radioGroup;
 	}
@@ -255,12 +272,7 @@ public class InsertTransaction extends BaseBoundary {
 				}
 			});
 			entranceRadio.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			entranceRadio.setBounds(47, 22, 82, 23);
-			if (transaction != null) {
-				entranceRadio.setEnabled(false);
-				if (transaction.getType() == '+')
-					entranceRadio.setSelected(true);
-			}
+			entranceRadio.setBounds(47, 22, 82, 23);			
 		}
 		return entranceRadio;
 	}

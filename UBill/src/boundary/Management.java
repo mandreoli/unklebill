@@ -334,7 +334,7 @@ public class Management {
 			Login.getAccount().setBalance(tot);
 			Login.getAccount().updateAccount();
 			
-			this.balanceLabel.setText(String.valueOf(Login.getAccount().getBalance())+" "+Login.getAccount().getCurrency());
+			updateBalanceLabel(balanceLabel);
 		}
 	}
 	
@@ -356,16 +356,18 @@ public class Management {
 	
 	private JLabel getEntranceAmount() {
 		if (entranceAmount == null) {
-			entranceAmount = new JLabel("Entrance");
-			entranceAmount.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			entranceAmount = new JLabel("0.0");
+			entranceAmount.setForeground(active);
+			entranceAmount.setFont(new Font("Lucida Grande", Font.BOLD, 14));
 		}
 		return entranceAmount;
 	}
 	
 	private JLabel getExitAmount() {
 		if (exitAmount == null) {
-			exitAmount = new JLabel("Exit");
-			exitAmount.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			exitAmount = new JLabel("0.0");
+			exitAmount.setForeground(passive);
+			exitAmount.setFont(new Font("Lucida Grande", Font.BOLD, 14));
 		}
 		return exitAmount;
 	}
@@ -450,10 +452,12 @@ public class Management {
 				public void actionPerformed(ActionEvent e) {
 					Transaction t = null;
 					
-					if (entranceTable.getSelectedRowCount() > 0)
-						t = Transaction.loadTransaction(entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getId());
-					else
-						t = Transaction.loadTransaction(exitTrans.getTransactions().get(exitTable.getSelectedRow()).getId());
+					if (entranceTable.getSelectedRowCount() > 0) {
+						t = Transaction.loadTransaction(entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getId());						
+					}
+					else {
+						t = Transaction.loadTransaction(exitTrans.getTransactions().get(exitTable.getSelectedRow()).getId());						
+					}
 					
 					Transaction oldT = new Transaction(t.getId(), t.getUser(), t.getAccount(), t.getEntry(), t.getType(), t.getPayment(), t.getYear(), t.getMonth(), t.getDay());					
 					InsertTransaction ins = new InsertTransaction(t);									
@@ -474,7 +478,7 @@ public class Management {
 						Login.getAccount().setBalance(tot);
 						Login.getAccount().updateAccount();
 						
-						balanceLabel.setText(String.valueOf(Login.getAccount().getBalance())+" "+Login.getAccount().getCurrency());
+						updateBalanceLabel(balanceLabel);
 					}					
 				}
 			});
@@ -499,53 +503,71 @@ public class Management {
 			for (Transaction t : this.transactions.getTransactions()) {
 				addRowsInTables(t);
 			}
-		}		
+		}
+		
+		updatePartialsAmounts(entranceAmount, exitAmount);
 	}
 	
 	private void addRowsInTables(Transaction t) {
 		Vector<String> vect = new Vector<String>();
-		vect.add(String.valueOf(t.getPayment()));
-		vect.add(String.valueOf(t.getDay()));
+		vect.add(String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency()));
+		vect.add(Date.getDay(t.getDay()));
 		vect.add(t.getEntry());		
 		
 		if (t.getType() == '+') {					
 			this.entranceTableModel.addRow(vect);
 			this.entranceTrans.addTransaction(t);
-			this.entranceTot += t.getPayment();
-			this.entranceAmount.setText(String.valueOf(this.entranceTot));
+			this.entranceTot += t.getPayment();			
 		}
 		else {
 			this.exitTableModel.addRow(vect);
 			this.exitTrans.addTransaction(t);
-			this.exitTot += t.getPayment();
-			this.exitAmount.setText(String.valueOf(this.exitTot));
-		}		
+			this.exitTot += t.getPayment();			
+		}
+		
+		updatePartialsAmounts(entranceAmount, exitAmount);
 	}
 	
 	private void updateRowsInTables(Transaction t, Transaction old, int row) {
 		
 		if (t.getType() == '+') {
-			this.entranceTableModel.setValueAt(String.valueOf(old.getPayment()), row, 0);
-			this.entranceTableModel.setValueAt(String.valueOf(old.getDay()), row, 1);
-			this.entranceTableModel.setValueAt(old.getEntry(), row, 2);			
-			this.entranceTrans.getTransactions().get(row).setPayment(old.getPayment());
-			this.entranceTrans.getTransactions().get(row).setDay(old.getDay());
-			this.entranceTrans.getTransactions().get(row).setEntry(old.getEntry());
+			this.entranceTableModel.setValueAt(String.valueOf(t.getPayment())+" "+Login.getAccount().getCurrency(), row, 0);
+			this.entranceTableModel.setValueAt(Date.getDay(t.getDay()), row, 1);
+			this.entranceTableModel.setValueAt(t.getEntry(), row, 2);			
+			this.entranceTrans.getTransactions().get(row).setPayment(t.getPayment());
+			this.entranceTrans.getTransactions().get(row).setDay(t.getDay());
+			this.entranceTrans.getTransactions().get(row).setEntry(t.getEntry());
 			this.entranceTot -= old.getPayment();
 			this.entranceTot += t.getPayment();			
-			this.entranceAmount.setText(String.valueOf(this.entranceTot));			
 		}
 		else {
-			this.exitTableModel.setValueAt(String.valueOf(old.getPayment()), row, 0);
-			this.exitTableModel.setValueAt(String.valueOf(old.getDay()), row, 1);
-			this.exitTableModel.setValueAt(old.getEntry(), row, 2);
-			this.exitTrans.getTransactions().get(row).setPayment(old.getPayment());
-			this.exitTrans.getTransactions().get(row).setDay(old.getDay());
-			this.exitTrans.getTransactions().get(row).setEntry(old.getEntry());			
+			this.exitTableModel.setValueAt(String.valueOf(t.getPayment())+" "+Login.getAccount().getCurrency(), row, 0);
+			this.exitTableModel.setValueAt(Date.getDay(t.getDay()), row, 1);
+			this.exitTableModel.setValueAt(t.getEntry(), row, 2);
+			this.exitTrans.getTransactions().get(row).setPayment(t.getPayment());
+			this.exitTrans.getTransactions().get(row).setDay(t.getDay());
+			this.exitTrans.getTransactions().get(row).setEntry(t.getEntry());			
 			this.exitTot -= old.getPayment();
-			this.exitTot += t.getPayment();
-			this.exitAmount.setText(String.valueOf(this.exitTot));
-		}		
+			this.exitTot += t.getPayment();			
+		}
+		
+		updatePartialsAmounts(entranceAmount, exitAmount);
 	}
 	
+	private void updatePartialsAmounts(JLabel entrance, JLabel exit) {
+		entrance.setText("+"+String.valueOf(this.entranceTot)+" "+Login.getAccount().getCurrency());
+		exit.setText("-"+String.valueOf(this.exitTot)+" "+Login.getAccount().getCurrency());
+	}
+	
+	private void updateBalanceLabel(JLabel label) {
+		
+		if (Login.getAccount().getBalance() > 0)
+			label.setForeground(active);
+		else if (Login.getAccount().getBalance() < 0)
+			label.setForeground(passive);
+		else
+			label.setForeground(neutro);
+			
+		label.setText(String.valueOf(Login.getAccount().getBalance())+" "+Login.getAccount().getCurrency());
+	}
 }
