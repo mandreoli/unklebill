@@ -7,6 +7,7 @@
   <class name="Entry" table="ENTRY">
     <id name="name" column="NAME">    	
 	</id>
+	<property name="user" column="USER"/>
 	<property name="description" column="DESCRIPTION"/>
   </class>
 </hibernate-mapping>

@@ -14,6 +14,16 @@ public class FieldParser {
 		return true;
 	}
 	
+	public static boolean checkCustomUser(String user, int min, int max) {
+		String text = user.trim();
+		String regex = "^[A-Za-z0-9_]{"+min+","+max+"}";
+		
+		if (!Pattern.matches(regex, text))
+			return false;
+		
+		return true;
+	}
+	
 	public static boolean checkPassword(char[] password) {
 		String text = new String(password);
 		String regex = "^[A-Za-z0-9]{4,15}";
@@ -38,6 +48,15 @@ public class FieldParser {
 		String text = name.trim();		
 		
 		if (text.equals("") || text.length() < 4 || text.length() > 30)
+			return false;
+		
+		return true;
+	}
+	
+	public static boolean checkCustomName(String name, int min,  int max) {
+		String text = name.trim();		
+		
+		if (text.equals("") || text.length() < min || text.length() > max)
 			return false;
 		
 		return true;
