@@ -99,8 +99,8 @@ public class InsertAccount extends BaseBoundary {
 			descrLabel.setBounds(6, 44, 104, 16);
 			mainPane.add(descrLabel);
 			
-			JLabel balanceLabel = new JLabel("Initial balance");
-			balanceLabel.setToolTipText("Beginning balance");
+			JLabel balanceLabel = new JLabel("Balance");
+			balanceLabel.setToolTipText("Current balance");
 			balanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			balanceLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			balanceLabel.setBounds(6, 137, 104, 16);
