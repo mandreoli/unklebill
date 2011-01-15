@@ -420,7 +420,7 @@ public class MonthView {
 	}
 	
 	private void populateTables() {
-		this.transactions = Transactions.loadTransactions(Login.getUser().getName(), Login.getAccount().getAccount(), Integer.valueOf(yearBox.getSelectedItem().toString()), Date.getMonth(monthBox.getSelectedItem().toString()));
+		this.transactions = Transactions.loadTransactions(Login.getUser().getUser(), Login.getAccount().getAccount(), Integer.valueOf(yearBox.getSelectedItem().toString()), Date.getMonth(monthBox.getSelectedItem().toString()));
 		this.entranceTrans = new Transactions();
 		this.exitTrans = new Transactions();
 		this.entranceTot = 0.0;
