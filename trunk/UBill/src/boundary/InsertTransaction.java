@@ -15,8 +15,11 @@ import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
+
+import store.Entry;
 import store.Transaction;
 import datatype.Date;
+import datatype.Entries;
 import executor.FieldParser;
 import executor.Login;
 import java.awt.event.KeyAdapter;
@@ -56,7 +59,7 @@ public class InsertTransaction extends BaseBoundary {
 	private JTextField dateText = null;
 	private JTextField amountText = null;
 	private JLabel currencyLabel = null;
-	private JComboBox comboBox = null;
+	private JComboBox categoryBox = null;
 	private JButton causalBtn = null;
 	private JLabel monthLabel = null;
 	private JLabel yearLabel = null;
@@ -152,7 +155,7 @@ public class InsertTransaction extends BaseBoundary {
 					else
 						type = '-';
 					if (transaction == null) {											
-						Transaction trans = new Transaction(Login.getUser().getName(), Login.getAccount().getAccount(), null, type, Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()));
+						Transaction trans = new Transaction(Login.getUser().getName(), Login.getAccount().getAccount(), categoryBox.getSelectedItem().toString(), type, Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()));
 						transaction = trans;
 						trans.saveTransaction();
 						ok("Transaction added<br/>with success.");
@@ -160,7 +163,8 @@ public class InsertTransaction extends BaseBoundary {
 					}
 					else {											
 						transaction.setDay(Integer.valueOf(dateText.getText()));
-						transaction.setPayment(Double.valueOf(amountText.getText()));						
+						transaction.setPayment(Double.valueOf(amountText.getText()));	
+						transaction.setEntry(categoryBox.getSelectedItem().toString());
 						transaction.updateTransaction();
 						ok("Transaction modified<br/>with success.");
 						mainDialog.dispose();
@@ -215,7 +219,7 @@ public class InsertTransaction extends BaseBoundary {
 	
 	private JLabel getTypeLabel() {
 		if (typeLabel == null) {
-			typeLabel = new JLabel("Causal");
+			typeLabel = new JLabel("Category");
 			typeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			typeLabel.setBounds(16, 80, 61, 16);
 		}
@@ -234,7 +238,7 @@ public class InsertTransaction extends BaseBoundary {
 			transPane.add(getCurrencyLabel());
 			transPane.add(getDateText());
 			transPane.add(getAmountText());
-			transPane.add(getComboBox());
+			transPane.add(getCategoryBox());
 			transPane.add(getCausalBtn());
 			transPane.add(getMonthLabel());
 			transPane.add(getYearLabel());
@@ -403,13 +407,18 @@ public class InsertTransaction extends BaseBoundary {
 		return currencyLabel;
 	}
 	
-	private JComboBox getComboBox() {
-		if (comboBox == null) {
-			comboBox = new JComboBox();
-			comboBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			comboBox.setBounds(89, 76, 132, 24);
+	private JComboBox getCategoryBox() {
+		if (categoryBox == null) {
+			Entries entries = Entries.loadEntries(Login.getUser().getUser());
+			entries.getEntries().addFirst(new Entry("", Login.getUser().getUser(), ""));
+			categoryBox = new JComboBox(entries.getEntriesNames().toArray());
+			categoryBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			categoryBox.setBounds(89, 76, 132, 24);
+			if (transaction != null) {
+				categoryBox.setSelectedItem(transaction.getEntry());
+			}
 		}
-		return comboBox;
+		return categoryBox;
 	}
 	
 	private JButton getCausalBtn() {
@@ -417,9 +426,10 @@ public class InsertTransaction extends BaseBoundary {
 			causalBtn = new JButton("");
 			causalBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					new InsertEntry(categoryBox);
 				}
 			});
-			causalBtn.setToolTipText("Add new causal");
+			causalBtn.setToolTipText("Add new category");
 			causalBtn.setIcon(new ImageIcon(getClass().getResource("/icons/add16.png")));
 			causalBtn.setBounds(224, 73, 30, 30);
 		}
