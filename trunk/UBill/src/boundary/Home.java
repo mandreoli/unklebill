@@ -245,7 +245,7 @@ public class Home extends BaseBoundary {
 					}
 					
 					if (confirm("You are deleting <i>"+listAccounts.getSelectedValue().toString()+"</i>.<br/>"+primaryString+"Are you sure?") == 0) {						
-						if (Transactions.loadTransactions(Login.getUser().getUser(), accountName).getNumTransactions() > 0) {
+						if (Transactions.loadTransactions(Login.getUser().getUser(), Login.getAccount().getAccount()).getNumTransactions() > 0) {
 							if (abort("You are deleting all<br/>transtactions for this account.<br/>Continue anyway?") == 0) {
 								accounts.getAccount(accountName).removeAccount();
 								//TODO cancellare tutte le transazioni dell'account per quell'utente
