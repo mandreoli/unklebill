@@ -155,7 +155,7 @@ public class InsertTransaction extends BaseBoundary {
 					else
 						type = '-';
 					if (transaction == null) {											
-						Transaction trans = new Transaction(Login.getUser().getUser(), Login.getAccount().getAccount(), categoryBox.getSelectedItem().toString(), type, Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()));
+						Transaction trans = new Transaction(Login.getUser().getUser(), Login.getAccount().getAccount(), categoryBox.getSelectedItem().toString(), type, Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()), 0, null);
 						transaction = trans;
 						trans.saveTransaction();
 						ok("Transaction added<br/>with success.");
