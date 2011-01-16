@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import store.Account;
 import datatype.Currency;
 import datatype.Date;
+import datatype.Transactions;
 import executor.FieldParser;
 import executor.Login;
 import java.awt.event.KeyAdapter;
@@ -216,6 +217,7 @@ public class InsertAccount extends BaseBoundary {
 						account.setCreation(Date.getCurrentDate());
 						account.setCurrency(currencyBox.getSelectedItem().toString());
 						account.updateAccount();
+						Transactions.updateTransactions(Login.getUser().getUser(), Login.getAccount().getAccount(), nameText.getText());
 						ok("Account modified<br/>with success.");
 						mainDialog.dispose();
 					}

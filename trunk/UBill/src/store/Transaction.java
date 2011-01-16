@@ -127,6 +127,13 @@ public class Transaction {
 		session.getTransaction().commit();
 	}
 	
+	public void deleteTransaction() {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.delete(this);
+		session.getTransaction().commit();
+	}
+	
 	public static Transaction loadTransaction(int id) {		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
