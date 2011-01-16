@@ -43,7 +43,7 @@ public class Main extends BaseBoundary {
 		this.main = this;
 	}
 	
-	public void START() {
+	public void START() {		
 		getMainFrame().setVisible(true);		
 	}
 	

@@ -154,7 +154,7 @@ public class Account {
 		session.getTransaction().commit();
 	}
 	
-	public void removeAccount() {
+	public void deleteAccount() {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		session.delete(this);

@@ -30,6 +30,15 @@ public class Transactions {
 		this.transactions.add(transaction);
 	}
 	
+	public Transaction getTransaction(int id) {
+		for (Transaction t : this.transactions) {
+			if (t.getId() == id)
+				return t;
+		}
+		
+		return null;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static Transactions loadTransactions(String user, String account) {
 		List<Transaction> transactions = new LinkedList<Transaction>();
@@ -58,12 +67,20 @@ public class Transactions {
 		return loaded;
 	}
 	
-	public Transaction getTransaction(int id) {
-		for (Transaction t : this.transactions) {
-			if (t.getId() == id)
-				return t;
-		}
+	public static void deleteTransactions(String user, String account) {
+		Transactions transactions = loadTransactions(user, account);
 		
-		return null;
+		for (Transaction t : transactions.getTransactions()) {
+			t.deleteTransaction();
+		}
+	}
+	
+	public static void updateTransactions(String user, String account, String newAccount) {
+		Transactions transactions = loadTransactions(user, account);
+		
+		for (Transaction t : transactions.getTransactions()) {
+			t.setAccount(newAccount);
+			t.updateTransaction();
+		}
 	}
 }
