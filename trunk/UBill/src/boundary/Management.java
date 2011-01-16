@@ -11,6 +11,7 @@ import java.awt.Font;
 import executor.Login;
 import javax.swing.SwingConstants;
 import java.awt.Color;
+import javax.swing.JButton;
 
 
 public class Management {
@@ -24,6 +25,7 @@ public class Management {
 	private Color active = new Color(0, 128, 0);
 	private Color neutro = new Color(0, 0, 0);
 	private Color passive = new Color(128, 0, 0);
+	private JButton button;
 	
 	
 	public Management(JPanel mainPane) {		
@@ -43,7 +45,9 @@ public class Management {
 			managePane.add(getAccountLabel());
 			managePane.add(getBalanceLabel());
 			managePane.add(getAccountBalanceLabel());
-			managePane.add(getTabbedPane());			
+			MonthView mv = new MonthView(this.balanceLabel);
+			managePane.add(mv.getTab());			
+			managePane.add(getButton());
 		}
 		return managePane;
 	}
@@ -51,8 +55,8 @@ public class Management {
 	private JLabel getAccountLabel() {
 		if (accountLabel == null) {
 			accountLabel = new JLabel(Login.getAccount().getAccount());
-			accountLabel.setFont(new Font("Lucida Grande", Font.BOLD, 24));
-			accountLabel.setBounds(20, 20, 300, 41);
+			accountLabel.setFont(new Font("Lucida Grande", Font.BOLD, 22));
+			accountLabel.setBounds(15, 40, 300, 41);
 		}
 		return accountLabel;
 	}
@@ -62,7 +66,7 @@ public class Management {
 			accountBalanceLabel = new JLabel("Account balance");
 			accountBalanceLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			accountBalanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-			accountBalanceLabel.setBounds(312, 45, 149, 16);
+			accountBalanceLabel.setBounds(312, 63, 149, 16);
 		}
 		return accountBalanceLabel;
 	}
@@ -78,8 +82,8 @@ public class Management {
 			else
 				balanceLabel.setForeground(neutro);
 			balanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-			balanceLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-			balanceLabel.setBounds(180, 60, 281, 30);
+			balanceLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
+			balanceLabel.setBounds(180, 75, 281, 30);
 		}
 		return balanceLabel;
 	}
@@ -87,8 +91,8 @@ public class Management {
 	private JTabbedPane getTabbedPane() {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
-			tabbedPane.setLocation(2, 73);
-			tabbedPane.setSize(new Dimension(477, 358));
+			tabbedPane.setLocation(2, 87);
+			tabbedPane.setSize(new Dimension(477, 344));
 			MonthView mv = new MonthView(this.balanceLabel);
 			tabbedPane.addTab("Monthly", null, mv.getTab(), null);
 			tabbedPane.addTab("Daily", null, getDayTab(), null);
@@ -103,6 +107,11 @@ public class Management {
 		}
 		return dayTab;
 	}
-	
-
+	private JButton getButton() {
+		if (button == null) {
+			button = new JButton("New button");
+			button.setBounds(371, 6, 90, 30);
+		}
+		return button;
+	}
 }

@@ -1,6 +1,7 @@
 package boundary;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
@@ -44,7 +45,6 @@ public class MonthView {
 	private JScrollPane exitScrollPane = null;
 	private JLabel entranceAmount = null;
 	private JLabel exitAmount = null;
-	private JLabel dateLabel = null;
 	private JComboBox monthBox = null;
 	private JComboBox yearBox = null;
 	private JButton delTransBtn = null;
@@ -72,10 +72,11 @@ public class MonthView {
 	
 	private JPanel getMonthTab() {
 		if (monthTab == null) {
-			monthTab = new JPanel();			
+			monthTab = new JPanel();
+			monthTab.setLocation(2, 87);
+			monthTab.setSize(new Dimension(477, 344));
 			monthTab.setLayout(null);			
 			monthTab.add(getSplitPane());
-			monthTab.add(getDateLabel());
 			monthTab.add(getMonthBox());
 			monthTab.add(getYearBox());
 			monthTab.add(getDelTransBtn());
@@ -90,7 +91,7 @@ public class MonthView {
 			splitPane = new JSplitPane();
 			splitPane.setOneTouchExpandable(true);
 			splitPane.setDividerSize(4);
-			splitPane.setBounds(10, 50, 456, 262);
+			splitPane.setBounds(10, 46, 456, 262);
 			splitPane.setLeftComponent(getEntrancePane());
 			splitPane.setRightComponent(getExitPane());
 			splitPane.setDividerLocation(228);
@@ -295,20 +296,11 @@ public class MonthView {
 		return exitAmount;
 	}
 	
-	private JLabel getDateLabel() {
-		if (dateLabel == null) {
-			dateLabel = new JLabel("Date");
-			dateLabel.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-			dateLabel.setBounds(10, 19, 44, 15);
-		}
-		return dateLabel;
-	}
-	
 	private JComboBox getMonthBox() {
 		if (monthBox == null) {
 			monthBox = new JComboBox(Month.values());					
 			monthBox.setFont(new Font("Lucida Grande", Font.BOLD, 12));
-			monthBox.setBounds(50, 14, 99, 24);			
+			monthBox.setBounds(10, 14, 99, 24);			
 			monthBox.setSelectedIndex(date.getMonth()-1);
 			monthBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -331,7 +323,7 @@ public class MonthView {
 			}
 			yearBox = new JComboBox(years);
 			yearBox.setFont(new Font("Lucida Grande", Font.BOLD, 12));
-			yearBox.setBounds(150, 14, 71, 24);			
+			yearBox.setBounds(108, 14, 71, 24);			
 			yearBox.setSelectedItem(date.getYear());
 			yearBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
