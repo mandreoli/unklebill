@@ -13,12 +13,14 @@ public class Transaction {
 	private int year = 0;
 	private int month = 0;
 	private int day = 0;
+	private int refid = 0;
+	private String reference = null;
 
 	public Transaction() {
 	  
 	}
 	
-	public Transaction(String user, String account, String entry, char type, double payment, int year, int month, int day) {
+	public Transaction(String user, String account, String entry, char type, double payment, int year, int month, int day, int refid, String reference) {
 		this.user = user;
 		this.account = account;
 		this.entry = entry;
@@ -27,9 +29,11 @@ public class Transaction {
 		this.year = year;
 		this.month = month;
 		this.day = day;
+		this.refid = refid;
+		this.reference = reference;
 	}
 	
-	public Transaction(int id, String user, String account, String entry, char type, double payment, int year, int month, int day) {
+	public Transaction(int id, String user, String account, String entry, char type, double payment, int year, int month, int day, int refid, String reference) {
 		this.id = id;
 		this.user = user;
 		this.account = account;
@@ -39,6 +43,8 @@ public class Transaction {
 		this.year = year;
 		this.month = month;
 		this.day = day;
+		this.refid = refid;
+		this.reference = reference;
 	}
 	
 	public void setId(int id) {
@@ -113,6 +119,22 @@ public class Transaction {
 		this.day = day;
 	}
   
+	public int getRefid() {
+		return this.refid;
+	}
+
+	public void setRefid(int refid) {
+		this.refid = refid;
+	}
+
+	public String getReference() {
+		return this.reference;
+	}
+
+	public void setReference(String reference) {
+		this.reference = reference;
+	}
+
 	public void saveTransaction() {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
@@ -142,7 +164,7 @@ public class Transaction {
 		
 		Transaction t = null;
 		if (loaded != null)
-			t = new Transaction(loaded.getId(), loaded.getUser(), loaded.getAccount(), loaded.getEntry(), loaded.getType(), loaded.getPayment(), loaded.getYear(), loaded.getMonth(), loaded.getDay()); 
+			t = new Transaction(loaded.getId(), loaded.getUser(), loaded.getAccount(), loaded.getEntry(), loaded.getType(), loaded.getPayment(), loaded.getYear(), loaded.getMonth(), loaded.getDay(), loaded.getRefid(), loaded.getReference()); 
 		
 		return t;
 	}

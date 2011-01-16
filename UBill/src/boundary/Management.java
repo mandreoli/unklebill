@@ -467,7 +467,7 @@ public class Management {
 						t = Transaction.loadTransaction(exitTrans.getTransactions().get(exitTable.getSelectedRow()).getId());						
 					}
 					
-					Transaction oldT = new Transaction(t.getId(), t.getUser(), t.getAccount(), t.getEntry(), t.getType(), t.getPayment(), t.getYear(), t.getMonth(), t.getDay());					
+					Transaction oldT = new Transaction(t.getId(), t.getUser(), t.getAccount(), t.getEntry(), t.getType(), t.getPayment(), t.getYear(), t.getMonth(), t.getDay(), t.getRefid(), t.getReference());					
 					InsertTransaction ins = new InsertTransaction(t);									
 					
 					if (ins.getTransaction() != null) {
@@ -521,7 +521,7 @@ public class Management {
 			reportBtn.setIcon(new ImageIcon(getClass().getResource("/icons/report16.png")));
 			reportBtn.setToolTipText("Create report for this month");
 			reportBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));			
-			reportBtn.setBounds(295, 13, 90, 30);
+			reportBtn.setBounds(295, 11, 90, 30);
 		}
 		return reportBtn;
 	}

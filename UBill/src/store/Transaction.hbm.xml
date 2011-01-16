@@ -16,5 +16,7 @@
     <property name="year" column="YEAR"/>
     <property name="month" column="MONTH"/>
     <property name="day" column="DAY"/>
+    <property name="refid" column="REFID"/>
+    <property name="reference" column="REFERENCE"/>
   </class>
 </hibernate-mapping>
