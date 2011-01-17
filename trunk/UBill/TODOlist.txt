@@ -1,6 +1,7 @@
 TODO LIST
 
-- spostare bottoni transazione in alto e aggiungere totale del mese e totoale di tutti gli accounts
+- gestire i trasferimenti tra accounts
+- totale di tutti gli accounts
 - Impostare formato double con soli 2 decimali, altrimenti errori di approssimazione
 - Mettere nella HOME la possibilita' di modificare il proprio account
 - Mettere nella HOME la possibilita' di modificare le categorie: cancellazione/modifica
