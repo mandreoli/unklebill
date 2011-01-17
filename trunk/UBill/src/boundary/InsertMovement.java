@@ -140,13 +140,14 @@ public class InsertMovement extends BaseBoundary {
 				public void actionPerformed(ActionEvent e) {
 					if (transaction == null) {
 						ft = new Transaction(Login.getUser().getUser(), fromBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '-', Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()), 0, null);
-						ft.saveTransaction();
-						ft.setRefid(ft.getId());
-						ft.setReference(toBox.getSelectedItem().toString());
-						ft.updateTransaction();
-						
+						ft.saveTransaction();												
+									
 						tt = new Transaction(Login.getUser().getUser(), toBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '+', Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()), ft.getId(), fromBox.getSelectedItem().toString());
 						tt.saveTransaction();
+						
+						ft.setRefid(tt.getId());
+						ft.setReference(toBox.getSelectedItem().toString());
+						ft.updateTransaction();
 						
 						ok("<html>Transfer from <b>"+ft.getAccount()+"</b> to <b>"+tt.getAccount()+"</b><br/>executed with success!</html>");
 						mainDialog.dispose();
@@ -355,17 +356,23 @@ public class InsertMovement extends BaseBoundary {
 	}
 	
 	public Transaction getPrimaryTransaction() {
-		if (Login.getAccount().getAccount().equals(tt.getAccount()))
-			return this.tt;
-		else
-			return this.ft;
+		if (tt != null) {
+			if (Login.getAccount().getAccount().equals(tt.getAccount()))
+				return this.tt;
+			else
+				return this.ft;
+		}
+		return null;
 	}
 	
 	public Transaction getOtherTransaction() {
-		if (!Login.getAccount().getAccount().equals(tt.getAccount()))
-			return this.tt;
-		else
-			return this.ft;
+		if (tt != null) {
+			if (!Login.getAccount().getAccount().equals(tt.getAccount()))
+				return this.tt;
+			else
+				return this.ft;
+		}
+		return null;
 	}
 	
 	private JLabel getFromLabel() {

@@ -72,10 +72,20 @@ public class Management extends BaseBoundary {
 	private JLabel monthLabel = null;
 	private JButton prevMonthBtn = null;
 	private JButton nextMonthBtn = null;
+	private RenderTableBody rtb = new RenderTableBody();
 	
 	
 	public Management(JPanel mainPane) {		
-		mainPane.add(getManagePane(), BorderLayout.CENTER);	
+		mainPane.add(getManagePane(), BorderLayout.CENTER);
+		/*
+		Transactions ts1 = Transactions.loadTransactions("michele", "home");
+		for (Transaction t : ts1.getTransactions()) {
+			System.out.println("ACCOUNT:"+t.getAccount()+" ID:"+t.getId()+" PAY: "+t.getPayment()+" REF:"+t.getReference()+" REFID:"+t.getRefid());
+		}
+		Transactions ts2 = Transactions.loadTransactions("michele", "bank");
+		for (Transaction t : ts2.getTransactions()) {
+			System.out.println("ACCOUNT:"+t.getAccount()+" ID:"+t.getId()+" PAY: "+t.getPayment()+" REF:"+t.getReference()+" REFID:"+t.getRefid());
+		}*/
 	}
 	
 	/**
@@ -182,7 +192,7 @@ public class Management extends BaseBoundary {
 			headers[0] = "Amount";
 			headers[1] = "Day";
 			headers[2] = "Causal";
-			entranceTableModel.setColumnIdentifiers(headers);
+			entranceTableModel.setColumnIdentifiers(headers);			
 		}
 		return entranceTableModel;
 	}
@@ -209,6 +219,7 @@ public class Management extends BaseBoundary {
 	private JTable getEntranceTable() {
 		if (entranceTable == null) {			
 			entranceTable = new JTable(getEntranceTableModel());
+			entranceTable.setForeground(active);
 			entranceTable.setShowGrid(false);
 			entranceTable.setBounds(new Rectangle(20, 70, 216, 235));			
 			entranceTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -219,7 +230,10 @@ public class Management extends BaseBoundary {
 				public void mousePressed(MouseEvent e) {
 					setEnabledButtons(entranceTable, exitTable);
 				}
-			});
+			});			
+			for (int i = 0; i < entranceTable.getColumnCount(); i++) {
+				entranceTable.getColumn(entranceTableModel.getColumnName(i)).setCellRenderer(rtb);
+			}
 		}
 		return entranceTable;
 	}
@@ -227,6 +241,7 @@ public class Management extends BaseBoundary {
 	private JTable getExitTable() {
 		if (exitTable == null) {			
 			exitTable = new JTable(getExitTableModel());
+			exitTable.setForeground(passive);
 			exitTable.setBounds(new Rectangle(20, 70, 216, 235));			
 			exitTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			exitTable.getColumnModel().getColumn(0).setPreferredWidth(50);
@@ -237,6 +252,9 @@ public class Management extends BaseBoundary {
 					setEnabledButtons(entranceTable, exitTable);
 				}
 			});
+			for (int i = 0; i < exitTable.getColumnCount(); i++) {
+				exitTable.getColumn(exitTableModel.getColumnName(i)).setCellRenderer(rtb);
+			}
 		}
 		return exitTable;
 	}
@@ -454,19 +472,39 @@ public class Management extends BaseBoundary {
 			delTransBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (abort("<html>Do you want to delete<br/>this transaction?</html>") == 0) {
-						if (entranceTable.getSelectedRowCount() > 0) {		
-							double tot = Login.getAccount().getBalance() - entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getPayment();
+						if (entranceTable.getSelectedRowCount() > 0) {
+							Transaction t = entranceTrans.getTransactions().get(entranceTable.getSelectedRow());
+							double tot = Login.getAccount().getBalance() - t.getPayment();
 							Login.getAccount().setBalance(tot);
-							entranceTot -= entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getPayment();							
-							entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).deleteTransaction();
+							Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
+							double tot2 = a.getBalance() + t.getPayment();
+							a.setBalance(tot2);
+							a.updateAccount();
+							
+							if (t.getRefid() != 0) {
+								Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser()).deleteTransaction();
+							}
+							else
+								entranceTot -= t.getPayment();							
+							t.deleteTransaction();
 							entranceTrans.getTransactions().remove(entranceTable.getSelectedRow());
-							entranceTableModel.removeRow(entranceTable.getSelectedRow());					
+							entranceTableModel.removeRow(entranceTable.getSelectedRow());
 						}
 						else {
-							double tot = Login.getAccount().getBalance() + exitTrans.getTransactions().get(exitTable.getSelectedRow()).getPayment();
+							Transaction t = exitTrans.getTransactions().get(exitTable.getSelectedRow());
+							double tot = Login.getAccount().getBalance() - t.getPayment();
 							Login.getAccount().setBalance(tot);
-							exitTot -= exitTrans.getTransactions().get(exitTable.getSelectedRow()).getPayment();
-							exitTrans.getTransactions().get(exitTable.getSelectedRow()).deleteTransaction();
+							Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
+							double tot2 = a.getBalance() + t.getPayment();
+							a.setBalance(tot2);
+							a.updateAccount();
+							
+							if (t.getRefid() != 0) {
+								Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser()).deleteTransaction();
+							}
+							else
+								exitTot -= t.getPayment();							
+							t.deleteTransaction();
 							exitTrans.getTransactions().remove(exitTable.getSelectedRow());
 							exitTableModel.removeRow(exitTable.getSelectedRow());
 						}
@@ -542,7 +580,7 @@ public class Management extends BaseBoundary {
 			moveBtn = new JButton("Transf");
 			moveBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					InsertMovement ins = new InsertMovement(date.getMonth(), date.getYear());					
+					InsertMovement ins = new InsertMovement(date.getMonth(), date.getYear());
 					calculateBalanceRef(ins.getOtherTransaction());			
 					calculateBalance(ins.getPrimaryTransaction());
 				}
@@ -583,10 +621,18 @@ public class Management extends BaseBoundary {
 	}
 	
 	private void addRowsInTables(Transaction t) {
-		Vector<String> vect = new Vector<String>();
-		vect.add(String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency()));
-		vect.add(Date.getDay(t.getDay()));
-		vect.add(t.getEntry());		
+		Vector<Object> vect = new Vector<Object>();
+		vect.add((String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency())));
+		vect.add((Date.getDay(t.getDay())));
+		
+		if (t.getRefid() != 0 && t.getReference() != null) {
+			if (t.getType() == '+')
+				vect.add((t.getEntry()+" from "+t.getReference()));
+			else
+				vect.add((t.getEntry()+" to "+t.getReference()));
+		}
+		else
+			vect.add((t.getEntry()));
 				
 		if (t.getType() == '+') {					
 			this.entranceTableModel.addRow(vect);
