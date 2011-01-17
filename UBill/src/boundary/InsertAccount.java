@@ -210,6 +210,7 @@ public class InsertAccount extends BaseBoundary {
 							fail("The account name<br/>is already in use!");
 					}
 					else {
+						String old = account.getAccount();
 						account.setAccount(nameText.getText());
 						account.setDescription(descrText.getText());
 						account.setBalance(Double.valueOf(balanceText.getText()));
@@ -217,7 +218,7 @@ public class InsertAccount extends BaseBoundary {
 						account.setCreation(Date.getCurrentDate());
 						account.setCurrency(currencyBox.getSelectedItem().toString());
 						account.updateAccount();						
-						Transactions.updateTransactions(Login.getUser().getUser(), account.getAccount(), nameText.getText());
+						Transactions.updateTransactions(Login.getUser().getUser(), old, nameText.getText());
 						ok("Account modified<br/>with success.");
 						mainDialog.dispose();
 					}
