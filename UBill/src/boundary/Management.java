@@ -31,7 +31,7 @@ import datatype.Transactions;
 import store.Transaction;
 
 
-public class Management {
+public class Management extends BaseBoundary {
 	
 	private JPanel managePane = null;
 	private JLabel accountLabel = null;
@@ -216,15 +216,7 @@ public class Management {
 			//entranceTable.getColumnModel().getColumn(2).setPreferredWidth(entranceTable.getWidth() - 150);			
 			entranceTable.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
-					if (entranceTable.getSelectedRowCount() > 0) {
-						delTransBtn.setEnabled(true);
-						modTransBtn.setEnabled(true);
-						exitTable.clearSelection();
-					}
-					else {
-						modTransBtn.setEnabled(false);
-						delTransBtn.setEnabled(false);
-					}
+					setEnabledButtons(entranceTable, exitTable);
 				}
 			});
 		}
@@ -241,19 +233,28 @@ public class Management {
 			//exitTable.getColumnModel().getColumn(2).setPreferredWidth(exitTable.getWidth() - 150);
 			exitTable.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {					
-					if (exitTable.getSelectedRowCount() > 0) {
-						delTransBtn.setEnabled(true);
-						modTransBtn.setEnabled(true);
-						entranceTable.clearSelection();
-					}
-					else {
-						delTransBtn.setEnabled(false);
-						modTransBtn.setEnabled(false);
-					}
+					setEnabledButtons(entranceTable, exitTable);
 				}
 			});
 		}
 		return exitTable;
+	}
+	
+	private void setEnabledButtons(JTable entranceTable, JTable exitTable) {
+		if (entranceTable.getSelectedRowCount() > 0) {
+			delTransBtn.setEnabled(true);
+			modTransBtn.setEnabled(true);
+			exitTable.clearSelection();
+		}
+		else if (exitTable.getSelectedRowCount() > 0) {
+			delTransBtn.setEnabled(true);
+			modTransBtn.setEnabled(true);
+			entranceTable.clearSelection();
+		}
+		else {
+			modTransBtn.setEnabled(false);
+			delTransBtn.setEnabled(false);
+		}
 	}
 	
 	private JPanel getEntrancePane() {
@@ -436,11 +437,25 @@ public class Management {
 			delTransBtn = new JButton("Delete");
 			delTransBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (entranceTable.getSelectedRowCount() > 0) {
-						System.out.println(entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getPayment());
-					}
-					else {
-						System.out.println(exitTrans.getTransactions().get(exitTable.getSelectedRow()).getPayment());
+					if (abort("<html>Do you want to delete<br/>this transaction?</html>") == 0) {
+						if (entranceTable.getSelectedRowCount() > 0) {		
+							double tot = Login.getAccount().getBalance() - entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getPayment();
+							Login.getAccount().setBalance(tot);
+							entranceTot -= entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getPayment();
+							entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).deleteTransaction();
+							entranceTableModel.removeRow(entranceTable.getSelectedRow());					
+						}
+						else {
+							double tot = Login.getAccount().getBalance() + exitTrans.getTransactions().get(exitTable.getSelectedRow()).getPayment();
+							Login.getAccount().setBalance(tot);
+							exitTot -= exitTrans.getTransactions().get(exitTable.getSelectedRow()).getPayment();
+							exitTrans.getTransactions().get(exitTable.getSelectedRow()).deleteTransaction();
+							exitTableModel.removeRow(exitTable.getSelectedRow());
+						}
+						Login.getAccount().updateAccount();
+						setEnabledButtons(entranceTable, exitTable);
+						updateBalanceLabel(balanceLabel);
+						updatePartialsAmounts(entranceAmount, exitAmount);
 					}
 				}
 			});
