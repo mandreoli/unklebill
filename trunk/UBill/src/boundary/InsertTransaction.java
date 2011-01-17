@@ -93,7 +93,10 @@ public class InsertTransaction extends BaseBoundary {
 		if (mainDialog == null) {
 			mainDialog = new JDialog();
 			mainDialog.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/favico.png")));
-			mainDialog.setTitle("Add new transaction");
+			if (transaction != null)
+				mainDialog.setTitle("Modify transaction");
+			else	
+				mainDialog.setTitle("Add new transaction");
 			mainDialog.setSize(new Dimension(this.wWidth, this.wHeight));		
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 			mainDialog.setLocation(new Point((d.width-wWidth)/2, (d.height-wHeight)/2));

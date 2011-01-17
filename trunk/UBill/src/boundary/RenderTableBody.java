@@ -2,8 +2,6 @@ package boundary;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.util.Vector;
-
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
@@ -20,17 +18,14 @@ public class RenderTableBody extends JLabel implements TableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {		
 		
 		String text[] = {"", "", ""}; 		
-	
+		
 	    label.setHorizontalAlignment(JLabel.CENTER);
-	    if (col == 0) {
-	    	label.setText(((Vector)value).get(1).toString());
-	    }
 	    label.setText(value.toString());
 	    label.setOpaque(true);	    
 	    
 	    if (col == 2) {
 	    	text = value.toString().split(" ");	    	
-	    }	    
+	    }
 	    
 	    if (text[0].equals("Transfer")) {	    	
 	    	label.setForeground(Color.gray);

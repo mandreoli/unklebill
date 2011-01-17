@@ -72,20 +72,25 @@ public class Management extends BaseBoundary {
 	private JLabel monthLabel = null;
 	private JButton prevMonthBtn = null;
 	private JButton nextMonthBtn = null;
-	private RenderTableBody rtb = new RenderTableBody();
+	//private RenderTableBody rtb = new RenderTableBody();
 	
 	
 	public Management(JPanel mainPane) {		
 		mainPane.add(getManagePane(), BorderLayout.CENTER);
-		/*
-		Transactions ts1 = Transactions.loadTransactions("michele", "home");
+		
+		Transactions ts1 = Transactions.loadTransactions("michele", "Home");
 		for (Transaction t : ts1.getTransactions()) {
 			System.out.println("ACCOUNT:"+t.getAccount()+" ID:"+t.getId()+" PAY: "+t.getPayment()+" REF:"+t.getReference()+" REFID:"+t.getRefid());
 		}
-		Transactions ts2 = Transactions.loadTransactions("michele", "bank");
+		Transactions ts2 = Transactions.loadTransactions("michele", "Bank");
 		for (Transaction t : ts2.getTransactions()) {
 			System.out.println("ACCOUNT:"+t.getAccount()+" ID:"+t.getId()+" PAY: "+t.getPayment()+" REF:"+t.getReference()+" REFID:"+t.getRefid());
-		}*/
+		}
+		Transactions ts3 = Transactions.loadTransactions("michele", "Bank2");
+		for (Transaction t : ts3.getTransactions()) {
+			System.out.println("ACCOUNT:"+t.getAccount()+" ID:"+t.getId()+" PAY: "+t.getPayment()+" REF:"+t.getReference()+" REFID:"+t.getRefid());
+		}
+		System.err.println("********");
 	}
 	
 	/**
@@ -230,10 +235,12 @@ public class Management extends BaseBoundary {
 				public void mousePressed(MouseEvent e) {
 					setEnabledButtons(entranceTable, exitTable);
 				}
-			});			
+			});		
+			/*
 			for (int i = 0; i < entranceTable.getColumnCount(); i++) {
 				entranceTable.getColumn(entranceTableModel.getColumnName(i)).setCellRenderer(rtb);
 			}
+			*/
 		}
 		return entranceTable;
 	}
@@ -252,9 +259,11 @@ public class Management extends BaseBoundary {
 					setEnabledButtons(entranceTable, exitTable);
 				}
 			});
+			/*
 			for (int i = 0; i < exitTable.getColumnCount(); i++) {
 				exitTable.getColumn(exitTableModel.getColumnName(i)).setCellRenderer(rtb);
 			}
+			*/
 		}
 		return exitTable;
 	}

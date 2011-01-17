@@ -130,7 +130,7 @@ public class Account {
 	}
 	
 	public void updateAccount() {
-		Accounts accounts = Accounts.loadAccounts(this.getUser());
+		Accounts accounts = Accounts.loadAccounts(this.getUser());		
 		
 		if (this.isUsable() == true) {
 			for (Account a : accounts.getAccounts()) {

@@ -180,5 +180,5 @@ public class Transaction {
 			t = new Transaction(loaded.getId(), loaded.getUser(), loaded.getAccount(), loaded.getEntry(), loaded.getType(), loaded.getPayment(), loaded.getYear(), loaded.getMonth(), loaded.getDay(), loaded.getRefid(), loaded.getReference()); 
 		
 		return t;
-	}
+	}	
 }
