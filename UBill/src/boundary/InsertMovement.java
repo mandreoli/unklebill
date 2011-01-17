@@ -11,51 +11,42 @@ import java.awt.Font;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
-
-import store.Entry;
 import store.Transaction;
+import datatype.Accounts;
 import datatype.Date;
-import datatype.Entries;
 import executor.FieldParser;
 import executor.Login;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 import javax.swing.JComboBox;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.JRadioButton;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 
 
 
-public class InsertTransaction extends BaseBoundary {
+public class InsertMovement extends BaseBoundary {
 
 	private int wWidth = 320;
 	private int wHeight = 240;
 	private Transaction transaction = null;
+	private Transaction ft = null;
+	private Transaction tt = null;
 	private JDialog mainDialog = null;
 	private JPanel mainPane = null;
 	private JButton exitBtn = null;
 	private JButton saveBtn = null;
 	private Color errorColor = new Color(255, 99, 99);
 	private Color normalColor = new Color(255, 255, 255);
-	private Color active = new Color(0, 128, 0);	
-	private Color passive = new Color(128, 0, 0);
-	private int flag = 0;
 	private JLabel dateLabel = null;
 	private JLabel amountLabel = null;
 	private JLabel typeLabel = null;
 	private JPanel transPane = null;
-	private JRadioButton entranceRadio = null;
-	private JRadioButton exitRadio = null;
 	private JLabel entranceIconLabel = null;
 	private JLabel exitIconLabel = null;
-	private ButtonGroup radioGroup = null;
 	private JTextField dateText = null;
 	private JTextField amountText = null;
 	private JLabel currencyLabel = null;
@@ -66,26 +57,23 @@ public class InsertTransaction extends BaseBoundary {
 	private int year = 0;
 	private int month = 0;
 	private Date date = new Date(Date.getCurrentDate());
+	private JLabel fromLabel;
+	private JLabel toLabel;
+	private JComboBox fromBox;
+	private JComboBox toBox;
 	
 	
 	/**
 	 * @wbp.parser.constructor
 	 **/
-	public InsertTransaction(int flag, int month, int year) {
+	public InsertMovement(int month, int year) {
 		this.year = year;
 		this.month = month;
-		this.flag = flag;
 		getMainDialog().setVisible(true);
 	}
 	
-	public InsertTransaction(Transaction transaction) {
+	public InsertMovement(Transaction transaction) {
 		this.transaction = transaction;
-		
-		if (transaction.getType() == '+')
-			this.flag = 0;
-		else
-			this.flag = 1;
-		
 		getMainDialog().setVisible(true);		
 	}
 	
@@ -93,7 +81,7 @@ public class InsertTransaction extends BaseBoundary {
 		if (mainDialog == null) {
 			mainDialog = new JDialog();
 			mainDialog.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/favico.png")));
-			mainDialog.setTitle("Add new transaction");
+			mainDialog.setTitle("Add new movement");
 			mainDialog.setSize(new Dimension(this.wWidth, this.wHeight));		
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 			mainDialog.setLocation(new Point((d.width-wWidth)/2, (d.height-wHeight)/2));
@@ -116,13 +104,14 @@ public class InsertTransaction extends BaseBoundary {
 			mainPane.setLayout(null);
 			mainPane.add(getExitBtn());
 			mainPane.add(getSaveBtn());
-			mainPane.add(getTransPane());			
-			mainPane.add(getEntranceRadio());
-			mainPane.add(getExitRadio());
-			getRadioGroup();
+			mainPane.add(getTransPane());
 			mainPane.add(getEntranceIconLabel());
-			mainPane.add(getExitIconLabel());			
-			catchTypedField(dateText, amountText);
+			mainPane.add(getExitIconLabel());		
+			mainPane.add(getFromLabel());
+			mainPane.add(getToLabel());
+			mainPane.add(getFromBox());
+			mainPane.add(getToBox());
+			catchTypedField(dateText, amountText);			
 		}
 		return mainPane;
 	}
@@ -149,24 +138,17 @@ public class InsertTransaction extends BaseBoundary {
 			saveBtn = new JButton();
 			saveBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					char type;
-					if (entranceRadio.isSelected())
-						type = '+';
-					else
-						type = '-';
-					if (transaction == null) {											
-						Transaction trans = new Transaction(Login.getUser().getUser(), Login.getAccount().getAccount(), categoryBox.getSelectedItem().toString(), type, Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()), 0, null);
-						transaction = trans;
-						trans.saveTransaction();
-						ok("Transaction added<br/>with success.");
-						mainDialog.dispose();
-					}
-					else {											
-						transaction.setDay(Integer.valueOf(dateText.getText()));
-						transaction.setPayment(Double.valueOf(amountText.getText()));	
-						transaction.setEntry(categoryBox.getSelectedItem().toString());
-						transaction.updateTransaction();
-						ok("Transaction modified<br/>with success.");
+					if (transaction == null) {
+						ft = new Transaction(Login.getUser().getUser(), fromBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '-', Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()), 0, null);
+						ft.saveTransaction();
+						ft.setRefid(ft.getId());
+						ft.setReference(toBox.getSelectedItem().toString());
+						ft.updateTransaction();
+						
+						tt = new Transaction(Login.getUser().getUser(), toBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '+', Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()), ft.getId(), fromBox.getSelectedItem().toString());
+						tt.saveTransaction();
+						
+						ok("<html>Transfer from <b>"+ft.getAccount()+"</b> to <b>"+tt.getAccount()+"</b><br/>executed with success!</html>");
 						mainDialog.dispose();
 					}
 				}
@@ -177,11 +159,11 @@ public class InsertTransaction extends BaseBoundary {
 			saveBtn.setEnabled(false);
 			saveBtn.setSize(new Dimension(90, 30));
 			if (this.transaction == null) {
-				saveBtn.setToolTipText("Add this transaction");
+				saveBtn.setToolTipText("Add this movement");
 				saveBtn.setText("Add");
 			}
 			else {
-				saveBtn.setToolTipText("Modify this transaction");
+				saveBtn.setToolTipText("Modify this movement");
 				saveBtn.setText("Modify");
 			}
 		}
@@ -189,7 +171,7 @@ public class InsertTransaction extends BaseBoundary {
 	}
 	
 	private void catchTypedField(JTextField date, JTextField amount) {
-		if (FieldParser.checkInt(date.getText()) && Integer.valueOf(dateText.getText()) > 0 && FieldParser.checkFloat(amount.getText(), false) && Double.valueOf(amount.getText()) > 0) {
+		if (fromBox.getSelectedIndex() != 0 && toBox.getSelectedIndex() != 0 && fromBox.getSelectedIndex() != toBox.getSelectedIndex() && FieldParser.checkInt(date.getText()) && Integer.valueOf(dateText.getText()) > 0 && FieldParser.checkFloat(amount.getText(), false) && Double.valueOf(amount.getText()) > 0) {
 			saveBtn.setEnabled(true);
 		}
 		else {			 
@@ -230,7 +212,7 @@ public class InsertTransaction extends BaseBoundary {
 		if (transPane == null) {
 			transPane = new JPanel();
 			transPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Transaction", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
-			transPane.setBounds(20, 57, 280, 111);
+			transPane.setBounds(20, 60, 280, 111);
 			transPane.setLayout(null);
 			transPane.add(getDateLabel());
 			transPane.add(getAmountLabel());
@@ -246,72 +228,11 @@ public class InsertTransaction extends BaseBoundary {
 		return transPane;
 	}
 	
-	private ButtonGroup getRadioGroup() {
-		if (radioGroup == null) {
-			radioGroup = new ButtonGroup();
-			radioGroup.add(entranceRadio);
-			radioGroup.add(exitRadio);
-			
-			if (this.flag == 0)
-				entranceRadio.setSelected(true);
-			else
-				exitRadio.setSelected(true);
-			
-			if (this.transaction != null) {
-				this.entranceRadio.setEnabled(false);
-				this.exitRadio.setEnabled(false);
-			}
-				
-		}
-		return radioGroup;
-	}
-	
-	private JRadioButton getEntranceRadio() {
-		if (entranceRadio == null) {
-			entranceRadio = new JRadioButton("Entrance");
-			entranceRadio.addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
-					if (entranceRadio.isSelected())
-						changeForegroundColor(0);
-				}
-			});
-			entranceRadio.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			entranceRadio.setBounds(47, 22, 82, 23);			
-		}
-		return entranceRadio;
-	}
-	
-	private JRadioButton getExitRadio() {
-		if (exitRadio == null) {
-			exitRadio = new JRadioButton("Exit");
-			exitRadio.addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
-					if (exitRadio.isSelected())
-						changeForegroundColor(1);
-				}
-			});
-			exitRadio.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			exitRadio.setBounds(187, 22, 63, 23);
-		}
-		return exitRadio;
-	}
-	
-	private void changeForegroundColor(int flag) {
-		if (flag == 0) {
-			currencyLabel.setForeground(active);
-			amountText.setForeground(active);
-		}
-		else {
-			currencyLabel.setForeground(passive);
-			amountText.setForeground(passive);
-		}
-	}
-	
 	private JLabel getEntranceIconLabel() {
 		if (entranceIconLabel == null) {
 			entranceIconLabel = new JLabel("");
 			entranceIconLabel.setIcon(new ImageIcon(getClass().getResource("/icons/entrance16.png")));
-			entranceIconLabel.setBounds(130, 26, 16, 16);
+			entranceIconLabel.setBounds(166, 29, 16, 16);
 		}
 		return entranceIconLabel;
 	}
@@ -320,7 +241,7 @@ public class InsertTransaction extends BaseBoundary {
 		if (exitIconLabel == null) {
 			exitIconLabel = new JLabel("");
 			exitIconLabel.setIcon(new ImageIcon(getClass().getResource("/icons/output16.png")));
-			exitIconLabel.setBounds(242, 26, 16, 16);
+			exitIconLabel.setBounds(20, 29, 16, 16);
 		}
 		return exitIconLabel;
 	}
@@ -388,7 +309,6 @@ public class InsertTransaction extends BaseBoundary {
 				}
 			});
 			amountText.setToolTipText("Insert the amount");
-			changeForegroundColor(flag);
 			amountText.setHorizontalAlignment(SwingConstants.RIGHT);
 			amountText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			amountText.setColumns(10);
@@ -409,15 +329,11 @@ public class InsertTransaction extends BaseBoundary {
 	}
 	
 	private JComboBox getCategoryBox() {
-		if (categoryBox == null) {
-			Entries entries = Entries.loadEntries(Login.getUser().getUser());
-			entries.getEntries().addFirst(new Entry("", Login.getUser().getUser(), ""));
-			categoryBox = new JComboBox(entries.getEntriesNames().toArray());
+		if (categoryBox == null) {						
+			categoryBox = new JComboBox(new String[]{"Transfer"});
 			categoryBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			categoryBox.setBounds(89, 76, 132, 24);
-			if (transaction != null) {
-				categoryBox.setSelectedItem(transaction.getEntry());
-			}
+			categoryBox.setEnabled(false);
 		}
 		return categoryBox;
 	}
@@ -432,15 +348,80 @@ public class InsertTransaction extends BaseBoundary {
 			});
 			causalBtn.setToolTipText("Add new category");
 			causalBtn.setIcon(new ImageIcon(getClass().getResource("/icons/add16.png")));
-			causalBtn.setBounds(224, 73, 30, 30);
+			causalBtn.setBounds(224, 73, 30, 30);	
+			causalBtn.setEnabled(false);
 		}
 		return causalBtn;
 	}
 	
-	public Transaction getTransaction() {
-		return this.transaction;
+	public Transaction getPrimaryTransaction() {
+		if (Login.getAccount().getAccount().equals(tt.getAccount()))
+			return this.tt;
+		else
+			return this.ft;
 	}
 	
+	public Transaction getOtherTransaction() {
+		if (!Login.getAccount().getAccount().equals(tt.getAccount()))
+			return this.tt;
+		else
+			return this.ft;
+	}
 	
+	private JLabel getFromLabel() {
+		if (fromLabel == null) {
+			fromLabel = new JLabel("From account");
+			fromLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			fromLabel.setBounds(20, 6, 99, 16);
+		}
+		return fromLabel;
+	}
+	
+	private JLabel getToLabel() {
+		if (toLabel == null) {
+			toLabel = new JLabel("To account");
+			toLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			toLabel.setBounds(166, 6, 99, 16);
+		}
+		return toLabel;
+	}
+	
+	private JComboBox getFromBox() {
+		if (fromBox == null) {
+			fromBox = new JComboBox(retrieveAccounts().toArray());
+			fromBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					catchTypedField(dateText, amountText);	
+				}
+			});
+			fromBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			fromBox.setBounds(40, 25, 110, 24);
+		}
+		return fromBox;
+	}
+	
+	private JComboBox getToBox() {
+		if (toBox == null) {			
+			toBox = new JComboBox(retrieveAccounts().toArray());
+			toBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					catchTypedField(dateText, amountText);	
+				}
+			});
+			toBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			toBox.setBounds(185, 25, 110, 24);
+			toBox.setSelectedItem(Login.getAccount().getAccount());
+		}
+		return toBox;
+	}
+	
+	private LinkedList<String> retrieveAccounts() {		
+		LinkedList<String> list = new LinkedList<String>();
+		
+		list = Accounts.loadAccounts(Login.getUser().getUser()).getAccountsNames();
+		list.addFirst("");
+		
+		return list;
+	}
 }	
 

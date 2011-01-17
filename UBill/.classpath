@@ -15,7 +15,5 @@
 	<classpathentry kind="lib" path="src/util/jta.jar"/>
 	<classpathentry kind="lib" path="src/util/log4j-1.2.11.jar"/>
 	<classpathentry kind="lib" path="src/util/iText.jar"/>
-	<classpathentry kind="lib" path="src/look/jgoodies-common-1.1.1.jar"/>
-	<classpathentry kind="lib" path="src/look/jgoodies-looks-2.4.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

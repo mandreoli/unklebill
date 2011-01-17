@@ -28,6 +28,7 @@ import javax.swing.JComboBox;
 import datatype.Date;
 import datatype.Month;
 import datatype.Transactions;
+import store.Account;
 import store.Transaction;
 
 
@@ -290,7 +291,7 @@ public class Management extends BaseBoundary {
 			addEntranceBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					InsertTransaction ins = new InsertTransaction(0, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
-					calculateBalance(ins);
+					calculateBalance(ins.getTransaction());
 				}
 			});
 		}
@@ -306,28 +307,43 @@ public class Management extends BaseBoundary {
 			addExitBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					InsertTransaction ins = new InsertTransaction(1, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
-					calculateBalance(ins);
+					calculateBalance(ins.getTransaction());
 				}
 			});
 		}
 		return addExitBtn;
 	}
 	
-	private void calculateBalance(InsertTransaction ins) {
-		if (ins.getTransaction() != null) {
-			addRowsInTables(ins.getTransaction());
+	private void calculateBalance(Transaction ins) {
+		if (ins != null) {
+			addRowsInTables(ins);
 			
 			double tot = Login.getAccount().getBalance();
 			
-			if (ins.getTransaction().getType() == '+')
-				tot += ins.getTransaction().getPayment();
+			if (ins.getType() == '+')
+				tot += ins.getPayment();
 			else
-				tot -= ins.getTransaction().getPayment();
+				tot -= ins.getPayment();
 			
 			Login.getAccount().setBalance(tot);
 			Login.getAccount().updateAccount();
 			
 			updateBalanceLabel(balanceLabel);
+		}
+	}
+	
+	private void calculateBalanceRef(Transaction t) {
+		if (t != null) {
+			Account a = Account.loadAccount(t.getAccount(), Login.getUser().getUser());			
+			double tot = a.getBalance();
+				
+			if (t.getType() == '+')
+				tot += t.getPayment();
+			else
+				tot -= t.getPayment();
+			
+			a.setBalance(tot);
+			a.updateAccount();
 		}
 	}
 	
@@ -441,8 +457,9 @@ public class Management extends BaseBoundary {
 						if (entranceTable.getSelectedRowCount() > 0) {		
 							double tot = Login.getAccount().getBalance() - entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getPayment();
 							Login.getAccount().setBalance(tot);
-							entranceTot -= entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getPayment();
+							entranceTot -= entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getPayment();							
 							entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).deleteTransaction();
+							entranceTrans.getTransactions().remove(entranceTable.getSelectedRow());
 							entranceTableModel.removeRow(entranceTable.getSelectedRow());					
 						}
 						else {
@@ -450,6 +467,7 @@ public class Management extends BaseBoundary {
 							Login.getAccount().setBalance(tot);
 							exitTot -= exitTrans.getTransactions().get(exitTable.getSelectedRow()).getPayment();
 							exitTrans.getTransactions().get(exitTable.getSelectedRow()).deleteTransaction();
+							exitTrans.getTransactions().remove(exitTable.getSelectedRow());
 							exitTableModel.removeRow(exitTable.getSelectedRow());
 						}
 						Login.getAccount().updateAccount();
@@ -521,9 +539,16 @@ public class Management extends BaseBoundary {
 	
 	private JButton getMoveBtn() {
 		if (moveBtn == null) {
-			moveBtn = new JButton("Move");
+			moveBtn = new JButton("Transf");
+			moveBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					InsertMovement ins = new InsertMovement(date.getMonth(), date.getYear());					
+					calculateBalanceRef(ins.getOtherTransaction());			
+					calculateBalance(ins.getPrimaryTransaction());
+				}
+			});
 			moveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/transfer16.png")));
-			moveBtn.setToolTipText("Add a movement between accounts");
+			moveBtn.setToolTipText("Add movement between accounts");
 			moveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));			
 			moveBtn.setBounds(200, 11, 90, 30);
 		}
@@ -562,16 +587,18 @@ public class Management extends BaseBoundary {
 		vect.add(String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency()));
 		vect.add(Date.getDay(t.getDay()));
 		vect.add(t.getEntry());		
-		
+				
 		if (t.getType() == '+') {					
 			this.entranceTableModel.addRow(vect);
 			this.entranceTrans.addTransaction(t);
-			this.entranceTot += t.getPayment();			
+			if (t.getRefid() == 0 && t.getReference() == null)
+				this.entranceTot += t.getPayment();			
 		}
 		else {
 			this.exitTableModel.addRow(vect);
 			this.exitTrans.addTransaction(t);
-			this.exitTot += t.getPayment();			
+			if (t.getRefid() == 0 && t.getReference() == null)
+				this.exitTot += t.getPayment();			
 		}
 		
 		updatePartialsAmounts(entranceAmount, exitAmount);
