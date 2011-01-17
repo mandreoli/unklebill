@@ -168,4 +168,17 @@ public class Transaction {
 		
 		return t;
 	}
+	
+	public static Transaction loadTransaction(int refid, String user, String account) {		
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		Transaction loaded = (Transaction)session.createQuery("FROM Transaction WHERE id="+refid+"").uniqueResult();		
+		session.getTransaction().commit();		
+		
+		Transaction t = null;
+		if (loaded != null)
+			t = new Transaction(loaded.getId(), loaded.getUser(), loaded.getAccount(), loaded.getEntry(), loaded.getType(), loaded.getPayment(), loaded.getYear(), loaded.getMonth(), loaded.getDay(), loaded.getRefid(), loaded.getReference()); 
+		
+		return t;
+	}
 }
