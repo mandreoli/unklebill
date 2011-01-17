@@ -72,12 +72,11 @@ public class Management extends BaseBoundary {
 	private JLabel monthLabel = null;
 	private JButton prevMonthBtn = null;
 	private JButton nextMonthBtn = null;
-	//private RenderTableBody rtb = new RenderTableBody();
 	
 	
 	public Management(JPanel mainPane) {		
-		mainPane.add(getManagePane(), BorderLayout.CENTER);
-		
+		mainPane.add(getManagePane(), BorderLayout.CENTER);	
+		/*
 		Transactions ts1 = Transactions.loadTransactions("michele", "Home");
 		for (Transaction t : ts1.getTransactions()) {
 			System.out.println("ACCOUNT:"+t.getAccount()+" ID:"+t.getId()+" PAY: "+t.getPayment()+" REF:"+t.getReference()+" REFID:"+t.getRefid());
@@ -86,11 +85,8 @@ public class Management extends BaseBoundary {
 		for (Transaction t : ts2.getTransactions()) {
 			System.out.println("ACCOUNT:"+t.getAccount()+" ID:"+t.getId()+" PAY: "+t.getPayment()+" REF:"+t.getReference()+" REFID:"+t.getRefid());
 		}
-		Transactions ts3 = Transactions.loadTransactions("michele", "Bank2");
-		for (Transaction t : ts3.getTransactions()) {
-			System.out.println("ACCOUNT:"+t.getAccount()+" ID:"+t.getId()+" PAY: "+t.getPayment()+" REF:"+t.getReference()+" REFID:"+t.getRefid());
-		}
 		System.err.println("********");
+		*/
 	}
 	
 	/**
@@ -186,12 +182,12 @@ public class Management extends BaseBoundary {
 	private TableModel getEntranceTableModel() {
 		if (entranceTableModel == null) {
 			entranceTableModel = new DefaultTableModel() {
-				private static final long serialVersionUID = 1L;
+                private static final long serialVersionUID = 1L;
 
-				@Override
-				public boolean isCellEditable(int row, int column) {
-					return false;
-				}	
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                        return false;
+                }       
 			};
 			Object[] headers = new Object[3];
 			headers[0] = "Amount";
@@ -205,13 +201,13 @@ public class Management extends BaseBoundary {
 	private TableModel getExitTableModel() {
 		if (exitTableModel == null) {
 			exitTableModel = new DefaultTableModel() {
-				private static final long serialVersionUID = 1L;
+                private static final long serialVersionUID = 1L;
 
-				@Override
-				public boolean isCellEditable(int row, int column) {
-					return false;
-				}	
-			};
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                        return false;
+                }       
+			};		
 			Object[] headers = new Object[3];
 			headers[0] = "Amount";
 			headers[1] = "Day";
@@ -224,7 +220,6 @@ public class Management extends BaseBoundary {
 	private JTable getEntranceTable() {
 		if (entranceTable == null) {			
 			entranceTable = new JTable(getEntranceTableModel());
-			entranceTable.setForeground(active);
 			entranceTable.setShowGrid(false);
 			entranceTable.setBounds(new Rectangle(20, 70, 216, 235));			
 			entranceTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -234,13 +229,9 @@ public class Management extends BaseBoundary {
 			entranceTable.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					setEnabledButtons(entranceTable, exitTable);
+					exitTable.clearSelection();
 				}
-			});		
-			/*
-			for (int i = 0; i < entranceTable.getColumnCount(); i++) {
-				entranceTable.getColumn(entranceTableModel.getColumnName(i)).setCellRenderer(rtb);
-			}
-			*/
+			});
 		}
 		return entranceTable;
 	}
@@ -248,22 +239,18 @@ public class Management extends BaseBoundary {
 	private JTable getExitTable() {
 		if (exitTable == null) {			
 			exitTable = new JTable(getExitTableModel());
-			exitTable.setForeground(passive);
+			exitTable.setShowGrid(false);
 			exitTable.setBounds(new Rectangle(20, 70, 216, 235));			
 			exitTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			exitTable.getColumnModel().getColumn(0).setPreferredWidth(50);
 			exitTable.getColumnModel().getColumn(1).setPreferredWidth(10);
 			//exitTable.getColumnModel().getColumn(2).setPreferredWidth(exitTable.getWidth() - 150);
 			exitTable.addMouseListener(new MouseAdapter() {
-				public void mousePressed(MouseEvent e) {					
+				public void mousePressed(MouseEvent e) {
+					entranceTable.clearSelection();
 					setEnabledButtons(entranceTable, exitTable);
 				}
 			});
-			/*
-			for (int i = 0; i < exitTable.getColumnCount(); i++) {
-				exitTable.getColumn(exitTableModel.getColumnName(i)).setCellRenderer(rtb);
-			}
-			*/
 		}
 		return exitTable;
 	}
@@ -272,16 +259,16 @@ public class Management extends BaseBoundary {
 		if (entranceTable.getSelectedRowCount() > 0) {
 			delTransBtn.setEnabled(true);
 			modTransBtn.setEnabled(true);
-			exitTable.clearSelection();
 		}
 		else if (exitTable.getSelectedRowCount() > 0) {
 			delTransBtn.setEnabled(true);
 			modTransBtn.setEnabled(true);
-			entranceTable.clearSelection();
 		}
 		else {
 			modTransBtn.setEnabled(false);
 			delTransBtn.setEnabled(false);
+			entranceTable.clearSelection();
+			exitTable.clearSelection();
 		}
 	}
 	
@@ -631,14 +618,14 @@ public class Management extends BaseBoundary {
 	
 	private void addRowsInTables(Transaction t) {
 		Vector<Object> vect = new Vector<Object>();
-		vect.add((String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency())));
-		vect.add((Date.getDay(t.getDay())));		
+		vect.add(String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency()));
+		vect.add(Date.getDay(t.getDay()));		
 		
 		if (t.getRefid() != 0 && t.getReference() != null) {
 			if (t.getType() == '+')
-				vect.add((t.getEntry()+" from "+t.getReference()));
+				vect.add(t.getEntry()+" from "+t.getReference());
 			else
-				vect.add((t.getEntry()+" to "+t.getReference()));
+				vect.add(t.getEntry()+" to "+t.getReference());
 		}
 		else
 			vect.add((t.getEntry()));
