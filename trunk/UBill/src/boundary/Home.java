@@ -200,7 +200,12 @@ public class Home extends BaseBoundary {
 		if (showBtn == null) {
 			showBtn = new JButton("");
 			showBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(ActionEvent e) {					
+					Account a = accounts.getAccount(listAccounts.getSelectedValue().toString());					
+					a.setUsable(true);
+					a.updateAccount();
+					Login.setAccount(a);
+					main.enableNavigationButtons(true);
 					showAccountInfo(accounts.getAccount(listAccounts.getSelectedValue().toString()));
 				}
 			});

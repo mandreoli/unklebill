@@ -58,7 +58,7 @@ public class InsertAccount extends BaseBoundary {
 	 **/
 	public InsertAccount(Account account) {
 		this.account = account;
-		getMainDialog().setVisible(true);		
+		getMainDialog().setVisible(true);
 	}
 	
 	private JDialog getMainDialog() {
@@ -216,8 +216,8 @@ public class InsertAccount extends BaseBoundary {
 						account.setUsable(primaryBox.isSelected());
 						account.setCreation(Date.getCurrentDate());
 						account.setCurrency(currencyBox.getSelectedItem().toString());
-						account.updateAccount();
-						Transactions.updateTransactions(Login.getUser().getUser(), Login.getAccount().getAccount(), nameText.getText());
+						account.updateAccount();						
+						Transactions.updateTransactions(Login.getUser().getUser(), account.getAccount(), nameText.getText());
 						ok("Account modified<br/>with success.");
 						mainDialog.dispose();
 					}
