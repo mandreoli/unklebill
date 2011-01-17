@@ -623,7 +623,7 @@ public class Management extends BaseBoundary {
 	private void addRowsInTables(Transaction t) {
 		Vector<Object> vect = new Vector<Object>();
 		vect.add((String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency())));
-		vect.add((Date.getDay(t.getDay())));
+		vect.add((Date.getDay(t.getDay())));		
 		
 		if (t.getRefid() != 0 && t.getReference() != null) {
 			if (t.getType() == '+')
