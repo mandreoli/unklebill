@@ -198,10 +198,11 @@ public class InsertAccount extends BaseBoundary {
 		if (saveBtn == null) {
 			saveBtn = new JButton();
 			saveBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {					
+				public void actionPerformed(ActionEvent e) {
+					double pay = FieldParser.roundDouble(Double.valueOf(balanceText.getText()));
 					if (account == null) {						
 						if (Account.loadAccount(nameText.getText(), Login.getUser().getUser()) == null) {
-							Account account = new Account(nameText.getText(), Login.getUser().getUser(), descrText.getText(), Double.valueOf(balanceText.getText()), Date.getCurrentDate(), currencyBox.getSelectedItem().toString(), primaryBox.isSelected());
+							Account account = new Account(nameText.getText(), Login.getUser().getUser(), descrText.getText(), pay, Date.getCurrentDate(), currencyBox.getSelectedItem().toString(), primaryBox.isSelected());
 							account.saveAccount();
 							ok("Account added<br/>with success.");
 							mainDialog.dispose();
@@ -213,7 +214,7 @@ public class InsertAccount extends BaseBoundary {
 						String old = account.getAccount();
 						account.setAccount(nameText.getText());
 						account.setDescription(descrText.getText());
-						account.setBalance(Double.valueOf(balanceText.getText()));
+						account.setBalance(pay);
 						account.setUsable(primaryBox.isSelected());
 						account.setCreation(Date.getCurrentDate());
 						account.setCurrency(currencyBox.getSelectedItem().toString());

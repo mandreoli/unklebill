@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import datatype.Accounts;
 import datatype.Date;
 import datatype.Transactions;
+import executor.FieldParser;
 import executor.Login;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
@@ -300,7 +301,7 @@ public class Home extends BaseBoundary {
 			this.createLabel.setText("<html><b>Last modified:</b>  "+text+"</html>");
 			this.primaryLabel.setText("<html><b>Primary:</b> "+prim+"</html>");
 			
-			double value = Double.valueOf(account.getBalance());
+			double value = FieldParser.roundDouble(Double.valueOf(account.getBalance()));
 			
 			if (value < 0)
 				this.balanceLabel.setForeground(passive);

@@ -157,8 +157,10 @@ public class InsertTransaction extends BaseBoundary {
 						type = '+';
 					else
 						type = '-';
-					if (transaction == null) {											
-						Transaction trans = new Transaction(Login.getUser().getUser(), Login.getAccount().getAccount(), categoryBox.getSelectedItem().toString(), type, Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()), 0, null);
+					
+					double pay = FieldParser.roundDouble(Double.valueOf(amountText.getText()));
+					if (transaction == null) {									
+						Transaction trans = new Transaction(Login.getUser().getUser(), Login.getAccount().getAccount(), categoryBox.getSelectedItem().toString(), type, pay, year, month, Integer.valueOf(dateText.getText()), 0, null);
 						transaction = trans;
 						trans.saveTransaction();
 						ok("Transaction added<br/>with success.");
@@ -166,7 +168,7 @@ public class InsertTransaction extends BaseBoundary {
 					}
 					else {											
 						transaction.setDay(Integer.valueOf(dateText.getText()));
-						transaction.setPayment(Double.valueOf(amountText.getText()));	
+						transaction.setPayment(pay);	
 						transaction.setEntry(categoryBox.getSelectedItem().toString());
 						transaction.updateTransaction();
 						ok("Transaction modified<br/>with success.");
