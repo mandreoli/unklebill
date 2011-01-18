@@ -8,6 +8,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
 
+import executor.CreateReport;
 import executor.FieldParser;
 import executor.Login;
 import javax.swing.SwingConstants;
@@ -16,6 +17,9 @@ import javax.swing.JButton;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -24,6 +28,8 @@ import javax.swing.table.TableModel;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
+
 import javax.swing.ImageIcon;
 import java.util.Vector;
 import javax.swing.JComboBox;
@@ -77,6 +83,7 @@ public class Management extends BaseBoundary {
 	private RenderTableBody rtbA = null;
 	private RenderTableBody rtbP = null;
 	private JLabel coinsLabel = null;
+	private JFileChooser saveReport = null;
 	
 	
 	public Management(JPanel mainPane) {		
@@ -603,12 +610,29 @@ public class Management extends BaseBoundary {
 	private JButton getReportBtn() {
 		if (reportBtn == null) {
 			reportBtn = new JButton("Report");
+			reportBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {					
+					getSaveReportChooser();
+				}
+			});
 			reportBtn.setIcon(new ImageIcon(getClass().getResource("/icons/report16.png")));
 			reportBtn.setToolTipText("Create report for this month");
 			reportBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));			
 			reportBtn.setBounds(295, 11, 90, 30);
 		}
 		return reportBtn;
+	}
+	
+	private void getSaveReportChooser() {
+		saveReport = new JFileChooser();
+		saveReport.setDialogTitle("Save report for "+monthBox.getSelectedItem().toString());
+		saveReport.setDialogType(JFileChooser.SAVE_DIALOG);
+		saveReport.setApproveButtonText("Save");
+		saveReport.setApproveButtonToolTipText("Save report");
+		int res = saveReport.showSaveDialog(managePane);
+		if (res == JFileChooser.APPROVE_OPTION) {
+			
+		}
 	}
 
 	private void populateTables() {
