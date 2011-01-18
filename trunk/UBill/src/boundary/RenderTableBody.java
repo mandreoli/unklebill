@@ -2,6 +2,8 @@ package boundary;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.util.LinkedList;
+
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
@@ -16,19 +18,29 @@ public class RenderTableBody extends JLabel implements TableCellRenderer {
 	private Color neutro = new Color(120, 120, 120);
 	private Color passive = new Color(128, 0, 0);
 	private int flag = 0;
-	private int row = -1;
+	private LinkedList<Integer> row = new LinkedList<Integer>();
 	
 	public RenderTableBody(int flag) {
 		this.flag = flag;
 	}
 	
-	public RenderTableBody(int flag, int row) {
-		this.flag = flag;
-		this.row = row;
+	public void setRow(int row) {
+		this.row.add(row);
 	}
 	
-	public void setRow(int row) {
-		this.row = row;
+	private boolean isRow(int row) {
+		for (int n : this.row) {
+			if (n == row)
+				return true;
+		}
+		return false;
+	}
+	
+	public void delRow(int row) {
+		for (int i = 0; i < this.row.size(); i++) {
+				if (this.row.get(i) == row)
+					this.row.remove(i);
+		}
 	}
 
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
@@ -38,13 +50,13 @@ public class RenderTableBody extends JLabel implements TableCellRenderer {
 	    label.setOpaque(true);
 	    
 		if (this.flag == 0) {
-		   	if (this.row == row)
+		   	if (isRow(row))
 		   		label.setForeground(neutro);
 		   	else	
 		   		label.setForeground(active);
 		}
 		else {
-		   	if (this.row == row)
+		   	if (isRow(row))
 		   		label.setForeground(neutro);
 		   	else	
 		   		label.setForeground(passive);

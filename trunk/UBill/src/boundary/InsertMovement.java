@@ -77,6 +77,10 @@ public class InsertMovement extends BaseBoundary {
 		getMainDialog().setVisible(true);		
 	}
 	
+	public Transaction getTransaction() {
+		return this.transaction;
+	}
+	
 	private JDialog getMainDialog() {
 		if (mainDialog == null) {
 			mainDialog = new JDialog();
@@ -138,12 +142,11 @@ public class InsertMovement extends BaseBoundary {
 			saveBtn = new JButton();
 			saveBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					double pay = FieldParser.roundDouble(Double.valueOf(amountText.getText()));
 					if (transaction == null) {
-						ft = new Transaction(Login.getUser().getUser(), fromBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '-', pay, year, month, Integer.valueOf(dateText.getText()), 0, null);
+						ft = new Transaction(Login.getUser().getUser(), fromBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '-', Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()), 0, null);
 						ft.saveTransaction();												
 									
-						tt = new Transaction(Login.getUser().getUser(), toBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '+', pay, year, month, Integer.valueOf(dateText.getText()), ft.getId(), fromBox.getSelectedItem().toString());
+						tt = new Transaction(Login.getUser().getUser(), toBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '+', Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()), ft.getId(), fromBox.getSelectedItem().toString());
 						tt.saveTransaction();
 						
 						ft.setRefid(tt.getId());
@@ -151,6 +154,38 @@ public class InsertMovement extends BaseBoundary {
 						ft.updateTransaction();
 						
 						ok("<html>Transfer from <b>"+ft.getAccount()+"</b> to <b>"+tt.getAccount()+"</b><br/>executed with success!</html>");
+						mainDialog.dispose();
+					}
+					else {
+						Transaction t1 = Transaction.loadTransaction(transaction.getRefid(), Login.getUser().getUser(), transaction.getReference());
+						
+						transaction.setDay(Integer.valueOf(dateText.getText()));
+						t1.setDay(Integer.valueOf(dateText.getText()));
+						transaction.setPayment(Double.valueOf(amountText.getText()));
+						t1.setPayment(Double.valueOf(amountText.getText()));
+						
+						if (transaction.getAccount().equals(fromBox.getSelectedItem().toString())) { 
+							transaction.setReference(toBox.getSelectedItem().toString());
+							transaction.setType('-');
+							t1.setReference(fromBox.getSelectedItem().toString());
+							t1.setType('+');							
+						}
+						else {
+							transaction.setReference(fromBox.getSelectedItem().toString());
+							transaction.setType('+');
+							t1.setReference(toBox.getSelectedItem().toString());
+							t1.setType('-');
+						}
+						
+						if (!t1.getReference().equals(transaction.getAccount()))
+							transaction.setAccount(t1.getReference());
+						if (!transaction.getReference().equals(t1.getAccount()))
+							t1.setAccount(transaction.getReference());
+						
+						t1.updateTransaction();
+						transaction.updateTransaction();
+						
+						ok("<html>Transfer modified with success!</html>");
 						mainDialog.dispose();
 					}
 				}
@@ -397,13 +432,19 @@ public class InsertMovement extends BaseBoundary {
 	private JComboBox getFromBox() {
 		if (fromBox == null) {
 			fromBox = new JComboBox(retrieveAccounts().toArray());
+			if (transaction != null) {
+				if (transaction.getType() == '+')
+					fromBox.setSelectedItem(transaction.getReference());
+				else
+					fromBox.setSelectedItem(Login.getAccount().getAccount());
+			}
 			fromBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					catchTypedField(dateText, amountText);	
 				}
 			});
 			fromBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			fromBox.setBounds(40, 25, 110, 24);
+			fromBox.setBounds(40, 25, 110, 24);			
 		}
 		return fromBox;
 	}
@@ -411,14 +452,21 @@ public class InsertMovement extends BaseBoundary {
 	private JComboBox getToBox() {
 		if (toBox == null) {			
 			toBox = new JComboBox(retrieveAccounts().toArray());
+			if (transaction != null) {
+				if (transaction.getType() == '-')
+					toBox.setSelectedItem(transaction.getReference());
+				else
+					toBox.setSelectedItem(Login.getAccount().getAccount());
+			}
+			else
+				toBox.setSelectedItem(Login.getAccount().getAccount());
 			toBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					catchTypedField(dateText, amountText);	
 				}
 			});
 			toBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			toBox.setBounds(185, 25, 110, 24);
-			toBox.setSelectedItem(Login.getAccount().getAccount());
+			toBox.setBounds(185, 25, 110, 24);			
 		}
 		return toBox;
 	}
