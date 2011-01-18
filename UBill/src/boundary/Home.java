@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import datatype.Accounts;
 import datatype.Date;
 import datatype.Transactions;
+import executor.FieldParser;
 import executor.Login;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
@@ -50,6 +51,11 @@ public class Home extends BaseBoundary {
 	private Color active = new Color(0, 128, 0);
 	private Color neutro = new Color(0, 0, 0);
 	private Color passive = new Color(128, 0, 0);
+	private JButton modAccBtn = null;
+	private JButton btnCategory = null;
+	private JLabel totalLabel = null;
+	private JPanel totalBalancePane = null;
+	private JLabel totalBalanceLabel = null;
 	
 	
 	
@@ -76,6 +82,9 @@ public class Home extends BaseBoundary {
 			userLabel.setToolTipText("Logged user");
 			userLabel.setBounds(20, 20, 442, 30);
 			homePane.add(userLabel);
+			homePane.add(getModAccBtn());
+			homePane.add(getBtnCategory());
+			homePane.add(getTotalBalancePane());
 		}
 		return homePane;
 	}
@@ -85,7 +94,7 @@ public class Home extends BaseBoundary {
 			manageAccountsPane = new JPanel();
 			manageAccountsPane.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
 			manageAccountsPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Manage accounts", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
-			manageAccountsPane.setBounds(6, 195, 468, 235);
+			manageAccountsPane.setBounds(6, 230, 468, 200);
 			manageAccountsPane.setLayout(null);			
 			manageAccountsPane.add(getBtnRemove());
 			manageAccountsPane.add(getBtnAdd());
@@ -102,27 +111,27 @@ public class Home extends BaseBoundary {
 		accountLabel = new JLabel("");
 		accountLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		accountLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-		accountLabel.setBounds(209, 25, 253, 32);
+		accountLabel.setBounds(209, 15, 253, 32);
 		
 		createLabel = new JLabel("");
 		createLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		createLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		createLabel.setBounds(209, 59, 253, 16);
+		createLabel.setBounds(209, 44, 253, 16);
 		
 		primaryLabel = new JLabel("");
 		primaryLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		primaryLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		primaryLabel.setBounds(209, 78, 253, 16);
+		primaryLabel.setBounds(209, 63, 253, 16);
 		
 		descrLabel = new JLabel("");
 		descrLabel.setVerticalAlignment(SwingConstants.TOP);
 		descrLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		descrLabel.setBounds(209, 142, 253, 83);
+		descrLabel.setBounds(209, 127, 253, 62);
 		
 		balanceLabel = new JLabel("");
 		balanceLabel.setVerticalAlignment(SwingConstants.TOP);
 		balanceLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		balanceLabel.setBounds(209, 105, 253, 30);
+		balanceLabel.setBounds(209, 90, 253, 30);
 		
 		manageAccountsPane.add(accountLabel);
 		manageAccountsPane.add(createLabel);
@@ -134,7 +143,7 @@ public class Home extends BaseBoundary {
 	private JScrollPane getScrollAccountPane() {
 		if (scrollAccountPane == null) {
 			scrollAccountPane = new JScrollPane(getListAccounts());
-			scrollAccountPane.setBounds(10, 50, 150, 148);
+			scrollAccountPane.setBounds(10, 50, 150, 113);
 			scrollAccountPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		}
 		return scrollAccountPane;
@@ -224,13 +233,14 @@ public class Home extends BaseBoundary {
 				public void actionPerformed(ActionEvent e) {
 					new InsertAccount();
 					populateListAccounts();
+					updateBalanceLabel();
 				}
 			});
 			btnAdd.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnAdd.setHorizontalTextPosition(SwingConstants.RIGHT);
 			btnAdd.setIcon(new ImageIcon(getClass().getResource("/icons/add16.png")));
 			btnAdd.setToolTipText("Add an account");
-			btnAdd.setBounds(10, 200, 75, 29);
+			btnAdd.setBounds(10, 165, 75, 29);
 		}
 		return btnAdd;
 	}
@@ -264,14 +274,15 @@ public class Home extends BaseBoundary {
 							Login.setAccount(null);
 						
 						populateListAccounts();
-					}					
+					}
+					updateBalanceLabel();
 				}
 			});
 			btnRemove.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnRemove.setHorizontalTextPosition(SwingConstants.LEFT);
 			btnRemove.setIcon(new ImageIcon(getClass().getResource("/icons/del16.png")));
 			btnRemove.setToolTipText("Remove selected account");
-			btnRemove.setBounds(85, 200, 75, 29);
+			btnRemove.setBounds(85, 165, 75, 29);
 			btnRemove.setEnabled(false);
 		}
 		return btnRemove;
@@ -325,5 +336,89 @@ public class Home extends BaseBoundary {
 		btnRemove.setEnabled(flag);
 		showBtn.setEnabled(flag);
 		modBtn.setEnabled(flag);
+	}
+	
+	private JButton getModAccBtn() {
+		if (modAccBtn == null) {
+			modAccBtn = new JButton("Profile");
+			modAccBtn.setIcon(new ImageIcon(getClass().getResource("/icons/setting16.png")));
+			modAccBtn.setToolTipText("Modify your profile");
+			modAccBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			modAccBtn.setBounds(15, 55, 90, 30);
+		}
+		return modAccBtn;
+	}
+	
+	private JButton getBtnCategory() {
+		if (btnCategory == null) {
+			btnCategory = new JButton("Category");
+			btnCategory.setIcon(new ImageIcon(getClass().getResource("/icons/category16.png")));
+			btnCategory.setToolTipText("Manage your categories");
+			btnCategory.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			btnCategory.setBounds(105, 55, 90, 30);
+		}
+		return btnCategory;
+	}
+	
+	private JLabel getTotalLabel() {
+		if (totalLabel == null) {
+			totalLabel = new JLabel("");
+			totalLabel.setBounds(6, 18, 48, 48);
+			totalLabel.setIcon(new ImageIcon(getClass().getResource("/icons/safety48.png")));
+			totalLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
+		}
+		return totalLabel;
+	}
+	
+	private JPanel getTotalBalancePane() {
+		if (totalBalancePane == null) {
+			totalBalancePane = new JPanel();
+			totalBalancePane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Total balance", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
+			totalBalancePane.setBounds(6, 97, 468, 72);
+			totalBalancePane.setLayout(null);
+			totalBalancePane.add(getTotalLabel());
+			totalBalancePane.add(getTotalBalanceLabel());
+		}
+		return totalBalancePane;
+	}
+	
+	private JLabel getTotalBalanceLabel() {
+		if (totalBalanceLabel == null) {
+			totalBalanceLabel = new JLabel("");
+			totalBalanceLabel.setToolTipText("This is the total of your accounts");
+			totalBalanceLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
+			totalBalanceLabel.setBounds(57, 18, 210, 48);
+			updateBalanceLabel();
+		}
+		return totalBalanceLabel;
+	}
+	
+	private double calculateTotalBalance() {
+		double total = 0.0;
+		
+		if (this.accounts.getNumAccounts() > 0) {
+			for (Account a : this.accounts.getAccounts()) {
+				total += a.getBalance();
+				FieldParser.roundDouble(total);
+			}
+		}
+		
+		return total;
+	}
+	
+	private void updateBalanceLabel() {
+		String sign = "";
+		double total = calculateTotalBalance();
+		
+		if (total > 0) {
+			this.totalBalanceLabel.setForeground(active);
+			sign = "+";
+		}
+		else if (total < 0)
+			this.totalBalanceLabel.setForeground(passive);
+		else
+			this.totalBalanceLabel.setForeground(neutro);
+		
+		this.totalBalanceLabel.setText(sign+String.valueOf(total)+" "+Login.getUser().getCurrency());
 	}
 }

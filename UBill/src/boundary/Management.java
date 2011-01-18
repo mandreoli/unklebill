@@ -76,6 +76,7 @@ public class Management extends BaseBoundary {
 	private JButton nextMonthBtn = null;
 	private RenderTableBody rtbA = null;
 	private RenderTableBody rtbP = null;
+	private JLabel coinsLabel = null;
 	
 	
 	public Management(JPanel mainPane) {		
@@ -107,15 +108,16 @@ public class Management extends BaseBoundary {
 			managePane.add(getBalanceLabel());
 			managePane.add(getAccountBalanceLabel());
 			managePane.add(getMonthTab());
+			managePane.add(getCoinsLabel());
 		}
 		return managePane;
 	}
 	
 	private JLabel getAccountLabel() {
 		if (accountLabel == null) {
-			accountLabel = new JLabel(Login.getAccount().getAccount());
+			accountLabel = new JLabel(Login.getAccount().getAccount());			
 			accountLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-			accountLabel.setBounds(15, 10, 245, 41);
+			accountLabel.setBounds(15, 10, 245, 48);
 		}
 		return accountLabel;
 	}
@@ -125,7 +127,7 @@ public class Management extends BaseBoundary {
 			accountBalanceLabel = new JLabel("Account balance");
 			accountBalanceLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			accountBalanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-			accountBalanceLabel.setBounds(312, 8, 149, 16);
+			accountBalanceLabel.setBounds(265, 8, 149, 16);
 		}
 		return accountBalanceLabel;
 	}
@@ -142,7 +144,7 @@ public class Management extends BaseBoundary {
 				balanceLabel.setForeground(neutro);
 			balanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			balanceLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
-			balanceLabel.setBounds(193, 20, 268, 30);
+			balanceLabel.setBounds(193, 20, 220, 30);
 		}
 		return balanceLabel;
 	}
@@ -749,5 +751,14 @@ public class Management extends BaseBoundary {
 			nextMonthBtn.setBounds(215, 66, 30, 30);
 		}
 		return nextMonthBtn;
+	}
+	
+	private JLabel getCoinsLabel() {
+		if (coinsLabel == null) {
+			coinsLabel = new JLabel("");
+			coinsLabel.setIcon(new ImageIcon(getClass().getResource("/icons/accounts48.png")));
+			coinsLabel.setBounds(420, 10, 48, 48);
+		}
+		return coinsLabel;
 	}
 }

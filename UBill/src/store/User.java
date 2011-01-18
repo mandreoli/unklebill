@@ -69,6 +69,13 @@ public class User {
 		session.save(this);
 		session.getTransaction().commit();
 	}
+
+	public void updateUser() {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update(this);
+		session.getTransaction().commit();
+	}
 	
 	public static User loadUser(String user, String password) {		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();

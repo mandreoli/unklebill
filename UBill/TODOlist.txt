@@ -1,7 +1,5 @@
 TODO LIST
 
-- modifica di un trasferimento
 - controllo date!!!
-- totale di tutti gli accounts
 - Mettere nella HOME la possibilita' di modificare il proprio account
 - Mettere nella HOME la possibilita' di modificare le categorie: cancellazione/modifica
