@@ -72,6 +72,8 @@ public class Management extends BaseBoundary {
 	private JLabel monthLabel = null;
 	private JButton prevMonthBtn = null;
 	private JButton nextMonthBtn = null;
+	private RenderTableBody rtbA = null;
+	private RenderTableBody rtbP = null;
 	
 	
 	public Management(JPanel mainPane) {		
@@ -190,9 +192,9 @@ public class Management extends BaseBoundary {
                 }       
 			};
 			Object[] headers = new Object[3];
-			headers[0] = "Amount";
-			headers[1] = "Day";
-			headers[2] = "Causal";
+			headers[0] = "Day";
+			headers[1] = "Amount";			
+			headers[2] = "Category";
 			entranceTableModel.setColumnIdentifiers(headers);			
 		}
 		return entranceTableModel;
@@ -209,9 +211,9 @@ public class Management extends BaseBoundary {
                 }       
 			};		
 			Object[] headers = new Object[3];
-			headers[0] = "Amount";
-			headers[1] = "Day";
-			headers[2] = "Causal";
+			headers[0] = "Day";
+			headers[1] = "Amount";			
+			headers[2] = "Category";
 			exitTableModel.setColumnIdentifiers(headers);
 		}
 		return exitTableModel;
@@ -220,18 +222,22 @@ public class Management extends BaseBoundary {
 	private JTable getEntranceTable() {
 		if (entranceTable == null) {			
 			entranceTable = new JTable(getEntranceTableModel());
+			entranceTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			entranceTable.setShowGrid(false);
 			entranceTable.setBounds(new Rectangle(20, 70, 216, 235));			
 			entranceTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			entranceTable.getColumnModel().getColumn(0).setPreferredWidth(50);
-			entranceTable.getColumnModel().getColumn(1).setPreferredWidth(10);
-			//entranceTable.getColumnModel().getColumn(2).setPreferredWidth(entranceTable.getWidth() - 150);			
+			entranceTable.getColumnModel().getColumn(1).setPreferredWidth(90);
+			entranceTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+			entranceTable.getColumnModel().getColumn(2).setPreferredWidth(315);			
 			entranceTable.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					setEnabledButtons(entranceTable, exitTable);
 					exitTable.clearSelection();
 				}
 			});
+			rtbA = new RenderTableBody(0);
+			for (int i = 0; i < entranceTableModel.getColumnCount(); i++)
+				entranceTable.getColumn(entranceTableModel.getColumnName(i)).setCellRenderer(rtbA);
 		}
 		return entranceTable;
 	}
@@ -239,18 +245,22 @@ public class Management extends BaseBoundary {
 	private JTable getExitTable() {
 		if (exitTable == null) {			
 			exitTable = new JTable(getExitTableModel());
+			exitTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			exitTable.setShowGrid(false);
 			exitTable.setBounds(new Rectangle(20, 70, 216, 235));			
 			exitTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			exitTable.getColumnModel().getColumn(0).setPreferredWidth(50);
-			exitTable.getColumnModel().getColumn(1).setPreferredWidth(10);
-			//exitTable.getColumnModel().getColumn(2).setPreferredWidth(exitTable.getWidth() - 150);
+			exitTable.getColumnModel().getColumn(1).setPreferredWidth(90);
+			exitTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+			exitTable.getColumnModel().getColumn(2).setPreferredWidth(315);
 			exitTable.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					entranceTable.clearSelection();
 					setEnabledButtons(entranceTable, exitTable);
 				}
 			});
+			rtbP = new RenderTableBody(1);
+			for (int i = 0; i < exitTableModel.getColumnCount(); i++)
+				exitTable.getColumn(exitTableModel.getColumnName(i)).setCellRenderer(rtbP);
 		}
 		return exitTable;
 	}
@@ -618,8 +628,8 @@ public class Management extends BaseBoundary {
 	
 	private void addRowsInTables(Transaction t) {
 		Vector<Object> vect = new Vector<Object>();
+		vect.add(Date.getDay(t.getDay()));
 		vect.add(String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency()));
-		vect.add(Date.getDay(t.getDay()));		
 		
 		if (t.getRefid() != 0 && t.getReference() != null) {
 			if (t.getType() == '+')
@@ -630,13 +640,17 @@ public class Management extends BaseBoundary {
 		else
 			vect.add((t.getEntry()));
 				
-		if (t.getType() == '+') {					
+		if (t.getType() == '+') {
+			if (t.getRefid() != 0)
+				rtbA.setRow(entranceTable.getRowCount());
 			this.entranceTableModel.addRow(vect);
 			this.entranceTrans.addTransaction(t);
 			if (t.getRefid() == 0 && t.getReference() == null)
 				this.entranceTot += t.getPayment();			
 		}
 		else {
+			if (t.getRefid() != 0)
+				rtbP.setRow(exitTable.getRowCount());
 			this.exitTableModel.addRow(vect);
 			this.exitTrans.addTransaction(t);
 			if (t.getRefid() == 0 && t.getReference() == null)
