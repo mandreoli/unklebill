@@ -351,7 +351,7 @@ public class Management extends BaseBoundary {
 			else
 				tot -= ins.getPayment();
 			
-			Login.getAccount().setBalance(FieldParser.roundDouble(tot));
+			Login.getAccount().setBalance(tot);
 			Login.getAccount().updateAccount();
 			
 			updateBalanceLabel(balanceLabel);
@@ -486,7 +486,6 @@ public class Management extends BaseBoundary {
 							Login.getAccount().setBalance(tot);
 							Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
 							double tot2 = a.getBalance() + t.getPayment();
-							tot2 = FieldParser.roundDouble(tot2);
 							a.setBalance(tot2);
 							a.updateAccount();
 							
@@ -508,7 +507,6 @@ public class Management extends BaseBoundary {
 							Login.getAccount().setBalance(tot);
 							Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
 							double tot2 = a.getBalance() + t.getPayment();
-							tot2 = FieldParser.roundDouble(tot2);
 							a.setBalance(tot2);
 							a.updateAccount();
 							
@@ -528,6 +526,8 @@ public class Management extends BaseBoundary {
 						setEnabledButtons(entranceTable, exitTable);
 						updateBalanceLabel(balanceLabel);
 						updatePartialsAmounts(entranceAmount, exitAmount);
+						rtbA.setRow(-1);
+						rtbP.setRow(-1);
 					}
 				}
 			});
@@ -563,21 +563,17 @@ public class Management extends BaseBoundary {
 						if (entranceTable.getSelectedRowCount() > 0) {
 							updateRowsInTables(ins.getTransaction(), oldT, entranceTable.getSelectedRow());
 							tot = Login.getAccount().getBalance() - oldT.getPayment();
-							tot = FieldParser.roundDouble(tot);
 						}
 						else {
 							updateRowsInTables(ins.getTransaction(), oldT, exitTable.getSelectedRow());
 							tot = Login.getAccount().getBalance() + oldT.getPayment();
-							tot = FieldParser.roundDouble(tot);
 						}
 						
 						if (ins.getTransaction().getType() == '+') {
 							tot += ins.getTransaction().getPayment();
-							tot = FieldParser.roundDouble(tot);
 						}
 						else {
 							tot -= ins.getTransaction().getPayment();
-							tot = FieldParser.roundDouble(tot);
 						}
 						
 						Login.getAccount().setBalance(tot);

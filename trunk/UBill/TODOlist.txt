@@ -3,6 +3,5 @@ TODO LIST
 - modifica di un trasferimento
 - controllo date!!!
 - totale di tutti gli accounts
-- Impostare formato double con soli 2 decimali, altrimenti errori di approssimazione
 - Mettere nella HOME la possibilita' di modificare il proprio account
 - Mettere nella HOME la possibilita' di modificare le categorie: cancellazione/modifica
