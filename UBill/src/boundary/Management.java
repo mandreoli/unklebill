@@ -483,14 +483,15 @@ public class Management extends BaseBoundary {
 						if (entranceTable.getSelectedRowCount() > 0) {
 							Transaction t = entranceTrans.getTransactions().get(entranceTable.getSelectedRow());
 							double tot = Login.getAccount().getBalance() - t.getPayment();
-							Login.getAccount().setBalance(tot);
-							Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
-							double tot2 = a.getBalance() + t.getPayment();
-							a.setBalance(tot2);
-							a.updateAccount();
+							Login.getAccount().setBalance(tot);							
 							
 							if (t.getRefid() != 0) {
+								Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
+								double tot2 = a.getBalance() + t.getPayment();
+								a.setBalance(tot2);
+								a.updateAccount();
 								Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser()).deleteTransaction();
+								rtbA.delRow(entranceTable.getSelectedRow());
 							}
 							else {
 								entranceTot -= t.getPayment();
@@ -505,13 +506,14 @@ public class Management extends BaseBoundary {
 							Transaction t = exitTrans.getTransactions().get(exitTable.getSelectedRow());
 							double tot = Login.getAccount().getBalance() - t.getPayment();
 							Login.getAccount().setBalance(tot);
-							Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
-							double tot2 = a.getBalance() + t.getPayment();
-							a.setBalance(tot2);
-							a.updateAccount();
 							
 							if (t.getRefid() != 0) {
+								Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
+								double tot2 = a.getBalance() + t.getPayment();
+								a.setBalance(tot2);
+								a.updateAccount();
 								Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser()).deleteTransaction();
+								rtbP.delRow(exitTable.getSelectedRow());
 							}
 							else {
 								exitTot -= t.getPayment();
@@ -520,14 +522,12 @@ public class Management extends BaseBoundary {
 							
 							t.deleteTransaction();
 							exitTrans.getTransactions().remove(exitTable.getSelectedRow());
-							exitTableModel.removeRow(exitTable.getSelectedRow());
+							exitTableModel.removeRow(exitTable.getSelectedRow());	
 						}
 						Login.getAccount().updateAccount();
 						setEnabledButtons(entranceTable, exitTable);
 						updateBalanceLabel(balanceLabel);
-						updatePartialsAmounts(entranceAmount, exitAmount);
-						rtbA.setRow(-1);
-						rtbP.setRow(-1);
+						updatePartialsAmounts(entranceAmount, exitAmount);						
 					}
 				}
 			});
@@ -553,34 +553,21 @@ public class Management extends BaseBoundary {
 					else {
 						t = Transaction.loadTransaction(exitTrans.getTransactions().get(exitTable.getSelectedRow()).getId());						
 					}
+						
+					InsertTransaction insT = null;
+					InsertMovement insM = null;
+					Transaction newT = null;					
+					if (t.getRefid() == 0) {
+						insT = new InsertTransaction(t);
+						newT = insT.getTransaction();
+					}
+					else {
+						insM = new InsertMovement(t);
+						newT = insM.getTransaction();
+					}
 					
-					Transaction oldT = new Transaction(t.getId(), t.getUser(), t.getAccount(), t.getEntry(), t.getType(), t.getPayment(), t.getYear(), t.getMonth(), t.getDay(), t.getRefid(), t.getReference());					
-					InsertTransaction ins = new InsertTransaction(t);									
-					
-					if (ins.getTransaction() != null) {
-						double tot = 0.0;
-						
-						if (entranceTable.getSelectedRowCount() > 0) {
-							updateRowsInTables(ins.getTransaction(), oldT, entranceTable.getSelectedRow());
-							tot = Login.getAccount().getBalance() - oldT.getPayment();
-						}
-						else {
-							updateRowsInTables(ins.getTransaction(), oldT, exitTable.getSelectedRow());
-							tot = Login.getAccount().getBalance() + oldT.getPayment();
-						}
-						
-						if (ins.getTransaction().getType() == '+') {
-							tot += ins.getTransaction().getPayment();
-						}
-						else {
-							tot -= ins.getTransaction().getPayment();
-						}
-						
-						Login.getAccount().setBalance(tot);
-						Login.getAccount().updateAccount();
-						
-						updateBalanceLabel(balanceLabel);
-					}					
+					if (newT != null)
+						populateTables();
 				}
 			});
 			modTransBtn.setIcon(new ImageIcon(getClass().getResource("/icons/edit16.png")));
@@ -628,6 +615,8 @@ public class Management extends BaseBoundary {
 		this.exitTrans = new Transactions();
 		this.entranceTot = 0.0;
 		this.exitTot = 0.0;
+		this.entranceTableModel.setRowCount(0);
+		this.exitTableModel.setRowCount(0);
 		
 		if (this.transactions.getNumTransactions() > 0) {			
 			for (Transaction t : this.transactions.getTransactions()) {
@@ -667,32 +656,6 @@ public class Management extends BaseBoundary {
 			this.exitTrans.addTransaction(t);
 			if (t.getRefid() == 0 && t.getReference() == null)
 				this.exitTot = FieldParser.roundDouble(this.exitTot + t.getPayment());			
-		}
-		
-		updatePartialsAmounts(entranceAmount, exitAmount);
-	}
-	
-	private void updateRowsInTables(Transaction t, Transaction old, int row) {
-		
-		if (t.getType() == '+') {
-			this.entranceTableModel.setValueAt(String.valueOf(t.getPayment())+" "+Login.getAccount().getCurrency(), row, 1);
-			this.entranceTableModel.setValueAt(Date.getDay(t.getDay()), row, 0);
-			this.entranceTableModel.setValueAt(t.getEntry(), row, 2);			
-			this.entranceTrans.getTransactions().get(row).setPayment(t.getPayment());
-			this.entranceTrans.getTransactions().get(row).setDay(t.getDay());
-			this.entranceTrans.getTransactions().get(row).setEntry(t.getEntry());
-			this.entranceTot = FieldParser.roundDouble(this.entranceTot - old.getPayment());
-			this.entranceTot = FieldParser.roundDouble(this.entranceTot + t.getPayment());			
-		}
-		else {
-			this.exitTableModel.setValueAt(String.valueOf(t.getPayment())+" "+Login.getAccount().getCurrency(), row, 1);
-			this.exitTableModel.setValueAt(Date.getDay(t.getDay()), row, 0);
-			this.exitTableModel.setValueAt(t.getEntry(), row, 2);
-			this.exitTrans.getTransactions().get(row).setPayment(t.getPayment());
-			this.exitTrans.getTransactions().get(row).setDay(t.getDay());
-			this.exitTrans.getTransactions().get(row).setEntry(t.getEntry());			
-			this.exitTot = FieldParser.roundDouble(this.exitTot - old.getPayment());
-			this.exitTot = FieldParser.roundDouble(this.exitTot + t.getPayment());		
 		}
 		
 		updatePartialsAmounts(entranceAmount, exitAmount);
