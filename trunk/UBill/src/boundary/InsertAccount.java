@@ -65,7 +65,10 @@ public class InsertAccount extends BaseBoundary {
 		if (mainDialog == null) {
 			mainDialog = new JDialog();
 			mainDialog.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/favico.png")));
-			mainDialog.setTitle("Add new account");
+			if (this.account != null)
+				mainDialog.setTitle("Modify this account");
+			else
+				mainDialog.setTitle("Add new account");
 			mainDialog.setSize(new Dimension(this.wWidth, this.wHeight));		
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 			mainDialog.setLocation(new Point((d.width-wWidth)/2, (d.height-wHeight)/2));
@@ -138,7 +141,7 @@ public class InsertAccount extends BaseBoundary {
 				@Override
 				public void keyReleased(KeyEvent e) {
 					catchTypedField(nameText, descrText, balanceText);
-					if (descrText.getText().length() <= 160)
+					if (descrText.getText().length() <= 100)
 						descrText.setBackground(normalColor);
 					else
 						descrText.setBackground(errorColor);
@@ -169,7 +172,7 @@ public class InsertAccount extends BaseBoundary {
 			mainPane.add(balanceText);
 			if (this.account != null) {
 				balanceText.setText(String.valueOf(this.account.getBalance()));
-				balanceText.setEditable(false);
+				balanceText.setEnabled(false);
 			}
 			
 			mainPane.add(getPrimaryBox());
@@ -244,7 +247,7 @@ public class InsertAccount extends BaseBoundary {
 	
 	private void catchTypedField(JTextField account, JTextArea descr, JTextField balance) {
 		
-		if (FieldParser.checkUser(account.getText()) && descr.getText().length() <= 160 && FieldParser.checkFloat(balance.getText(), true)) {
+		if (FieldParser.checkUser(account.getText()) && descr.getText().length() <= 100 && FieldParser.checkFloat(balance.getText(), true)) {
 			saveBtn.setEnabled(true);
 		}
 		else {
@@ -271,6 +274,7 @@ public class InsertAccount extends BaseBoundary {
 		if (currencyBox == null) {
 			currencyBox = new JComboBox(Currency.values());
 			currencyBox.setBounds(210, 131, 90, 27);
+			currencyBox.setSelectedItem(Login.getUser().getCurrency());
 			if (this.account != null) {	
 				currencyBox.setSelectedItem(this.account.getCurrency());
 			}

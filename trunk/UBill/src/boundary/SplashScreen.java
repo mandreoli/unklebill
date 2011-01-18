@@ -34,14 +34,14 @@ public class SplashScreen extends JWindow {
     private JPanel getMainPane() {
     	if (mainPane == null) {
     		mainPane = new JPanel();    		
-    		mainPane.setBackground(new Color(255, 248, 220));
+    		//mainPane.setBackground(new Color(255, 248, 220));
     		mainPane.setBorder(new LineBorder(new Color(51, 102, 204), 5));
     		mainPane.setSize(new Dimension(this.wWidth, this.wHeight));
 			mainPane.setLayout(null);
 			
 			JLabel devLabel = new JLabel("UnkleBill v1.0 developed by Michele Andreoli");
 			devLabel.setForeground(Color.DARK_GRAY);
-			devLabel.setFont(new Font("Lucida Grande", Font.BOLD, 12));
+			devLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
 			devLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			devLabel.setBounds(6, 6, 468, 16);
 			mainPane.add(devLabel);
@@ -53,16 +53,21 @@ public class SplashScreen extends JWindow {
 			
 			JLabel titleLabel = new JLabel("I Want Your...");
 			titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			titleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 34));
-			titleLabel.setBounds(187, 41, 287, 81);
+			titleLabel.setFont(new Font("Lucida Fax", Font.BOLD, 34));
+			titleLabel.setBounds(180, 41, 287, 81);
 			mainPane.add(titleLabel);
 			
 			JLabel title2Label = new JLabel("Bills!");
 			title2Label.setForeground(Color.RED);
 			title2Label.setHorizontalAlignment(SwingConstants.CENTER);
-			title2Label.setFont(new Font("Lucida Grande", Font.BOLD, 44));
-			title2Label.setBounds(187, 87, 287, 81);
+			title2Label.setFont(new Font("SansSerif", Font.BOLD, 44));
+			title2Label.setBounds(180, 87, 287, 81);
 			mainPane.add(title2Label);
+			
+			JLabel imgLabel = new JLabel("");
+			imgLabel.setIcon(new ImageIcon(SplashScreen.class.getResource("/icons/chek48.png")));
+			imgLabel.setBounds(401, 134, 48, 48);
+			mainPane.add(imgLabel);
     	}
     	return mainPane;
     }
