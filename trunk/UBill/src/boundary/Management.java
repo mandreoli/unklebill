@@ -506,12 +506,12 @@ public class Management extends BaseBoundary {
 						}
 						else {
 							Transaction t = exitTrans.getTransactions().get(exitTable.getSelectedRow());
-							double tot = Login.getAccount().getBalance() - t.getPayment();
+							double tot = Login.getAccount().getBalance() + t.getPayment();
 							Login.getAccount().setBalance(tot);
 							
 							if (t.getRefid() != 0) {
 								Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
-								double tot2 = a.getBalance() + t.getPayment();
+								double tot2 = a.getBalance() - t.getPayment();
 								a.setBalance(tot2);
 								a.updateAccount();
 								Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser()).deleteTransaction();
