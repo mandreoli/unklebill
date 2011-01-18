@@ -1,6 +1,8 @@
 package store;
 
 import org.hibernate.Session;
+
+import executor.FieldParser;
 import util.HibernateUtil;
 
 public class Transaction {
@@ -25,7 +27,7 @@ public class Transaction {
 		this.account = account;
 		this.entry = entry;
 		this.type = type;
-		this.payment = payment;
+		this.payment = FieldParser.roundDouble(payment);
 		this.year = year;
 		this.month = month;
 		this.day = day;
@@ -39,7 +41,7 @@ public class Transaction {
 		this.account = account;
 		this.entry = entry;
 		this.type = type;
-		this.payment = payment;
+		this.payment = FieldParser.roundDouble(payment);
 		this.year = year;
 		this.month = month;
 		this.day = day;
@@ -88,11 +90,11 @@ public class Transaction {
 	}
 
 	public void setPayment(double payment) {
-		this.payment = payment;
+		this.payment = FieldParser.roundDouble(payment);
 	}
 
 	public double getPayment() {
-		return this.payment;
+		return FieldParser.roundDouble(this.payment);
 	}
 
 	public int getYear() {

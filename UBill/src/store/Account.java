@@ -3,6 +3,7 @@ package store;
 import org.hibernate.Session;
 
 import datatype.Accounts;
+import executor.FieldParser;
 import util.HibernateUtil;
 
 public class Account {
@@ -23,7 +24,7 @@ public class Account {
 		this.account = account;		
 		this.user = user;
 		this.description = description;
-		this.balance = balance;
+		this.balance = FieldParser.roundDouble(balance);
 		this.creation = creation;
 		this.currency = currency;
 		this.usable = usable;
@@ -34,7 +35,7 @@ public class Account {
 		this.account = account;		
 		this.user = user;
 		this.description = description;
-		this.balance = balance;
+		this.balance = FieldParser.roundDouble(balance);
 		this.creation = creation;
 		this.currency = currency;
 		this.usable = usable;
@@ -73,11 +74,11 @@ public class Account {
 	}
 
 	public double getBalance() {
-		return this.balance;
+		return FieldParser.roundDouble(this.balance);
 	}
 
 	public void setBalance(double balance) {
-		this.balance = balance;
+		this.balance = FieldParser.roundDouble(balance);
 	}
 	
 	public String getCreation() {
