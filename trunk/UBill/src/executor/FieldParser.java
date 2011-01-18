@@ -96,4 +96,10 @@ public class FieldParser {
 		
 		return true;
 	}
+	
+	public static double roundDouble(double number) {
+		int dec = 2;
+		
+		return Math.round(number * Math.pow(10, dec)) / Math.pow(10, dec);
+	}
 }

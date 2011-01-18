@@ -138,11 +138,12 @@ public class InsertMovement extends BaseBoundary {
 			saveBtn = new JButton();
 			saveBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					double pay = FieldParser.roundDouble(Double.valueOf(amountText.getText()));
 					if (transaction == null) {
-						ft = new Transaction(Login.getUser().getUser(), fromBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '-', Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()), 0, null);
+						ft = new Transaction(Login.getUser().getUser(), fromBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '-', pay, year, month, Integer.valueOf(dateText.getText()), 0, null);
 						ft.saveTransaction();												
 									
-						tt = new Transaction(Login.getUser().getUser(), toBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '+', Double.valueOf(amountText.getText()), year, month, Integer.valueOf(dateText.getText()), ft.getId(), fromBox.getSelectedItem().toString());
+						tt = new Transaction(Login.getUser().getUser(), toBox.getSelectedItem().toString(), categoryBox.getSelectedItem().toString(), '+', pay, year, month, Integer.valueOf(dateText.getText()), ft.getId(), fromBox.getSelectedItem().toString());
 						tt.saveTransaction();
 						
 						ft.setRefid(tt.getId());

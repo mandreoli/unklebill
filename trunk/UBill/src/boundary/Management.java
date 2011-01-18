@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
+
+import executor.FieldParser;
 import executor.Login;
 import javax.swing.SwingConstants;
 import java.awt.Color;
@@ -349,7 +351,7 @@ public class Management extends BaseBoundary {
 			else
 				tot -= ins.getPayment();
 			
-			Login.getAccount().setBalance(tot);
+			Login.getAccount().setBalance(FieldParser.roundDouble(tot));
 			Login.getAccount().updateAccount();
 			
 			updateBalanceLabel(balanceLabel);
@@ -484,14 +486,18 @@ public class Management extends BaseBoundary {
 							Login.getAccount().setBalance(tot);
 							Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
 							double tot2 = a.getBalance() + t.getPayment();
+							tot2 = FieldParser.roundDouble(tot2);
 							a.setBalance(tot2);
 							a.updateAccount();
 							
 							if (t.getRefid() != 0) {
 								Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser()).deleteTransaction();
 							}
-							else
-								entranceTot -= t.getPayment();							
+							else {
+								entranceTot -= t.getPayment();
+								entranceTot = FieldParser.roundDouble(entranceTot);
+							}
+							
 							t.deleteTransaction();
 							entranceTrans.getTransactions().remove(entranceTable.getSelectedRow());
 							entranceTableModel.removeRow(entranceTable.getSelectedRow());
@@ -502,14 +508,18 @@ public class Management extends BaseBoundary {
 							Login.getAccount().setBalance(tot);
 							Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
 							double tot2 = a.getBalance() + t.getPayment();
+							tot2 = FieldParser.roundDouble(tot2);
 							a.setBalance(tot2);
 							a.updateAccount();
 							
 							if (t.getRefid() != 0) {
 								Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser()).deleteTransaction();
 							}
-							else
-								exitTot -= t.getPayment();							
+							else {
+								exitTot -= t.getPayment();
+								exitTot = FieldParser.roundDouble(exitTot);
+							}
+							
 							t.deleteTransaction();
 							exitTrans.getTransactions().remove(exitTable.getSelectedRow());
 							exitTableModel.removeRow(exitTable.getSelectedRow());
@@ -553,16 +563,22 @@ public class Management extends BaseBoundary {
 						if (entranceTable.getSelectedRowCount() > 0) {
 							updateRowsInTables(ins.getTransaction(), oldT, entranceTable.getSelectedRow());
 							tot = Login.getAccount().getBalance() - oldT.getPayment();
+							tot = FieldParser.roundDouble(tot);
 						}
 						else {
 							updateRowsInTables(ins.getTransaction(), oldT, exitTable.getSelectedRow());
 							tot = Login.getAccount().getBalance() + oldT.getPayment();
+							tot = FieldParser.roundDouble(tot);
 						}
 						
-						if (ins.getTransaction().getType() == '+')
+						if (ins.getTransaction().getType() == '+') {
 							tot += ins.getTransaction().getPayment();
-						else
-							tot -= ins.getTransaction().getPayment();																	
+							tot = FieldParser.roundDouble(tot);
+						}
+						else {
+							tot -= ins.getTransaction().getPayment();
+							tot = FieldParser.roundDouble(tot);
+						}
 						
 						Login.getAccount().setBalance(tot);
 						Login.getAccount().updateAccount();
@@ -646,7 +662,7 @@ public class Management extends BaseBoundary {
 			this.entranceTableModel.addRow(vect);
 			this.entranceTrans.addTransaction(t);
 			if (t.getRefid() == 0 && t.getReference() == null)
-				this.entranceTot += t.getPayment();			
+				this.entranceTot = FieldParser.roundDouble(this.entranceTot + t.getPayment());			
 		}
 		else {
 			if (t.getRefid() != 0)
@@ -654,7 +670,7 @@ public class Management extends BaseBoundary {
 			this.exitTableModel.addRow(vect);
 			this.exitTrans.addTransaction(t);
 			if (t.getRefid() == 0 && t.getReference() == null)
-				this.exitTot += t.getPayment();			
+				this.exitTot = FieldParser.roundDouble(this.exitTot + t.getPayment());			
 		}
 		
 		updatePartialsAmounts(entranceAmount, exitAmount);
@@ -663,31 +679,31 @@ public class Management extends BaseBoundary {
 	private void updateRowsInTables(Transaction t, Transaction old, int row) {
 		
 		if (t.getType() == '+') {
-			this.entranceTableModel.setValueAt(String.valueOf(t.getPayment())+" "+Login.getAccount().getCurrency(), row, 0);
-			this.entranceTableModel.setValueAt(Date.getDay(t.getDay()), row, 1);
+			this.entranceTableModel.setValueAt(String.valueOf(t.getPayment())+" "+Login.getAccount().getCurrency(), row, 1);
+			this.entranceTableModel.setValueAt(Date.getDay(t.getDay()), row, 0);
 			this.entranceTableModel.setValueAt(t.getEntry(), row, 2);			
 			this.entranceTrans.getTransactions().get(row).setPayment(t.getPayment());
 			this.entranceTrans.getTransactions().get(row).setDay(t.getDay());
 			this.entranceTrans.getTransactions().get(row).setEntry(t.getEntry());
-			this.entranceTot -= old.getPayment();
-			this.entranceTot += t.getPayment();			
+			this.entranceTot = FieldParser.roundDouble(this.entranceTot - old.getPayment());
+			this.entranceTot = FieldParser.roundDouble(this.entranceTot + t.getPayment());			
 		}
 		else {
-			this.exitTableModel.setValueAt(String.valueOf(t.getPayment())+" "+Login.getAccount().getCurrency(), row, 0);
-			this.exitTableModel.setValueAt(Date.getDay(t.getDay()), row, 1);
+			this.exitTableModel.setValueAt(String.valueOf(t.getPayment())+" "+Login.getAccount().getCurrency(), row, 1);
+			this.exitTableModel.setValueAt(Date.getDay(t.getDay()), row, 0);
 			this.exitTableModel.setValueAt(t.getEntry(), row, 2);
 			this.exitTrans.getTransactions().get(row).setPayment(t.getPayment());
 			this.exitTrans.getTransactions().get(row).setDay(t.getDay());
 			this.exitTrans.getTransactions().get(row).setEntry(t.getEntry());			
-			this.exitTot -= old.getPayment();
-			this.exitTot += t.getPayment();			
+			this.exitTot = FieldParser.roundDouble(this.exitTot - old.getPayment());
+			this.exitTot = FieldParser.roundDouble(this.exitTot + t.getPayment());		
 		}
 		
 		updatePartialsAmounts(entranceAmount, exitAmount);
 	}
 	
 	private void updatePartialsAmounts(JLabel entrance, JLabel exit) {
-		double monthBalance = this.entranceTot - this.exitTot;
+		double monthBalance = FieldParser.roundDouble(this.entranceTot - this.exitTot);
 		
 		entrance.setText("+"+String.valueOf(this.entranceTot)+" "+Login.getAccount().getCurrency());
 		exit.setText("-"+String.valueOf(this.exitTot)+" "+Login.getAccount().getCurrency());
@@ -698,7 +714,7 @@ public class Management extends BaseBoundary {
 			balanceMonthLabel.setForeground(passive);
 		else
 			balanceMonthLabel.setForeground(neutro);
-		
+
 		balanceMonthLabel.setText(String.valueOf(monthBalance)+" "+Login.getAccount().getCurrency());
 	}
 	
@@ -710,7 +726,7 @@ public class Management extends BaseBoundary {
 			label.setForeground(passive);
 		else
 			label.setForeground(neutro);
-			
+				
 		label.setText(String.valueOf(Login.getAccount().getBalance())+" "+Login.getAccount().getCurrency());
 	}
 
