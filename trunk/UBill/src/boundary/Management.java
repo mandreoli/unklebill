@@ -490,10 +490,12 @@ public class Management extends BaseBoundary {
 							
 							if (t.getRefid() != 0) {
 								Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
-								double tot2 = a.getBalance() + t.getPayment();
-								a.setBalance(tot2);
-								a.updateAccount();
-								Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser()).deleteTransaction();
+								if (a != null) {
+									double tot2 = a.getBalance() + t.getPayment();
+									a.setBalance(tot2);
+									a.updateAccount();
+									Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser()).deleteTransaction();
+								}
 								rtbA.delRow(entranceTable.getSelectedRow());
 							}
 							else {
@@ -512,10 +514,12 @@ public class Management extends BaseBoundary {
 							
 							if (t.getRefid() != 0) {
 								Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
-								double tot2 = a.getBalance() - t.getPayment();
-								a.setBalance(tot2);
-								a.updateAccount();
-								Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser()).deleteTransaction();
+								if (a != null) {
+									double tot2 = a.getBalance() - t.getPayment();
+									a.setBalance(tot2);
+									a.updateAccount();								
+									Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser()).deleteTransaction();
+								}
 								rtbP.delRow(exitTable.getSelectedRow());
 							}
 							else {
