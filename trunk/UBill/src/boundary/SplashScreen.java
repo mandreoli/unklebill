@@ -63,11 +63,6 @@ public class SplashScreen extends JWindow {
 			title2Label.setFont(new Font("SansSerif", Font.BOLD, 44));
 			title2Label.setBounds(180, 87, 287, 81);
 			mainPane.add(title2Label);
-			
-			JLabel imgLabel = new JLabel("");
-			imgLabel.setIcon(new ImageIcon(SplashScreen.class.getResource("/icons/chek48.png")));
-			imgLabel.setBounds(401, 134, 48, 48);
-			mainPane.add(imgLabel);
     	}
     	return mainPane;
     }

@@ -260,7 +260,7 @@ public class Home extends BaseBoundary {
 							primaryString = "This is your primary account.<br/>";
 					}
 					
-					if (confirm("You are deleting <i>"+listAccounts.getSelectedValue().toString()+"</i>.<br/>"+primaryString+"Are you sure?") == 0) {						
+					if (confirm("You are deleting <b>"+listAccounts.getSelectedValue().toString()+"</b>.<br/>"+primaryString+"Are you sure?") == 0) {						
 						if (Transactions.loadTransactions(Login.getUser().getUser(), account.getAccount()).getNumTransactions() > 0) {
 							if (abort("You are deleting all<br/>transtactions for this account.<br/>Continue anyway?") == 0) {
 								Transactions.deleteTransactions(Login.getUser().getUser(), account.getAccount());
@@ -359,6 +359,11 @@ public class Home extends BaseBoundary {
 	private JButton getBtnCategory() {
 		if (btnCategory == null) {
 			btnCategory = new JButton("Labels");
+			btnCategory.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new ModifyLabels(Login.getUser());
+				}
+			});
 			btnCategory.setIcon(new ImageIcon(getClass().getResource("/icons/category16.png")));
 			btnCategory.setToolTipText("Manage your categories");
 			btnCategory.setFont(new Font("Lucida Grande", Font.PLAIN, 12));

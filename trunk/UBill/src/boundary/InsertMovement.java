@@ -380,7 +380,7 @@ public class InsertMovement extends BaseBoundary {
 			causalBtn = new JButton("");
 			causalBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					new InsertEntry(categoryBox);
+					new InsertEntry();					
 				}
 			});
 			causalBtn.setToolTipText("Add new category");

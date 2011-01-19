@@ -81,18 +81,7 @@ public class Management extends BaseBoundary {
 	
 	
 	public Management(JPanel mainPane) {		
-		mainPane.add(getManagePane(), BorderLayout.CENTER);	
-		/*
-		Transactions ts1 = Transactions.loadTransactions("michele", "Home");
-		for (Transaction t : ts1.getTransactions()) {
-			System.out.println("ACCOUNT:"+t.getAccount()+" ID:"+t.getId()+" PAY: "+t.getPayment()+" REF:"+t.getReference()+" REFID:"+t.getRefid());
-		}
-		Transactions ts2 = Transactions.loadTransactions("michele", "Bank");
-		for (Transaction t : ts2.getTransactions()) {
-			System.out.println("ACCOUNT:"+t.getAccount()+" ID:"+t.getId()+" PAY: "+t.getPayment()+" REF:"+t.getReference()+" REFID:"+t.getRefid());
-		}
-		System.err.println("********");
-		*/
+		mainPane.add(getManagePane(), BorderLayout.CENTER);
 	}
 	
 	/**

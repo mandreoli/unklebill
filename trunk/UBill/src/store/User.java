@@ -152,20 +152,7 @@ public class User {
 		return u;
 	}
 	
-	public static User checkFreeUser(String user, String password) {		
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		User loaded = (User)session.createQuery("FROM User WHERE user='"+user+"' OR password='"+password+"'").uniqueResult();		
-		session.getTransaction().commit();		
-		
-		User u = null;
-		if (loaded != null)
-			u = new User(loaded.getId(), loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getAddress(), loaded.getMail(), loaded.getCurrency(), loaded.isAuto()); 
-		
-		return u;
-	}
-	
-	public static User checkUpdatableUser(String user, String password, int id) {		
+	public static User updatableUser(String user, String password, int id) {		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		User loaded = (User)session.createQuery("FROM User WHERE (user='"+user+"' OR password='"+password+"') AND id<>"+id).uniqueResult();		
@@ -179,7 +166,7 @@ public class User {
 	}
 	
 	public static boolean checkFreeUser(String user, char[] pwd) {
-		User loadedUser = User.checkFreeUser(user, new String(pwd));
+		User loadedUser = loadUser(user, new String(pwd));
 		
 		if (loadedUser == null)
 			return true;
@@ -188,7 +175,7 @@ public class User {
 	}
 	
 	public static boolean checkUpdatableUser(String user, char[] pwd, int id) {
-		User loadedUser = User.checkUpdatableUser(user, new String(pwd), id);
+		User loadedUser = updatableUser(user, new String(pwd), id);
 		
 		if (loadedUser == null)
 			return true;

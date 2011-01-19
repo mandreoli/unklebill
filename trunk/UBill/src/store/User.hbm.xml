@@ -5,7 +5,8 @@
 
 <hibernate-mapping package="store">
   <class name="User" table="USER">
-    <id name="id" column="ID">    	
+    <id name="id" column="ID">
+    	<generator class="native"/>    	
 	</id>
 	<property name="user" column="USER"/>
 	<property name="password" column="PASSWORD"/>

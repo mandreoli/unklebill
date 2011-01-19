@@ -224,4 +224,35 @@ public class Account {
 		
 		return a;
 	}
+	
+	public static Account updatableAccount(String user, String account, int id) {		
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		Account loaded = (Account)session.createQuery("FROM Account WHERE user='"+user+"' AND account='"+account+"' AND id<>"+id).uniqueResult();		
+		session.getTransaction().commit();		
+		
+		Account a = null;
+		if (loaded != null)
+			a = new Account(loaded.getId(), loaded.getAccount(), loaded.getUser(), loaded.getDescription(), loaded.getBalance(), loaded.getCreation(), loaded.getCurrency(), loaded.isUsable()); 
+		
+		return a;
+	}
+	
+	public static boolean checkFreeAccount(String user, String account) {
+		Account loadedAccount = loadAccount(account, user);
+		
+		if (loadedAccount == null)
+			return true;
+		
+		return false;
+	}
+	
+	public static boolean checkUpdatableAccount(String user, String account, int id) {
+		Account loadedAccount = updatableAccount(user, account, id);
+		
+		if (loadedAccount == null)
+			return true;
+		
+		return false;
+	}
 }

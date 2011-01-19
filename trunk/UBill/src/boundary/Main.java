@@ -255,6 +255,16 @@ public class Main extends BaseBoundary {
 					}
 				}
 			});
+			profileMenuItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new ModifyProfile(Login.getUser());
+				}
+			});
+			categoryMenuItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new ModifyLabels(Login.getUser());
+				}
+			});
 			aboutMenuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
