@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -17,12 +16,9 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
 import store.Entry;
-
 import executor.FieldParser;
 import executor.Login;
-
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -42,18 +38,12 @@ public class InsertEntry extends BaseBoundary {
 	private Color errorColor = new Color(255, 99, 99);
 	private Color normalColor = new Color(255, 255, 255);
 	private Entry entry = null;
-	private JComboBox entryBox = null;
 	
 	
 	/**
 	 * @wbp.parser.constructor
 	 **/
 	public InsertEntry() {
-		getMainDialog().setVisible(true);
-	}
-	
-	public InsertEntry(JComboBox entryBox) {
-		this.entryBox = entryBox;
 		getMainDialog().setVisible(true);
 	}
 	
@@ -66,7 +56,10 @@ public class InsertEntry extends BaseBoundary {
 		if (mainDialog == null) {
 			mainDialog = new JDialog();
 			mainDialog.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/favico.png")));
-			mainDialog.setTitle("Add new category");
+			if (entry != null)
+				mainDialog.setTitle("Modify category");
+			else
+				mainDialog.setTitle("Add new category");
 			mainDialog.setSize(new Dimension(this.wWidth, this.wHeight));		
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 			mainDialog.setLocation(new Point((d.width-wWidth)/2, (d.height-wHeight)/2));
@@ -78,6 +71,7 @@ public class InsertEntry extends BaseBoundary {
 			});	
 			mainDialog.setContentPane(getMainPane());
 			mainDialog.setModal(true);
+			catchTypedField(categoryText, descrText);
 		}
 		return mainDialog;
 	}
@@ -116,17 +110,29 @@ public class InsertEntry extends BaseBoundary {
 		if (saveBtn == null) {
 			saveBtn = new JButton();
 			saveBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {					
-					if (Entry.loadEntry(Login.getUser().getUser(), categoryText.getText()) == null) {
-						Entry entry = new Entry(categoryText.getText(), Login.getUser().getUser(), descrText.getText());
-						entry.saveEntry();
-						ok("Category added<br/>with success.");
-						mainDialog.dispose();
-						entryBox.addItem(categoryText.getText());
-						entryBox.setSelectedItem(categoryText.getText());
+				public void actionPerformed(ActionEvent e) {
+					if (entry == null) {
+						if (Entry.checkFreeEntry(Login.getUser().getUser(), categoryText.getText())) {
+							entry = new Entry(categoryText.getText(), Login.getUser().getUser(), descrText.getText());
+							entry.saveEntry();
+							ok("Category added<br/>with success.");
+							mainDialog.dispose();						
+						}
+						else
+							fail("This category<br/>is already in use!");
 					}
-					else
-						fail("This category<br/>is already in use!");
+					else {
+						if (Entry.checkUpdatableEntry(Login.getUser().getUser(), categoryText.getText(), entry.getId())) {
+							String oldEntry = entry.getName();
+							entry.setName(categoryText.getText());
+							entry.setDescription(descrText.getText());
+							entry.updateEntry(oldEntry);
+							ok("Category modified<br/>with success.");
+							mainDialog.dispose();
+						}
+						else
+							fail("This category<br/>is already in use!");
+					}
 				}
 			});
 			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/ok16.png")));
@@ -135,15 +141,19 @@ public class InsertEntry extends BaseBoundary {
 			saveBtn.setEnabled(false);
 			saveBtn.setSize(new Dimension(90, 30));
 			if (this.entry == null) {
-				saveBtn.setToolTipText("Add this transaction");
+				saveBtn.setToolTipText("Add this category");
 				saveBtn.setText("Add");
 			}
 			else {
-				saveBtn.setToolTipText("Modify this transaction");
+				saveBtn.setToolTipText("Modify this category");
 				saveBtn.setText("Modify");
 			}
 		}
 		return saveBtn;
+	}
+	
+	public Entry getEntry() {
+		return this.entry;
 	}
 	
 	private JLabel getCategoryLabel() {
@@ -158,12 +168,12 @@ public class InsertEntry extends BaseBoundary {
 	
 	private JTextField getCategoryText() {
 		if (categoryText == null) {
-			categoryText = new JTextField();
+			categoryText = new JTextField();			
 			categoryText.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
 					catchTypedField(categoryText, descrText);
-					if (FieldParser.checkCustomUser(categoryText.getText(), 2, 10))
+					if (FieldParser.checkCustomUser(categoryText.getText(), 2, 25))
 						categoryText.setBackground(normalColor);
 					else
 						categoryText.setBackground(errorColor);
@@ -173,6 +183,9 @@ public class InsertEntry extends BaseBoundary {
 			categoryText.setFont(new Font("Lucida Grande", Font.BOLD, 12));
 			categoryText.setBounds(95, 23, 160, 27);
 			categoryText.setColumns(10);
+			if (entry != null) {
+				categoryText.setText(entry.getName());
+			}
 		}
 		return categoryText;
 	}
@@ -182,7 +195,7 @@ public class InsertEntry extends BaseBoundary {
 			descrLabel = new JLabel("Description:");
 			descrLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			descrLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-			descrLabel.setBounds(20, 60, 77, 16);
+			descrLabel.setBounds(20, 60, 77, 16);			
 		}
 		return descrLabel;
 	}
@@ -199,11 +212,12 @@ public class InsertEntry extends BaseBoundary {
 	private JTextArea getDescrText() {
 		if (descrText == null) {
 			descrText = new JTextArea();
+			descrText.setLineWrap(true);
 			descrText.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
 					catchTypedField(categoryText, descrText);
-					if (FieldParser.checkCustomName(descrText.getText(), 4, 20))
+					if (FieldParser.checkCustomName(descrText.getText(), 4, 80))
 						descrText.setBackground(normalColor);
 					else
 						descrText.setBackground(errorColor);
@@ -211,12 +225,15 @@ public class InsertEntry extends BaseBoundary {
 			});
 			descrText.setToolTipText("Insert a short description");
 			descrText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			if (entry != null) {
+				descrText.setText(entry.getDescription());
+			}
 		}
 		return descrText;
 	}
 	
 	private void catchTypedField(JTextField category, JTextArea descr) {
-		if (FieldParser.checkCustomUser(category.getText(), 2, 10)) {
+		if (FieldParser.checkCustomUser(category.getText(), 2, 25)) {
 			saveBtn.setEnabled(true);
 		}
 		else {			 

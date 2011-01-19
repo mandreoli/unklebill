@@ -203,7 +203,7 @@ public class InsertAccount extends BaseBoundary {
 				public void actionPerformed(ActionEvent e) {
 					double pay = FieldParser.roundDouble(Double.valueOf(balanceText.getText()));
 					if (account == null) {						
-						if (Account.loadAccount(nameText.getText(), Login.getUser().getUser()) == null) {
+						if (Account.checkFreeAccount(nameText.getText(), Login.getUser().getUser())) {
 							Account account = new Account(nameText.getText(), Login.getUser().getUser(), descrText.getText(), pay, Date.getCurrentDate(), currencyBox.getSelectedItem().toString(), primaryBox.isSelected());
 							account.saveAccount();
 							ok("Account added<br/>with success.");
@@ -213,16 +213,20 @@ public class InsertAccount extends BaseBoundary {
 							fail("The account name<br/>is already in use!");
 					}
 					else {
-						String oldAccount = account.getAccount();
-						account.setAccount(nameText.getText());
-						account.setDescription(descrText.getText());
-						account.setBalance(pay);
-						account.setUsable(primaryBox.isSelected());
-						account.setCreation(Date.getCurrentDate());
-						account.setCurrency(currencyBox.getSelectedItem().toString());
-						account.updateAccount(oldAccount);						
-						ok("Account modified<br/>with success.");
-						mainDialog.dispose();
+						if (Account.checkUpdatableAccount(Login.getUser().getUser(), nameText.getText(), account.getId())) {
+							String oldAccount = account.getAccount();
+							account.setAccount(nameText.getText());
+							account.setDescription(descrText.getText());
+							account.setBalance(pay);
+							account.setUsable(primaryBox.isSelected());
+							account.setCreation(Date.getCurrentDate());
+							account.setCurrency(currencyBox.getSelectedItem().toString());
+							account.updateAccount(oldAccount);						
+							ok("Account modified<br/>with success.");
+							mainDialog.dispose();
+						}
+						else
+							fail("The account name<br/>is already in use!");
 					}
 				}
 			});

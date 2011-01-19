@@ -88,4 +88,18 @@ public class Transactions {
 		
 		return loaded;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static Transactions loadTransactionsByEntry(String user, String entry) {
+		List<Transaction> transactions = new LinkedList<Transaction>();
+		Transactions loaded = null;
+		
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		transactions = session.createQuery("FROM Transaction WHERE user='"+user+"' AND entry='"+entry+"'").list();		
+		session.getTransaction().commit();				
+		loaded = new Transactions(new LinkedList<Transaction>(transactions));
+		
+		return loaded;
+	}
 }
