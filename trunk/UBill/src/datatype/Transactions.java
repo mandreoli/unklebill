@@ -75,22 +75,6 @@ public class Transactions {
 		}
 	}
 	
-	public static void updateTransactions(String user, String account, String newAccount) {
-		Transactions transactions = loadTransactions(user, account);
-		Transactions references = loadReferencedTransactions(user, account);		
-		
-		for (Transaction t : transactions.getTransactions()) {
-			t.setAccount(newAccount);
-			t.updateTransaction();
-		}
-		
-		for (Transaction t : references.getTransactions()) {
-			t.setReference(newAccount);
-			t.updateTransaction();
-		}
-		
-	}
-	
 	@SuppressWarnings("unchecked")
 	public static Transactions loadReferencedTransactions(String user, String reference) {
 		List<Transaction> transactions = new LinkedList<Transaction>();

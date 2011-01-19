@@ -20,7 +20,6 @@ import javax.swing.JScrollPane;
 import store.Account;
 import datatype.Currency;
 import datatype.Date;
-import datatype.Transactions;
 import executor.FieldParser;
 import executor.Login;
 import java.awt.event.KeyAdapter;
@@ -214,15 +213,14 @@ public class InsertAccount extends BaseBoundary {
 							fail("The account name<br/>is already in use!");
 					}
 					else {
-						String old = account.getAccount();
+						String oldAccount = account.getAccount();
 						account.setAccount(nameText.getText());
 						account.setDescription(descrText.getText());
 						account.setBalance(pay);
 						account.setUsable(primaryBox.isSelected());
 						account.setCreation(Date.getCurrentDate());
 						account.setCurrency(currencyBox.getSelectedItem().toString());
-						account.updateAccount();						
-						Transactions.updateTransactions(Login.getUser().getUser(), old, nameText.getText());
+						account.updateAccount(oldAccount);						
 						ok("Account modified<br/>with success.");
 						mainDialog.dispose();
 					}

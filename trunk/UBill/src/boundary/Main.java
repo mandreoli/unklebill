@@ -44,7 +44,7 @@ public class Main extends BaseBoundary {
 	}
 	
 	public void START() {		
-		getMainFrame().setVisible(true);		
+		getMainFrame().setVisible(true);
 	}
 	
 	/**
@@ -220,20 +220,31 @@ public class Main extends BaseBoundary {
 			menuBar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 			
 			JMenu fileMenu = new JMenu("File");
-			fileMenu.setFont(new Font("Lucida Grande", Font.PLAIN, 12));			
+			fileMenu.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			JMenu editMenu = new JMenu("Edit");
+			editMenu.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			JMenu helpMenu = new JMenu("?");
 			helpMenu.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			
 			JMenuItem exitMenuItem = new JMenuItem("Exit");			
 			exitMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			exitMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/exit16.png")));
+			JMenuItem profileMenuItem = new JMenuItem("Profile");
+			profileMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			profileMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/user16.png")));
+			JMenuItem categoryMenuItem = new JMenuItem("Labels");
+			categoryMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			categoryMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/category16.png")));
 			JMenuItem aboutMenuItem = new JMenuItem("About");
 			aboutMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			aboutMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/info16.png")));
 			
 			menuBar.add(fileMenu);
+			menuBar.add(editMenu);
 			menuBar.add(helpMenu);
 			fileMenu.add(exitMenuItem);
+			editMenu.add(profileMenuItem);
+			editMenu.add(categoryMenuItem);
 			helpMenu.add(aboutMenuItem);
 			exitMenuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
