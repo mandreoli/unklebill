@@ -252,23 +252,23 @@ public class Home extends BaseBoundary {
 			btnRemove.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					boolean isPrimary = false;
-					String accountName = accounts.getAccount(listAccounts.getSelectedValue().toString()).getAccount();
+					Account account = accounts.getAccount(listAccounts.getSelectedValue().toString());
 					String primaryString = "";
 					
-					if (Login.getAccount() != null && accountName.equals(Login.getAccount().getAccount())) {
+					if (Login.getAccount() != null && account.getAccount().equals(Login.getAccount().getAccount())) {
 							isPrimary = true;
 							primaryString = "This is your primary account.<br/>";
 					}
 					
 					if (confirm("You are deleting <i>"+listAccounts.getSelectedValue().toString()+"</i>.<br/>"+primaryString+"Are you sure?") == 0) {						
-						if (Transactions.loadTransactions(Login.getUser().getUser(), Login.getAccount().getAccount()).getNumTransactions() > 0) {
+						if (Transactions.loadTransactions(Login.getUser().getUser(), account.getAccount()).getNumTransactions() > 0) {
 							if (abort("You are deleting all<br/>transtactions for this account.<br/>Continue anyway?") == 0) {
-								Transactions.deleteTransactions(Login.getUser().getUser(), accountName);
-								accounts.getAccount(accountName).deleteAccount();								
+								Transactions.deleteTransactions(Login.getUser().getUser(), account.getAccount());
+								accounts.getAccount(account.getAccount()).deleteAccount();								
 							}
 						}
 						else {
-							accounts.getAccount(accountName).deleteAccount();
+							account.deleteAccount();
 						}
 						
 						if (isPrimary)
