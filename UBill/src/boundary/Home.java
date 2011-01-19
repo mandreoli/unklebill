@@ -56,6 +56,7 @@ public class Home extends BaseBoundary {
 	private JLabel totalLabel = null;
 	private JPanel totalBalancePane = null;
 	private JLabel totalBalanceLabel = null;
+	private JLabel userLabel = null;
 	
 	
 	
@@ -76,7 +77,7 @@ public class Home extends BaseBoundary {
 			homePane.setLayout(null);
 			homePane.add(getManageAccountsPane());
 			
-			JLabel userLabel = new JLabel(" "+Login.getUser().getName());
+			userLabel = new JLabel(" "+Login.getUser().getName());
 			userLabel.setIcon(new ImageIcon(getClass().getResource("/icons/user24.png")));
 			userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 24));
 			userLabel.setToolTipText("Logged user");
@@ -345,13 +346,19 @@ public class Home extends BaseBoundary {
 			modAccBtn.setToolTipText("Modify your profile");
 			modAccBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			modAccBtn.setBounds(15, 55, 90, 30);
+			modAccBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					new ModifyProfile(Login.getUser());
+					userLabel.setText(" "+Login.getUser().getName());
+				}
+			});
 		}
 		return modAccBtn;
 	}
 	
 	private JButton getBtnCategory() {
 		if (btnCategory == null) {
-			btnCategory = new JButton("Category");
+			btnCategory = new JButton("Labels");
 			btnCategory.setIcon(new ImageIcon(getClass().getResource("/icons/category16.png")));
 			btnCategory.setToolTipText("Manage your categories");
 			btnCategory.setFont(new Font("Lucida Grande", Font.PLAIN, 12));

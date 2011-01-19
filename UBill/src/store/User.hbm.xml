@@ -5,10 +5,13 @@
 
 <hibernate-mapping package="store">
   <class name="User" table="USER">
-    <id name="user" column="USER">    	
+    <id name="id" column="ID">    	
 	</id>
+	<property name="user" column="USER"/>
 	<property name="password" column="PASSWORD"/>
     <property name="name" column="NAME"/>
+    <property name="address" column="ADDRESS"/>
+    <property name="mail" column="MAIL"/>
     <property name="currency" column="CURRENCY"/>
     <property name="auto" column="AUTO"/>
   </class>

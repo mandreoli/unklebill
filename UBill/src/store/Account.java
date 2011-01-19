@@ -3,6 +3,7 @@ package store;
 import org.hibernate.Session;
 
 import datatype.Accounts;
+import datatype.Transactions;
 import executor.FieldParser;
 import util.HibernateUtil;
 
@@ -147,6 +148,42 @@ public class Account {
 		else {
 			if (accounts.getNumAccounts() == 0)
 				this.setUsable(true);
+		}
+		
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update(this);
+		session.getTransaction().commit();
+	}
+	
+	public void updateAccount(String oldAccount) {
+		Accounts accounts = Accounts.loadAccounts(this.getUser());		
+		
+		if (this.isUsable() == true) {
+			for (Account a : accounts.getAccounts()) {
+				if (a.isUsable()) {
+					a.setUsable(false);
+					Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+					session.beginTransaction();
+					session.update(a);
+					session.getTransaction().commit();
+				}
+			}
+		}
+		else {
+			if (accounts.getNumAccounts() == 0)
+				this.setUsable(true);
+		}
+				
+		Transactions transactions = Transactions.loadTransactions(this.user, oldAccount);
+		Transactions references = Transactions.loadReferencedTransactions(this.user, oldAccount);
+		for (Transaction t : transactions.getTransactions()) {
+			t.setAccount(this.account);
+			t.updateTransaction();
+		}
+		for (Transaction t : references.getTransactions()) {
+			t.setReference(this.account);
+			t.updateTransaction();
 		}
 		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();

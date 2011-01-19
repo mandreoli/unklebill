@@ -24,15 +24,6 @@ public class Login {
 		return true;
 	}
 	
-	public static boolean checkFreeUser(String user, char[] pwd) {
-		User loadedUser = User.checkFreeUser(user, new String(pwd));
-		
-		if (loadedUser == null)
-			return true;
-		
-		return false;
-	}
-	
 	public static void login(Main main, JPanel mainPane, JPanel panel) {
 		main.enableNavigationButtons(true);
 		mainPane.remove(panel);
