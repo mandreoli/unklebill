@@ -1,5 +1,6 @@
 package boundary;
 
+import executor.CreateReport;
 import executor.ExtFilter;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,10 +24,14 @@ public class SaveReport {
 	private JPanel mainPane = null;
 	private JPanel selectPane = null;
 	private File file = null;
+	private String month = null;
+	private String year = null;
 	private JFileChooser fileChooser;
 	
-	public SaveReport(File file) {
+	public SaveReport(File file, String month, String year) {
 		this.file = file;
+		this.month = month;
+		this.year = year;
 		getMainDialog().setVisible(true);
 	}
 	
@@ -35,7 +40,7 @@ public class SaveReport {
 			mainDialog = new JDialog();
 			mainDialog.setModal(true);
 			mainDialog.setResizable(false);
-			mainDialog.setTitle("Create report");
+			mainDialog.setTitle("Create "+month+" report");
 			mainDialog.setContentPane(getMainPane());
 			mainDialog.setSize(new Dimension(wWidth, wHeight));
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -72,7 +77,8 @@ public class SaveReport {
 		    fileChooser.setFileFilter(filter);
 			fileChooser.setSelectedFile(new File(file.getName()));
 			fileChooser.setControlButtonsAreShown(true);		
-			fileChooser.setApproveButtonText("Save");		
+			fileChooser.setApproveButtonText("Save");
+			fileChooser.setApproveButtonToolTipText("Save report");
 			fileChooser.addActionListener(new ActionListener() {
 			      public void actionPerformed(ActionEvent actionEvent) {
 				        JFileChooser theFileChooser = (JFileChooser) actionEvent.getSource();
@@ -81,12 +87,14 @@ public class SaveReport {
 				        if (command.equals(JFileChooser.APPROVE_SELECTION)) {
 				        		File f = theFileChooser.getSelectedFile();
 				        		try {
-									System.out.println(f.getCanonicalPath());
-								} catch (IOException e) {																
+				        			new CreateReport(f.getCanonicalPath(), month, year);									
+									mainDialog.dispose();
+								} catch (IOException e) {
+									System.err.println("Error while getting canonical path: "+e);
 								}
 				        }
 				        else if (command.equals(JFileChooser.CANCEL_SELECTION)){
-				        	
+				        	mainDialog.dispose();
 				        }			        
 			      }
 			});
