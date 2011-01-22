@@ -60,7 +60,7 @@ public class Transactions {
 		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();		
-		transactions = session.createQuery("FROM Transaction WHERE user='"+user+"' AND account='"+account+"' AND year="+year+" AND month="+month).list();
+		transactions = session.createQuery("FROM Transaction WHERE user='"+user+"' AND account='"+account+"' AND year="+year+" AND month="+month+" ORDER BY day").list();
 		session.getTransaction().commit();
 		loaded = new Transactions(new LinkedList<Transaction>(transactions));
 		
