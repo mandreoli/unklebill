@@ -411,7 +411,6 @@ public class Home extends BaseBoundary {
 		if (this.accounts.getNumAccounts() > 0) {
 			for (Account a : this.accounts.getAccounts()) {
 				total += a.getBalance();
-				FieldParser.roundDouble(total);
 			}
 		}
 		
@@ -431,6 +430,6 @@ public class Home extends BaseBoundary {
 		else
 			this.totalBalanceLabel.setForeground(neutro);
 		
-		this.totalBalanceLabel.setText(sign+String.valueOf(total)+" "+Login.getUser().getCurrency());
+		this.totalBalanceLabel.setText(sign+String.valueOf(FieldParser.roundDouble(total))+" "+Login.getUser().getCurrency());
 	}
 }
