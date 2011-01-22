@@ -28,6 +28,10 @@ public class RenderTableBody extends JLabel implements TableCellRenderer {
 		this.row.add(row);
 	}
 	
+	public void resetRows() {
+		this.row.clear();
+	}
+	
 	private boolean isRow(int row) {
 		for (int n : this.row) {
 			if (n == row)

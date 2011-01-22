@@ -309,6 +309,8 @@ public class Management extends BaseBoundary {
 				public void actionPerformed(ActionEvent e) {
 					InsertTransaction ins = new InsertTransaction(0, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
 					calculateBalance(ins.getTransaction());
+					delTransBtn.setEnabled(false);
+					modTransBtn.setEnabled(false);
 				}
 			});
 		}
@@ -325,6 +327,8 @@ public class Management extends BaseBoundary {
 				public void actionPerformed(ActionEvent e) {
 					InsertTransaction ins = new InsertTransaction(1, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
 					calculateBalance(ins.getTransaction());
+					delTransBtn.setEnabled(false);
+					modTransBtn.setEnabled(false);
 				}
 			});
 		}
@@ -522,8 +526,10 @@ public class Management extends BaseBoundary {
 						Login.getAccount().updateAccount();
 						setEnabledButtons(entranceTable, exitTable);
 						updateBalanceLabel(balanceLabel);
-						updatePartialsAmounts(entranceAmount, exitAmount);						
+						updatePartialsAmounts(entranceAmount, exitAmount);
 					}
+					modTransBtn.setEnabled(false);
+					delTransBtn.setEnabled(false);
 				}
 			});
 			delTransBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
@@ -563,9 +569,12 @@ public class Management extends BaseBoundary {
 					
 					if (newT != null)
 						populateTables();
-				}
+					
+					modTransBtn.setEnabled(false);
+					delTransBtn.setEnabled(false);
+				}				
 			});
-			modTransBtn.setIcon(new ImageIcon(getClass().getResource("/icons/edit16.png")));
+			modTransBtn.setIcon(new ImageIcon(getClass().getResource("/icons/edit16.png")));			
 			modTransBtn.setEnabled(false);
 			modTransBtn.setToolTipText("Modify selected transaction");
 			modTransBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
@@ -618,6 +627,8 @@ public class Management extends BaseBoundary {
 		this.exitTot = 0.0;
 		this.entranceTableModel.setRowCount(0);
 		this.exitTableModel.setRowCount(0);
+		this.rtbA.resetRows();
+		this.rtbP.resetRows();
 		
 		if (this.transactions.getNumTransactions() > 0) {			
 			for (Transaction t : this.transactions.getTransactions()) {
@@ -631,7 +642,7 @@ public class Management extends BaseBoundary {
 	private void addRowsInTables(Transaction t) {
 		Vector<Object> vect = new Vector<Object>();
 		vect.add(Date.getDay(t.getDay()));
-		vect.add(String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency()));
+		vect.add(String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency()));		
 		
 		if (t.getRefid() != 0 && t.getReference() != null) {
 			if (t.getType() == '+')
