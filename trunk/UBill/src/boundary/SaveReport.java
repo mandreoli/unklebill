@@ -16,7 +16,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
-public class SaveReport {
+public class SaveReport extends BaseBoundary {
 
 	private int wWidth = 480;
 	private int wHeight = 320;
@@ -85,9 +85,10 @@ public class SaveReport {
 				        String command = actionEvent.getActionCommand();
 				        
 				        if (command.equals(JFileChooser.APPROVE_SELECTION)) {
-				        		File f = theFileChooser.getSelectedFile();
+				        		File f = theFileChooser.getSelectedFile();				        		
 				        		try {
-				        			new CreateReport(f.getCanonicalPath(), month, year);									
+				        			new CreateReport(f.getCanonicalPath(), month, year);
+				        			ok("Report created with success!");
 									mainDialog.dispose();
 								} catch (IOException e) {
 									System.err.println("Error while getting canonical path: "+e);
