@@ -1,5 +1,4 @@
 TODO LIST
 
-- c'è un errore nell'aggiornamento del totale account quando si modifica una transazione
 - scroll lista all'ultimo elemento durante inserimento entrata/uscita
 - controllo date!!!
