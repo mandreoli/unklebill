@@ -547,26 +547,107 @@ public class Management extends BaseBoundary {
 			modTransBtn = new JButton("Modify");
 			modTransBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Transaction t = null;
+					Transaction t = null;					
+					Transaction refT = null;
 					
-					if (entranceTable.getSelectedRowCount() > 0) {
-						t = Transaction.loadTransaction(entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getId());						
-					}
-					else {
-						t = Transaction.loadTransaction(exitTrans.getTransactions().get(exitTable.getSelectedRow()).getId());						
-					}
-									
+					if (entranceTable.getSelectedRowCount() > 0)
+						t = entranceTrans.getTransactions().get(entranceTable.getSelectedRow());
+					else
+						t = exitTrans.getTransactions().get(exitTable.getSelectedRow());
+					
+					double oldPay = t.getPayment();
+					
 					if (t.getRefid() == 0) {
-						new InsertTransaction(t);
+						new InsertTransaction(t);						
 					}
 					else {
 						new InsertMovement(t);
+					}						
+					
+					if (t != null) {
+						if (t.getType() == '+') {							
+							double tot = Login.getAccount().getBalance() - oldPay;
+							Login.getAccount().setBalance(tot);							
+							
+							if (t.getRefid() != 0) {
+								Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
+								if (a != null) {
+									double tot2 = a.getBalance() + oldPay - t.getPayment();
+									a.setBalance(tot2);
+									a.updateAccount();
+									refT = Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser());
+									refT.setPayment(t.getPayment());
+									refT.setDay(t.getDay());
+									System.out.println("NEW "+t.getPayment()+" "+t.getDay());
+									refT.updateTransaction();
+								}								
+							}												
+						}
+						else {							
+							double tot = Login.getAccount().getBalance() + oldPay;
+							Login.getAccount().setBalance(tot);
+							
+							if (t.getRefid() != 0) {
+								Account a = Account.loadAccount(t.getReference(), Login.getUser().getUser());
+								if (a != null) {
+									double tot2 = a.getBalance() - oldPay + t.getPayment();
+									a.setBalance(tot2);
+									a.updateAccount();								
+									refT = Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser());
+									refT.setPayment(t.getPayment());
+									refT.setDay(t.getDay());
+									refT.updateTransaction();
+								}								
+							}	
+						}
+						t.updateTransaction();
+						calculateBalance(t);
+						populateTables();
+						Login.getAccount().updateAccount();
+						setEnabledButtons(entranceTable, exitTable);						
+						updateBalanceLabel(balanceLabel);						
+						updatePartialsAmounts(entranceAmount, exitAmount);
+					}
+					/*
+					Transaction t = null;
+					double tot = 0.0;
+					Account a = Account.loadAccount(Login.getAccount().getAccount(), Login.getUser().getUser());
+					
+					if (entranceTable.getSelectedRowCount() > 0) {
+						t = Transaction.loadTransaction(entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getId());						
+						tot = Login.getAccount().getBalance() - t.getPayment();						
+					}
+					else {
+						t = Transaction.loadTransaction(exitTrans.getTransactions().get(exitTable.getSelectedRow()).getId());
+						tot = Login.getAccount().getBalance() + t.getPayment();
+						System.out.println(tot);
+					}					
+									
+					if (t.getRefid() == 0) {
+						InsertTransaction ins = new InsertTransaction(t);
+						if (ins.getTransaction() != null) {							
+							a.setBalance(tot);
+							a.updateAccount();
+							Login.getAccount().setBalance(tot);
+							updateBalanceLabel(balanceLabel);
+							calculateBalance(ins.getTransaction());
+						}						
+					}
+					else {
+						InsertMovement ins = new InsertMovement(t);
+						if (ins.getTransaction() != null) {
+							a.setBalance(tot);
+							a.updateAccount();
+							Login.getAccount().setBalance(tot);
+							updateBalanceLabel(balanceLabel);
+							calculateBalance(ins.getTransaction());
+						}
 					}
 					
 					populateTables();
 					
 					modTransBtn.setEnabled(false);
-					delTransBtn.setEnabled(false);
+					delTransBtn.setEnabled(false);*/
 				}				
 			});
 			modTransBtn.setIcon(new ImageIcon(getClass().getResource("/icons/edit16.png")));			
