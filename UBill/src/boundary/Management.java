@@ -530,6 +530,7 @@ public class Management extends BaseBoundary {
 					}
 					modTransBtn.setEnabled(false);
 					delTransBtn.setEnabled(false);
+					populateTables();
 				}
 			});
 			delTransBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
@@ -554,21 +555,15 @@ public class Management extends BaseBoundary {
 					else {
 						t = Transaction.loadTransaction(exitTrans.getTransactions().get(exitTable.getSelectedRow()).getId());						
 					}
-						
-					InsertTransaction insT = null;
-					InsertMovement insM = null;
-					Transaction newT = null;					
+									
 					if (t.getRefid() == 0) {
-						insT = new InsertTransaction(t);
-						newT = insT.getTransaction();
+						new InsertTransaction(t);
 					}
 					else {
-						insM = new InsertMovement(t);
-						newT = insM.getTransaction();
+						new InsertMovement(t);
 					}
 					
-					if (newT != null)
-						populateTables();
+					populateTables();
 					
 					modTransBtn.setEnabled(false);
 					delTransBtn.setEnabled(false);
@@ -607,7 +602,7 @@ public class Management extends BaseBoundary {
 			reportBtn = new JButton("Report");
 			reportBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					File file = new File(monthBox.getSelectedItem().toString()+yearBox.getSelectedItem().toString()+".pdf");
+					File file = new File(Login.getAccount().getAccount()+"_"+monthBox.getSelectedItem().toString()+yearBox.getSelectedItem().toString()+".pdf");
 					new SaveReport(file, monthBox.getSelectedItem().toString(), yearBox.getSelectedItem().toString());
 				}
 			});
