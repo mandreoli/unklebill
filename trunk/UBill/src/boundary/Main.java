@@ -119,11 +119,12 @@ public class Main extends BaseBoundary {
 			homeBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			homeBtn.setHorizontalTextPosition(SwingConstants.CENTER);
 			homeBtn.setIcon(new ImageIcon(getClass().getResource("/icons/brief48.png")));
-			homeBtn.setBounds(10, 6, 100, 80);
+			homeBtn.setBounds(10, 10, 100, 80);
 			homeBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {					
 					if (mainPane.getComponentCount() > 1)
-						mainPane.remove(mainPane.getComponent(1));					
+						mainPane.remove(mainPane.getComponent(1));
+					toggleNaviButtons(false, true, true);
 					new Home(mainPane, main);
 					mainPane.repaint();
 				}
@@ -139,12 +140,13 @@ public class Main extends BaseBoundary {
 			transBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			transBtn.setHorizontalTextPosition(SwingConstants.CENTER);
 			transBtn.setIcon(new ImageIcon(getClass().getResource("/icons/coin48.png")));
-			transBtn.setBounds(10, 90, 100, 80);
+			transBtn.setBounds(10, 95, 100, 80);
 			transBtn.setEnabled(false);
 			transBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (mainPane.getComponentCount() > 1)
 						mainPane.remove(mainPane.getComponent(1));
+					toggleNaviButtons(true, false, true);
 					new Management(mainPane);
 					mainPane.repaint();
 				}
@@ -161,7 +163,18 @@ public class Main extends BaseBoundary {
 			statBtn.setHorizontalTextPosition(SwingConstants.CENTER);
 			statBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			statBtn.setEnabled(false);
-			statBtn.setBounds(10, 178, 100, 80);
+			statBtn.setBounds(10, 180, 100, 80);
+			statBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (mainPane.getComponentCount() > 1)
+						mainPane.remove(mainPane.getComponent(1));
+					toggleNaviButtons(true, true, false);
+					
+					//TODO: creare pannello statistiche
+					
+					mainPane.repaint();
+				}
+			});
 		}
 		return statBtn;
 	}
@@ -177,7 +190,7 @@ public class Main extends BaseBoundary {
 			});
 			logoutBtn.setToolTipText("Logout");
 			logoutBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			logoutBtn.setBounds(10, 270, 100, 32);
+			logoutBtn.setBounds(10, 280, 100, 32);
 		}
 		return logoutBtn;
 	}
@@ -274,4 +287,9 @@ public class Main extends BaseBoundary {
 		return menuBar;
 	}
 	
+	public void toggleNaviButtons(boolean home, boolean manage, boolean stats) {		
+		homeBtn.setEnabled(home);		
+		transBtn.setEnabled(manage);
+		statBtn.setEnabled(stats);
+	}
 }

@@ -155,7 +155,7 @@ public class Management extends BaseBoundary {
 			monthTab.add(getBalanceMonthLabel());
 			monthTab.add(getMonthLabel());
 			monthTab.add(getPrevMonthBtn());
-			monthTab.add(getNextMonthBtn());
+			monthTab.add(getNextMonthBtn());			
 			populateTables();			
 		}
 		return monthTab;
