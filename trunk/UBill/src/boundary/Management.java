@@ -24,7 +24,6 @@ import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import java.util.Vector;
 import javax.swing.JComboBox;
@@ -48,13 +47,17 @@ public class Management extends BaseBoundary {
 	private DefaultTableModel entranceTableModel = null;
 	private DefaultTableModel exitTableModel = null;
 	private JPanel entrancePane = null;
+	private JPanel entranceTotalPane = null;
 	private JPanel exitPane = null;
+	private JPanel exitTotalPane = null;
 	private JButton addEntranceBtn = null;
 	private JButton addExitBtn = null;
 	private JScrollPane entranceScrollPane = null;
 	private JScrollPane exitScrollPane = null;
 	private JLabel entranceAmount = null;
+	private JLabel entranceTransf = null;
 	private JLabel exitAmount = null;
+	private JLabel exitTransf = null;
 	private JComboBox monthBox = null;
 	private JComboBox yearBox = null;
 	private JButton delTransBtn = null;
@@ -68,6 +71,8 @@ public class Management extends BaseBoundary {
 	private Transactions exitTrans = null;
 	private double entranceTot = 0.0;
 	private double exitTot = 0.0;
+	private double entranceTransfTot = 0.0;
+	private double exitTransfTot = 0.0;
 	private JButton moveBtn = null;
 	private JButton reportBtn = null;
 	private JLabel dateLabel = null;
@@ -77,7 +82,7 @@ public class Management extends BaseBoundary {
 	private JButton nextMonthBtn = null;
 	private RenderTableBody rtbA = null;
 	private RenderTableBody rtbP = null;
-	private JLabel coinsLabel = null;	
+	private JLabel coinsLabel = null;
 	
 	public Management(JPanel mainPane) {		
 		mainPane.add(getManagePane(), BorderLayout.CENTER);
@@ -156,7 +161,7 @@ public class Management extends BaseBoundary {
 			monthTab.add(getMonthLabel());
 			monthTab.add(getPrevMonthBtn());
 			monthTab.add(getNextMonthBtn());			
-			populateTables();			
+			populateTables();
 		}
 		return monthTab;
 	}
@@ -166,7 +171,7 @@ public class Management extends BaseBoundary {
 			splitPane = new JSplitPane();
 			splitPane.setOneTouchExpandable(true);
 			splitPane.setDividerSize(4);
-			splitPane.setBounds(10, 105, 456, 262);
+			splitPane.setBounds(10, 100, 456, 272);
 			splitPane.setLeftComponent(getEntrancePane());
 			splitPane.setRightComponent(getExitPane());
 			splitPane.setDividerLocation(228);
@@ -282,9 +287,19 @@ public class Management extends BaseBoundary {
 			entrancePane.setLayout(new BorderLayout(0, 0));
 			entrancePane.add(getAddEntranceBtn(), BorderLayout.NORTH);
 			entrancePane.add(getEntranceScrollPane(), BorderLayout.CENTER);
-			entrancePane.add(getEntranceAmount(), BorderLayout.SOUTH);
+			entrancePane.add(getTotalEntrancePane(), BorderLayout.SOUTH);
 		}
 		return entrancePane;
+	}
+	
+	private JPanel getTotalEntrancePane() {
+		if (entranceTotalPane == null) {
+			entranceTotalPane = new JPanel();
+			entranceTotalPane.setLayout(new BorderLayout(0, 0));
+			entranceTotalPane.add(getEntranceAmount(), BorderLayout.NORTH);
+			entranceTotalPane.add(getEntranceTransf(), BorderLayout.SOUTH);
+		}
+		return entranceTotalPane;
 	}
 	
 	private JPanel getExitPane() {
@@ -294,9 +309,19 @@ public class Management extends BaseBoundary {
 			exitPane.setLayout(new BorderLayout(0, 0));
 			exitPane.add(getAddExitBtn(), BorderLayout.NORTH);
 			exitPane.add(getExitScrollPane(), BorderLayout.CENTER);
-			exitPane.add(getExitAmount(), BorderLayout.SOUTH);
+			exitPane.add(getTotalExitPane(), BorderLayout.SOUTH);
 		}
 		return exitPane;
+	}
+	
+	private JPanel getTotalExitPane() {
+		if (exitTotalPane == null) {
+			exitTotalPane = new JPanel();
+			exitTotalPane.setLayout(new BorderLayout(0, 0));
+			exitTotalPane.add(getExitAmount(), BorderLayout.NORTH);
+			exitTotalPane.add(getExitTransf(), BorderLayout.SOUTH);
+		}
+		return exitTotalPane;
 	}
 	
 	private JButton getAddEntranceBtn() {
@@ -393,6 +418,15 @@ public class Management extends BaseBoundary {
 		return entranceAmount;
 	}
 	
+	private JLabel getEntranceTransf(){
+		if (entranceTransf == null) {
+			entranceTransf = new JLabel("0.0");
+			entranceTransf.setForeground(Color.GRAY);
+			entranceTransf.setFont(new Font("Lucida Grande", Font.BOLD, 11));
+		}
+		return entranceTransf;
+	}
+	
 	private JLabel getExitAmount() {
 		if (exitAmount == null) {
 			exitAmount = new JLabel("0.0");
@@ -402,12 +436,21 @@ public class Management extends BaseBoundary {
 		return exitAmount;
 	}
 	
+	private JLabel getExitTransf(){
+		if (exitTransf == null) {
+			exitTransf = new JLabel("0.0");
+			exitTransf.setForeground(Color.GRAY);
+			exitTransf.setFont(new Font("Lucida Grande", Font.BOLD, 11));
+		}
+		return exitTransf;
+	}
+	
 	private JLabel getDateLabel() {
 		if (dateLabel == null) {
 			dateLabel = new JLabel("Selected date");
 			dateLabel.setHorizontalAlignment(SwingConstants.LEFT);
 			dateLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			dateLabel.setBounds(15, 53, 149, 16);
+			dateLabel.setBounds(15, 47, 149, 16);
 		}
 		return dateLabel;
 	}
@@ -416,7 +459,7 @@ public class Management extends BaseBoundary {
 		if (monthBox == null) {
 			monthBox = new JComboBox(Month.values());					
 			monthBox.setFont(new Font("Lucida Grande", Font.BOLD, 12));
-			monthBox.setBounds(10, 70, 99, 24);			
+			monthBox.setBounds(10, 64, 99, 24);			
 			monthBox.setSelectedIndex(date.getMonth()-1);
 			monthBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -440,7 +483,7 @@ public class Management extends BaseBoundary {
 			}
 			yearBox = new JComboBox(years);
 			yearBox.setFont(new Font("Lucida Grande", Font.BOLD, 12));
-			yearBox.setBounds(108, 70, 71, 24);			
+			yearBox.setBounds(108, 64, 71, 24);			
 			yearBox.setSelectedItem(date.getYear());
 			yearBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -525,8 +568,7 @@ public class Management extends BaseBoundary {
 						}
 						Login.getAccount().updateAccount();
 						setEnabledButtons(entranceTable, exitTable);
-						updateBalanceLabel(balanceLabel);
-						updatePartialsAmounts(entranceAmount, exitAmount);
+						updateBalanceLabel(balanceLabel);						
 					}
 					modTransBtn.setEnabled(false);
 					delTransBtn.setEnabled(false);
@@ -537,7 +579,7 @@ public class Management extends BaseBoundary {
 			delTransBtn.setEnabled(false);
 			delTransBtn.setToolTipText("Delete selected transaction");
 			delTransBtn.setIcon(new ImageIcon(getClass().getResource("/icons/del16.png")));
-			delTransBtn.setBounds(105, 11, 90, 30);
+			delTransBtn.setBounds(105, 5, 90, 30);
 		}
 		return delTransBtn;
 	}
@@ -558,10 +600,10 @@ public class Management extends BaseBoundary {
 					double oldPay = t.getPayment();
 					
 					if (t.getRefid() == 0) {
-						new InsertTransaction(t);						
+						new InsertTransaction(t, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));						
 					}
 					else {
-						new InsertMovement(t);
+						new InsertMovement(t, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
 					}						
 					
 					if (t != null) {
@@ -577,8 +619,7 @@ public class Management extends BaseBoundary {
 									a.updateAccount();
 									refT = Transaction.loadTransaction(t.getRefid(), a.getAccount(), Login.getUser().getUser());
 									refT.setPayment(t.getPayment());
-									refT.setDay(t.getDay());
-									System.out.println("NEW "+t.getPayment()+" "+t.getDay());
+									refT.setDay(t.getDay());									
 									refT.updateTransaction();
 								}								
 							}												
@@ -606,48 +647,7 @@ public class Management extends BaseBoundary {
 						Login.getAccount().updateAccount();
 						setEnabledButtons(entranceTable, exitTable);						
 						updateBalanceLabel(balanceLabel);						
-						updatePartialsAmounts(entranceAmount, exitAmount);
 					}
-					/*
-					Transaction t = null;
-					double tot = 0.0;
-					Account a = Account.loadAccount(Login.getAccount().getAccount(), Login.getUser().getUser());
-					
-					if (entranceTable.getSelectedRowCount() > 0) {
-						t = Transaction.loadTransaction(entranceTrans.getTransactions().get(entranceTable.getSelectedRow()).getId());						
-						tot = Login.getAccount().getBalance() - t.getPayment();						
-					}
-					else {
-						t = Transaction.loadTransaction(exitTrans.getTransactions().get(exitTable.getSelectedRow()).getId());
-						tot = Login.getAccount().getBalance() + t.getPayment();
-						System.out.println(tot);
-					}					
-									
-					if (t.getRefid() == 0) {
-						InsertTransaction ins = new InsertTransaction(t);
-						if (ins.getTransaction() != null) {							
-							a.setBalance(tot);
-							a.updateAccount();
-							Login.getAccount().setBalance(tot);
-							updateBalanceLabel(balanceLabel);
-							calculateBalance(ins.getTransaction());
-						}						
-					}
-					else {
-						InsertMovement ins = new InsertMovement(t);
-						if (ins.getTransaction() != null) {
-							a.setBalance(tot);
-							a.updateAccount();
-							Login.getAccount().setBalance(tot);
-							updateBalanceLabel(balanceLabel);
-							calculateBalance(ins.getTransaction());
-						}
-					}
-					
-					populateTables();
-					
-					modTransBtn.setEnabled(false);
-					delTransBtn.setEnabled(false);*/
 				}				
 			});
 			modTransBtn.setIcon(new ImageIcon(getClass().getResource("/icons/edit16.png")));			
@@ -655,7 +655,7 @@ public class Management extends BaseBoundary {
 			modTransBtn.setToolTipText("Modify selected transaction");
 			modTransBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			modTransBtn.setEnabled(false);
-			modTransBtn.setBounds(10, 11, 90, 30);
+			modTransBtn.setBounds(10, 5, 90, 30);
 		}
 		return modTransBtn;
 	}
@@ -673,7 +673,7 @@ public class Management extends BaseBoundary {
 			moveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/transfer16.png")));
 			moveBtn.setToolTipText("Add movement between accounts");
 			moveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));			
-			moveBtn.setBounds(200, 11, 90, 30);
+			moveBtn.setBounds(200, 5, 90, 30);
 		}
 		return moveBtn;
 	}
@@ -690,7 +690,7 @@ public class Management extends BaseBoundary {
 			reportBtn.setIcon(new ImageIcon(getClass().getResource("/icons/report16.png")));
 			reportBtn.setToolTipText("Create report for this month");
 			reportBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));			
-			reportBtn.setBounds(295, 11, 90, 30);
+			reportBtn.setBounds(295, 5, 90, 30);
 		}
 		return reportBtn;
 	}
@@ -701,6 +701,8 @@ public class Management extends BaseBoundary {
 		this.exitTrans = new Transactions();
 		this.entranceTot = 0.0;
 		this.exitTot = 0.0;
+		this.entranceTransfTot = 0.0;
+		this.exitTransfTot = 0.0;
 		this.entranceTableModel.setRowCount(0);
 		this.exitTableModel.setRowCount(0);
 		this.rtbA.resetRows();
@@ -712,7 +714,7 @@ public class Management extends BaseBoundary {
 			}
 		}
 		
-		updatePartialsAmounts(entranceAmount, exitAmount);
+		updatePartialsAmounts(entranceAmount, exitAmount, entranceTransf, exitTransf);
 	}
 	
 	private void addRowsInTables(Transaction t) {
@@ -735,7 +737,9 @@ public class Management extends BaseBoundary {
 			this.entranceTableModel.addRow(vect);
 			this.entranceTrans.addTransaction(t);
 			if (t.getRefid() == 0 && t.getReference() == null)
-				this.entranceTot = FieldParser.roundDouble(this.entranceTot + t.getPayment());			
+				this.entranceTot = FieldParser.roundDouble(this.entranceTot + t.getPayment());
+			else
+				this.entranceTransfTot = FieldParser.roundDouble(this.entranceTransfTot + t.getPayment());
 		}
 		else {
 			if (t.getRefid() != 0)
@@ -743,17 +747,21 @@ public class Management extends BaseBoundary {
 			this.exitTableModel.addRow(vect);
 			this.exitTrans.addTransaction(t);
 			if (t.getRefid() == 0 && t.getReference() == null)
-				this.exitTot = FieldParser.roundDouble(this.exitTot + t.getPayment());			
+				this.exitTot = FieldParser.roundDouble(this.exitTot + t.getPayment());
+			else
+				this.exitTransfTot = FieldParser.roundDouble(this.exitTransfTot + t.getPayment());
 		}
 		
-		updatePartialsAmounts(entranceAmount, exitAmount);
+		updatePartialsAmounts(entranceAmount, exitAmount, entranceTransf, exitTransf);
 	}
 	
-	private void updatePartialsAmounts(JLabel entrance, JLabel exit) {
+	private void updatePartialsAmounts(JLabel entrance, JLabel exit, JLabel entranceTransf, JLabel exitTransf) {
 		double monthBalance = FieldParser.roundDouble(this.entranceTot - this.exitTot);
 		
 		entrance.setText("+"+String.valueOf(this.entranceTot)+" "+Login.getAccount().getCurrency());
 		exit.setText("-"+String.valueOf(this.exitTot)+" "+Login.getAccount().getCurrency());
+		entranceTransf.setText("+"+String.valueOf(this.entranceTransfTot)+" "+Login.getAccount().getCurrency());
+		exitTransf.setText("-"+String.valueOf(this.exitTransfTot)+" "+Login.getAccount().getCurrency());
 		
 		if (monthBalance > 0)
 			balanceMonthLabel.setForeground(active);
@@ -782,7 +790,7 @@ public class Management extends BaseBoundary {
 			balanceMonthLabel = new JLabel();
 			balanceMonthLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			balanceMonthLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-			balanceMonthLabel.setBounds(248, 70, 211, 23);
+			balanceMonthLabel.setBounds(248, 64, 211, 23);
 		}
 		return balanceMonthLabel;
 	}
@@ -792,7 +800,7 @@ public class Management extends BaseBoundary {
 			monthLabel = new JLabel("Balance of the month");
 			monthLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			monthLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			monthLabel.setBounds(312, 55, 149, 16);
+			monthLabel.setBounds(312, 49, 149, 16);
 		}
 		return monthLabel;
 	}
@@ -813,7 +821,7 @@ public class Management extends BaseBoundary {
 			});
 			prevMonthBtn.setToolTipText("Previous month");
 			prevMonthBtn.setIcon(new ImageIcon(Management.class.getResource("/icons/rewind16.png")));
-			prevMonthBtn.setBounds(185, 66, 30, 30);
+			prevMonthBtn.setBounds(185, 60, 30, 30);
 		}
 		return prevMonthBtn;
 	}
@@ -834,7 +842,7 @@ public class Management extends BaseBoundary {
 			});
 			nextMonthBtn.setToolTipText("Next month");
 			nextMonthBtn.setIcon(new ImageIcon(Management.class.getResource("/icons/forward16.png")));
-			nextMonthBtn.setBounds(215, 66, 30, 30);
+			nextMonthBtn.setBounds(215, 60, 30, 30);
 		}
 		return nextMonthBtn;
 	}
