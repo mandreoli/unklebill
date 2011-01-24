@@ -1,4 +1,3 @@
 TODO LIST
 
 - scroll lista all'ultimo elemento durante inserimento entrata/uscita
-- controllo date!!!

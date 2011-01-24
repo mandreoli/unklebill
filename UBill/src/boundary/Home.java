@@ -144,6 +144,7 @@ public class Home extends BaseBoundary {
 	private JScrollPane getScrollAccountPane() {
 		if (scrollAccountPane == null) {
 			scrollAccountPane = new JScrollPane(getListAccounts());
+			scrollAccountPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			scrollAccountPane.setBounds(10, 50, 150, 113);
 			scrollAccountPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		}

@@ -208,7 +208,13 @@ public class InsertMovement extends BaseBoundary {
 	}
 	
 	private void catchTypedField(JTextField date, JTextField amount) {
-		if (fromBox.getSelectedIndex() != 0 && toBox.getSelectedIndex() != 0 && fromBox.getSelectedIndex() != toBox.getSelectedIndex() && FieldParser.checkInt(date.getText()) && Integer.valueOf(dateText.getText()) > 0 && FieldParser.checkFloat(amount.getText(), false) && Double.valueOf(amount.getText()) > 0) {
+		int num = 0;
+		if (date.getText().equals(""))
+			num = 0;
+		else
+			num = Integer.valueOf(date.getText());
+		
+		if (Date.checkDate(month, num, year) && fromBox.getSelectedIndex() != 0 && toBox.getSelectedIndex() != 0 && fromBox.getSelectedIndex() != toBox.getSelectedIndex() && FieldParser.checkInt(date.getText()) && Integer.valueOf(dateText.getText()) > 0 && FieldParser.checkFloat(amount.getText(), false) && Double.valueOf(amount.getText()) > 0) {
 			saveBtn.setEnabled(true);
 		}
 		else {			 
@@ -291,7 +297,13 @@ public class InsertMovement extends BaseBoundary {
 				@Override
 				public void keyReleased(KeyEvent e) {
 					catchTypedField(dateText, amountText);
-					if (FieldParser.checkInt(dateText.getText()) && Integer.valueOf(dateText.getText()) > 0)
+					int num = 0;
+					if (dateText.getText().equals(""))
+						num = 0;
+					else
+						num = Integer.valueOf(dateText.getText());
+					
+					if (FieldParser.checkInt(dateText.getText()) && Date.checkDate(month, num, year))
 						dateText.setBackground(normalColor);
 					else
 						dateText.setBackground(errorColor);

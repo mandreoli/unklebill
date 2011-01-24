@@ -40,7 +40,7 @@ public class SaveReport extends BaseBoundary {
 			mainDialog = new JDialog();
 			mainDialog.setModal(true);
 			mainDialog.setResizable(false);
-			mainDialog.setTitle("Create "+month+" report");
+			mainDialog.setTitle("Create "+month+" "+year+" report");
 			mainDialog.setContentPane(getMainPane());
 			mainDialog.setSize(new Dimension(wWidth, wHeight));
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();

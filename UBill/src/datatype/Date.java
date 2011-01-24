@@ -14,11 +14,9 @@ public class Date {
 	}
 	
 	public Date(int month, int day, int year) {
-		if (checkDate(month, day, year)) {
-			this.year = year;
-			this.month = month;
-			this.day = day;
-		}		
+		this.year = year;
+		this.month = month;
+		this.day = day;	
 	}
 	
 	public Date(String date) {
@@ -72,16 +70,10 @@ public class Date {
 		return getMonth(this.month)+" "+getDay(this.day)+", "+String.valueOf(this.year);
 	}
 	
-	public boolean setDate(int month, int day, int year) {
-		if (checkDate(year, month, day)) {		
-			this.year = year;
-			this.month = month;
-			this.day = day;
-			
-			return true;
-		}
-		
-		return false;
+	public void setDate(int month, int day, int year) {
+		this.year = year;
+		this.month = month;
+		this.day = day;
 	}
 	
 	public static String getMonth(int month) {
@@ -119,8 +111,17 @@ public class Date {
 		return text;
 	}
 	
-	public static boolean checkDate(int month, int day, int year) {
-		//TODO da fare il controllo della data
+	public static boolean checkDate(int month, int day, int year) {		
+		
+		if (day < 1 || day > 31 || year < 1900 || month > 12 || month < 1)
+			return false;
+		
+		if ( (month == 11 || month == 4 || month == 6 || month == 9) && day > 30 )
+			return false;
+		
+		if (month == 2 && day > 29)
+			return false;
+		
 		return true;
 	}
 	
@@ -129,7 +130,9 @@ public class Date {
 		int year = Integer.valueOf(arr[2]);
 		int month = Integer.valueOf(arr[0]);
 		int day = Integer.valueOf(arr[1]);
-		//TODO da fare il controllo della data
+		
+		checkDate(month, day, year);
+		
 		return true;
 	}
 }

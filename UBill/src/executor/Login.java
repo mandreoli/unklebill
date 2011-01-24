@@ -27,6 +27,7 @@ public class Login {
 	public static void login(Main main, JPanel mainPane, JPanel panel) {
 		main.enableNavigationButtons(true);
 		mainPane.remove(panel);
+		main.toggleNaviButtons(false, true, true);
 		new Home(mainPane, main);
 		mainPane.repaint();
 	}

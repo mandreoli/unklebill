@@ -2,6 +2,8 @@ package executor;
 
 import java.util.regex.Pattern;
 
+import datatype.Date;
+
 public class FieldParser {
 	
 	public static boolean checkUser(String user) {
@@ -67,9 +69,8 @@ public class FieldParser {
 		String regex = null;
 		
 		if (signed)
-			regex = "([ ]*)((-?+)|(\\+{0,1}+))([ ]*)([0-9]+)([ 0-9 ]*)([ ]*)((\\.)([0-9]{1,2}))";
+			regex = "([ ]*)((-?+)|(\\+{0,1}+))([ ]*)([0-9]+)([ 0-9 ]*)([ ]*)((\\.)([0-9]+))?+([ ]*)([0-9]*)([ ]*)";
 		else
-			//regex = "([ ]*)((\\+{0,1}+))([ ]*)([0-9]+)([ 0-9 ]*)([ ]*)((\\.)([0-9]{1,2}))";
 			regex = "([ ]*)((\\+{0,1}+))([ ]*)([0-9]+)([ 0-9 ]*)([ ]*)((\\.)([0-9]+))?+([ ]*)([0-9]*)([ ]*)";
 					
 		if (!Pattern.matches(regex, text))
@@ -92,7 +93,7 @@ public class FieldParser {
 		String text = date.trim();
 		String regex = "^(0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])[-/.](19|20)\\d\\d$";	
 		
-		if (!Pattern.matches(regex, text))
+		if (!Pattern.matches(regex, text) && Date.checkDate(date))
 			return false;
 		
 		return true;
