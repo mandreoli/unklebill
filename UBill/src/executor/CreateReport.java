@@ -177,30 +177,41 @@ public class CreateReport {
 		c2.setPhrase(new Paragraph(new Chunk("+"+String.valueOf(FieldParser.roundDouble(entranceTot))+" "+Login.getAccount().getCurrency(), dataActiveBold)));
 		c3.setPhrase(new Paragraph(new Chunk("-"+String.valueOf(FieldParser.roundDouble(exitTot))+" "+Login.getAccount().getCurrency(), dataPassiveBold)));
 		Font f = null;
+		String text = "";
 		double tot = entranceTot-exitTot;
-		if (tot > 0)
+		if (tot > 0) {
+			text = "+";		
 			f = dataActiveBold;
+		}
 		else if (tot < 0)
 			f = dataPassiveBold;
 		else
-			 f = bold;
-		c4.setPhrase(new Paragraph(new Chunk("=  "+String.valueOf(FieldParser.roundDouble(tot))+" "+Login.getAccount().getCurrency(), f)));
+			f = bold;
+		c4.setPhrase(new Paragraph(new Chunk(""+text+String.valueOf(FieldParser.roundDouble(tot))+" "+Login.getAccount().getCurrency(), f)));
 		table.addCell(c1);
 		table.addCell(c2);
 		table.addCell(c3);
-		table.addCell(c4);
+		table.addCell(c4);		
+		tot = entranceTransf-exitTransf;
+		text = "";
+		if (tot > 0) {
+			text = "+";
+		}
 		c1.setPhrase(new Paragraph(new Chunk("Transf.", dataNeutroBold)));
 		c2.setPhrase(new Paragraph(new Chunk("+"+String.valueOf(FieldParser.roundDouble(entranceTransf))+" "+Login.getAccount().getCurrency(), dataNeutroBold)));
 		c3.setPhrase(new Paragraph(new Chunk("-"+String.valueOf(FieldParser.roundDouble(exitTransf))+" "+Login.getAccount().getCurrency(), dataNeutroBold)));
-		c4.setPhrase(new Paragraph(new Chunk("=  "+String.valueOf(FieldParser.roundDouble(entranceTransf-exitTransf))+" "+Login.getAccount().getCurrency(), dataNeutroBold)));
+		c4.setPhrase(new Paragraph(new Chunk(""+text+String.valueOf(FieldParser.roundDouble(tot))+" "+Login.getAccount().getCurrency(), dataNeutroBold)));
 		table.addCell(c1);
 		table.addCell(c2);
 		table.addCell(c3);
 		table.addCell(c4);
 		f = null;
 		tot = (entranceTot-exitTot) + (entranceTransf-exitTransf);
-		if (tot > 0)
+		text = "";
+		if (tot > 0) {
+			text = "+";
 			f = dataActiveBold;
+		}
 		else if (tot < 0)
 			f = dataPassiveBold;
 		else
@@ -208,7 +219,7 @@ public class CreateReport {
 		c1.setPhrase(new Paragraph(new Chunk("", dataNeutroBold)));
 		c2.setPhrase(new Paragraph(new Chunk("", dataNeutroBold)));
 		c3.setPhrase(new Paragraph(new Chunk("", dataNeutroBold)));
-		c4.setPhrase(new Paragraph(new Chunk("=  "+String.valueOf(FieldParser.roundDouble(tot))+" "+Login.getAccount().getCurrency(), f)));
+		c4.setPhrase(new Paragraph(new Chunk("= "+text+String.valueOf(FieldParser.roundDouble(tot))+" "+Login.getAccount().getCurrency(), f)));
 		table.addCell(c1);
 		table.addCell(c2);
 		table.addCell(c3);

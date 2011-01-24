@@ -72,7 +72,9 @@ public class InsertMovement extends BaseBoundary {
 		getMainDialog().setVisible(true);
 	}
 	
-	public InsertMovement(Transaction transaction) {
+	public InsertMovement(Transaction transaction, int month, int year) {
+		this.year = year;
+		this.month = month;
 		this.transaction = transaction;
 		getMainDialog().setVisible(true);		
 	}

@@ -78,7 +78,9 @@ public class InsertTransaction extends BaseBoundary {
 		getMainDialog().setVisible(true);
 	}
 	
-	public InsertTransaction(Transaction transaction) {
+	public InsertTransaction(Transaction transaction, int month, int year) {
+		this.year = year;
+		this.month = month;
 		this.transaction = transaction;
 		
 		if (transaction.getType() == '+')
