@@ -157,7 +157,7 @@ public class Main extends BaseBoundary {
 	
 	private JButton getStatBtn() {
 		if (statBtn == null) {
-			statBtn = new JButton("Statistics");
+			statBtn = new JButton("Summary");
 			statBtn.setIcon(new ImageIcon(getClass().getResource("/icons/stats48.png")));
 			statBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			statBtn.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -169,9 +169,7 @@ public class Main extends BaseBoundary {
 					if (mainPane.getComponentCount() > 1)
 						mainPane.remove(mainPane.getComponent(1));
 					toggleNaviButtons(true, true, false);
-					
-					//TODO: creare pannello statistiche
-					
+					new Statitics(mainPane);
 					mainPane.repaint();
 				}
 			});

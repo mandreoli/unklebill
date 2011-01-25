@@ -35,6 +35,13 @@ public class SaveReport extends BaseBoundary {
 		getMainDialog().setVisible(true);
 	}
 	
+	public SaveReport(File file, String year) {
+		this.file = file;
+		this.month = "";
+		this.year = year;
+		getMainDialog().setVisible(true);
+	}
+	
 	public JDialog getMainDialog() {
 		if (mainDialog == null) {
 			mainDialog = new JDialog();

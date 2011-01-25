@@ -1,9 +1,5 @@
 TODO LIST
 
-- scroll lista all'ultimo elemento durante inserimento entrata/uscita
 - ordinamento tabella click su colonna. Basta cambiare la query ORDER BY
 
-STATISTICS magari cambiare nome
-
-- tab mese, anno... e poi vediamo se mettrne altri
 - tab mese inserire i giorni del mese e per ogni giorno tot entrate-uscite e tot trasf. in entrata-uscita  
