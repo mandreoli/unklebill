@@ -131,4 +131,20 @@ public class Date {
 		
 		return true;
 	}
+	
+	public static int getNumDays(int month) {
+		int days = 0;
+		switch(month) {
+			case 2: days = 29;
+					break;
+			case 4: 
+			case 11:
+			case 6:
+			case 9: days = 30;
+					break;
+			default: days = 31;
+		}
+		
+		return days;
+	}
 }
