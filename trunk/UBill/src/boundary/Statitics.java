@@ -26,9 +26,12 @@ import javax.swing.table.TableModel;
 import datatype.Date;
 import datatype.Month;
 import datatype.Transactions;
+import executor.FieldParser;
 import executor.Login;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
+import store.Transaction;
+
 
 public class Statitics {
 	
@@ -127,7 +130,8 @@ public class Statitics {
 			monthPane.add(getMonthBox());			
 			monthPane.add(getPrevMonthBtn());
 			monthPane.add(getNextMonthBtn());			
-			monthPane.add(getReportMonthBtn());			
+			monthPane.add(getReportMonthBtn());
+			populateMonthTable();
 		}
 		return monthPane;
 	}
@@ -175,7 +179,7 @@ public class Statitics {
 			yearBox2.setSelectedItem(date.getYear());
 			yearBox2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					checkPrevNextMonthBtn(yearBox2, 2);			
+					checkPrevNextMonthBtn(yearBox2, 2);					
 				}
 			});			
 		}
@@ -199,10 +203,8 @@ public class Statitics {
 			monthBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					checkPrevNextMonthBtn(yearBox2, 2);
-					populateMonthTable();
 				}
-			});
-			populateMonthTable();
+			});			
 		}
 		return monthBox;
 	}
@@ -211,9 +213,9 @@ public class Statitics {
 		if (monthScrollPane == null) {
 			monthScrollPane = new JScrollPane(getMonthTable());
 			monthScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-			monthScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			monthScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			monthScrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			monthScrollPane.setBounds(new Rectangle(30, 50, 415, 280));	
+			monthScrollPane.setBounds(new Rectangle(20, 50, 435, 280));	
 		}
 		return monthScrollPane;
 	}
@@ -244,11 +246,11 @@ public class Statitics {
 			monthTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			monthTable.setShowGrid(false);
 			monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			monthTable.getColumnModel().getColumn(0).setPreferredWidth(40);
-			monthTable.getColumnModel().getColumn(1).setPreferredWidth(90);			
-			monthTable.getColumnModel().getColumn(2).setPreferredWidth(90);
-			monthTable.getColumnModel().getColumn(3).setPreferredWidth(90);
-			monthTable.getColumnModel().getColumn(4).setPreferredWidth(90);
+			monthTable.getColumnModel().getColumn(0).setPreferredWidth(52);
+			monthTable.getColumnModel().getColumn(1).setPreferredWidth(91);			
+			monthTable.getColumnModel().getColumn(2).setPreferredWidth(91);
+			monthTable.getColumnModel().getColumn(3).setPreferredWidth(91);
+			monthTable.getColumnModel().getColumn(4).setPreferredWidth(91);
 			monthTable.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 
@@ -265,9 +267,9 @@ public class Statitics {
 		if (yearScrollPane == null) {
 			yearScrollPane = new JScrollPane(getYearTable());
 			yearScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-			yearScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			yearScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			yearScrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			yearScrollPane.setBounds(new Rectangle(30, 50, 415, 280));	
+			yearScrollPane.setBounds(new Rectangle(20, 50, 435, 280));	
 		}
 		return yearScrollPane;
 	}
@@ -329,6 +331,7 @@ public class Statitics {
 					else {
 						monthBox.setSelectedIndex(monthBox.getSelectedIndex()-1);
 					}
+					populateMonthTable();
 				}
 			});
 			prevMonthBtn.setToolTipText("Previous month");
@@ -350,6 +353,7 @@ public class Statitics {
 					else {
 						monthBox.setSelectedIndex(monthBox.getSelectedIndex()+1);
 					}
+					populateMonthTable();
 				}
 			});
 			nextMonthBtn.setToolTipText("Next month");
@@ -450,35 +454,98 @@ public class Statitics {
 		return reportYearBtn;
 	}
 	
-	@SuppressWarnings("unused")
 	private void populateMonthTable() {
 		monthTableModel.setRowCount(0);
-		int month = Date.getNumDays(Date.getMonth(monthBox.getSelectedItem().toString()));
+		int days = Date.getNumDays(Date.getMonth(monthBox.getSelectedItem().toString()));
+		int month = Date.getMonth(monthBox.getSelectedItem().toString());
 		int year = Integer.valueOf(yearBox2.getSelectedItem().toString());
-		Object obj[] = new Object[5];
-		
+		Object obj[] = new Object[5];	
 		double entrance = 0.0;
 		double exit = 0.0;
 		double entranceTransf = 0.0;
 		double exitTransf = 0.0;
+		double entranceTot = 0.0;
+		double exitTot = 0.0;
+		double entranceTransfTot = 0.0;
+		double exitTransfTot = 0.0;
 		Transactions ts = null;
+		monthRender.resetRows();
 				
-		for (int day = 1; day <= month; day++) {
+		for (int day = 1; day <= days; day++) {
 			entrance = 0.0;
 			exit = 0.0;
 			entranceTransf = 0.0;
 			exitTransf = 0.0;		
 			ts = Transactions.loadTransactions(Login.getUser().getUser(), Login.getAccount().getAccount(), year, month, day);
 			
-			//TODO: sommare i costi di un giorno
+			for (Transaction t : ts.getTransactions()) {				
+				if (t.getRefid() != 0) {
+					if (t.getType() == '+') {
+						entranceTransf += t.getPayment();
+						entranceTransfTot += entranceTransf;
+					}
+					else {
+						exitTransf += t.getPayment();
+						exitTransfTot += exitTransf;
+					}
+				}
+				else {
+					if (t.getType() == '+') {
+						entrance += t.getPayment();
+						entranceTot += entrance;
+					}
+					else {
+						exit += t.getPayment();
+						exitTot += exit;
+					}
+				}
+			}
+			
+			entrance = FieldParser.roundDouble(entrance);
+			exit = FieldParser.roundDouble(exit);
+			entranceTransf = FieldParser.roundDouble(entranceTransf);
+			exitTransf = FieldParser.roundDouble(exitTransf);
 			
 			obj[0] = Date.getDay(day);
-			obj[1] = 0; 
-			obj[2] = 0;
-			obj[3] = 0;
-			obj[4] = 0;
+			setRow(1, 0, entrance, obj);
+			setRow(2, 0, exit, obj);
+			setRow(3, 0, entranceTransf, obj);
+			setRow(4, 0, exitTransf, obj);
 			
 			monthTableModel.addRow(obj);
-		}		
+		}
+		
+		entranceTot = FieldParser.roundDouble(entranceTot);
+		exitTot = FieldParser.roundDouble(exitTot);
+		entranceTransfTot = FieldParser.roundDouble(entranceTransfTot);
+		exitTransfTot = FieldParser.roundDouble(exitTransfTot);
+		
+		monthRender.setRow(days);
+		
+		obj[0] = "Total";
+		setRow(1, days, entranceTot, obj);
+		setRow(2, days, exitTot, obj);
+		setRow(3, days, entranceTransfTot, obj);
+		setRow(4, days, exitTransfTot, obj);
+		
+		monthTableModel.addRow(obj);
+	}
+	
+	private void setRow(int col, int row, double amount, Object obj[]) {
+		char sign;
+		if (col == 1 || col == 3)
+			sign = '+';
+		else
+			sign = '-';
+		
+		if (amount > 0.0) {			
+			obj[col] = sign+""+amount+" "+Login.getAccount().getCurrency();
+		}
+		else {
+			if (row > 0)
+				obj[col] = sign+"0.0 "+Login.getAccount().getCurrency();
+			else
+				obj[col] = "";
+		}
 	}
 }

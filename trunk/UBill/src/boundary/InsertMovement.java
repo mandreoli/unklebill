@@ -329,7 +329,7 @@ public class InsertMovement extends BaseBoundary {
 			monthLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			monthLabel.setBounds(90, 28, 63, 16);
 			if (transaction != null)
-				monthLabel.setText(Date.getMonth(transaction.getMonth()));
+				monthLabel.setText(Date.getMonth(month));
 		}
 		return monthLabel;
 	}

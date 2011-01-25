@@ -668,7 +668,7 @@ public class Management extends BaseBoundary {
 			moveBtn = new JButton("Transf");
 			moveBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					InsertMovement ins = new InsertMovement(date.getMonth(), date.getYear());
+					InsertMovement ins = new InsertMovement(Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
 					calculateBalanceRef(ins.getOtherTransaction());			
 					calculateBalance(ins.getPrimaryTransaction());
 				}
@@ -720,10 +720,10 @@ public class Management extends BaseBoundary {
 		updatePartialsAmounts(entranceAmount, exitAmount, entranceTransf, exitTransf);
 	}
 	
-	private void addRowsInTables(Transaction t) {
+	private void addRowsInTables(Transaction t) {		
 		Vector<Object> vect = new Vector<Object>();
-		vect.add(Date.getDay(t.getDay()));
-		vect.add(String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency()));		
+		vect.add(Date.getDay(t.getDay()));		
+		vect.add(t.getType()+""+String.valueOf(t.getPayment()+" "+Login.getAccount().getCurrency()));		
 		
 		if (t.getRefid() != 0 && t.getReference() != null) {
 			if (t.getType() == '+')
@@ -860,12 +860,14 @@ public class Management extends BaseBoundary {
 	}
 
 	public void showLastCell(JTable table) {
-		int row =  table.getRowCount () - 1;
+		int row =  table.getRowCount() - 1;
 		
-		Rectangle rect = table.getCellRect(row, 0, true);
-	    table.scrollRectToVisible(rect);
-	    table.clearSelection();
-	    table.setRowSelectionInterval(row, row);
-	    ((AbstractTableModel) table.getModel()).fireTableDataChanged();
+		if (table.getRowCount() > 0) {
+			Rectangle rect = table.getCellRect(row, 0, true);
+		    table.scrollRectToVisible(rect);
+		    table.clearSelection();
+		    table.setRowSelectionInterval(row, row);
+		    ((AbstractTableModel) table.getModel()).fireTableDataChanged();
+		}
 	}
 }
