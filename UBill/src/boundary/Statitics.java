@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import datatype.Date;
 import datatype.Month;
+import datatype.Transactions;
 import executor.Login;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
@@ -46,6 +47,10 @@ public class Statitics {
 	private RenderTableBody monthRender = null;
 	private JTable monthTable = null;
 	private JScrollPane monthScrollPane = null;
+	private DefaultTableModel yearTableModel = null;
+	private RenderTableBody yearRender = null;
+	private JTable yearTable = null;
+	private JScrollPane yearScrollPane = null;
 	private JButton prevMonthBtn = null;
 	private JButton nextMonthBtn = null;
 	private JButton prevYearBtn = null;
@@ -101,11 +106,12 @@ public class Statitics {
 			yearPane = new JPanel();
 			yearPane.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			yearPane.setLayout(null);
+			yearPane.add(getYearScrollPane());
 			yearPane.add(getDateLabel1());
 			yearPane.add(getYearBox1());
 			yearPane.add(getPrevYearBtn());
 			yearPane.add(getNextYearBtn());
-			yearPane.add(getReportYearBtn());
+			yearPane.add(getReportYearBtn());			
 		}
 		return yearPane;
 	}
@@ -115,13 +121,13 @@ public class Statitics {
 			monthPane = new JPanel();
 			monthPane.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			monthPane.setLayout(null);
-			monthPane.add(getDateLabel2());
-			monthPane.add(getMonthBox());
-			monthPane.add(getYearBox2());
-			monthPane.add(getPrevMonthBtn());
-			monthPane.add(getNextMonthBtn());
 			monthPane.add(getMonthScrollPane());
-			monthPane.add(getReportMonthBtn());
+			monthPane.add(getDateLabel2());
+			monthPane.add(getYearBox2());
+			monthPane.add(getMonthBox());			
+			monthPane.add(getPrevMonthBtn());
+			monthPane.add(getNextMonthBtn());			
+			monthPane.add(getReportMonthBtn());			
 		}
 		return monthPane;
 	}
@@ -188,13 +194,15 @@ public class Statitics {
 		if (monthBox == null) {
 			monthBox = new JComboBox(Month.values());					
 			monthBox.setFont(new Font("Lucida Grande", Font.BOLD, 12));
-			monthBox.setBounds(90, 10, 99, 24);			
+			monthBox.setBounds(90, 10, 99, 24);
 			monthBox.setSelectedIndex(date.getMonth()-1);
 			monthBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					checkPrevNextMonthBtn(yearBox2, 2);
+					populateMonthTable();
 				}
 			});
+			populateMonthTable();
 		}
 		return monthBox;
 	}
@@ -248,19 +256,65 @@ public class Statitics {
 			});
 			monthRender = new RenderTableBody();
 			for (int i = 0; i < monthTableModel.getColumnCount(); i++)
-				monthTable.getColumn(monthTableModel.getColumnName(i)).setCellRenderer(monthRender);
-			
-			Vector<Integer> v = new Vector<Integer>();
-			v.add(1);
-			v.add(2);
-			v.add(3);
-			v.add(4);
-			v.add(5);
-			for (int i = 0; i < 32; i++) {	
-				monthTableModel.addRow(v);
-			}
+				monthTable.getColumn(monthTableModel.getColumnName(i)).setCellRenderer(monthRender);			
 		}
 		return monthTable;
+	}
+	
+	private JScrollPane getYearScrollPane() {
+		if (yearScrollPane == null) {
+			yearScrollPane = new JScrollPane(getYearTable());
+			yearScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+			yearScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			yearScrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			yearScrollPane.setBounds(new Rectangle(30, 50, 415, 280));	
+		}
+		return yearScrollPane;
+	}
+	
+	private TableModel getYearTableModel() {
+		if (yearTableModel == null) {
+			yearTableModel = new DefaultTableModel() {
+                private static final long serialVersionUID = 1L;
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                        return false;
+                }       
+			};
+			Object[] headers = new Object[5];
+			headers[0] = "Month";
+			headers[1] = "Entrance";			
+			headers[2] = "Exit";
+			headers[3] = "T.Entrance";
+			headers[4] = "T.Exit";
+			yearTableModel.setColumnIdentifiers(headers);			
+		}
+		return yearTableModel;
+	}
+	
+	private JTable getYearTable() {
+		if (yearTable == null) {			
+			yearTable = new JTable(getYearTableModel());
+			yearTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			yearTable.setShowGrid(false);
+			yearTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			yearTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+			yearTable.getColumnModel().getColumn(1).setPreferredWidth(90);			
+			yearTable.getColumnModel().getColumn(2).setPreferredWidth(90);
+			yearTable.getColumnModel().getColumn(3).setPreferredWidth(90);
+			yearTable.getColumnModel().getColumn(4).setPreferredWidth(90);
+			yearTable.addMouseListener(new MouseAdapter() {
+				public void mousePressed(MouseEvent e) {
+
+				}
+			});
+			yearRender = new RenderTableBody();
+			for (int i = 0; i < yearTableModel.getColumnCount(); i++)
+				yearTable.getColumn(yearTableModel.getColumnName(i)).setCellRenderer(yearRender);
+			
+			//TODO: popolare
+		}
+		return yearTable;
 	}
 	
 	private JButton getPrevMonthBtn() {
@@ -394,5 +448,37 @@ public class Statitics {
 			reportYearBtn.setBounds(375, 7, 90, 30);
 		}
 		return reportYearBtn;
+	}
+	
+	@SuppressWarnings("unused")
+	private void populateMonthTable() {
+		monthTableModel.setRowCount(0);
+		int month = Date.getNumDays(Date.getMonth(monthBox.getSelectedItem().toString()));
+		int year = Integer.valueOf(yearBox2.getSelectedItem().toString());
+		Object obj[] = new Object[5];
+		
+		double entrance = 0.0;
+		double exit = 0.0;
+		double entranceTransf = 0.0;
+		double exitTransf = 0.0;
+		Transactions ts = null;
+				
+		for (int day = 1; day <= month; day++) {
+			entrance = 0.0;
+			exit = 0.0;
+			entranceTransf = 0.0;
+			exitTransf = 0.0;		
+			ts = Transactions.loadTransactions(Login.getUser().getUser(), Login.getAccount().getAccount(), year, month, day);
+			
+			//TODO: sommare i costi di un giorno
+			
+			obj[0] = Date.getDay(day);
+			obj[1] = 0; 
+			obj[2] = 0;
+			obj[3] = 0;
+			obj[4] = 0;
+			
+			monthTableModel.addRow(obj);
+		}		
 	}
 }
