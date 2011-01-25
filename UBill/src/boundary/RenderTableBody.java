@@ -2,6 +2,7 @@ package boundary;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.util.LinkedList;
 
 import javax.swing.JLabel;
@@ -16,6 +17,7 @@ public class RenderTableBody extends JLabel implements TableCellRenderer {
 	private Color selected = new Color(194, 194, 255);
 	private Color active = new Color(0, 128, 0);
 	private Color neutro = new Color(120, 120, 120);
+	private Color normal = new Color(0, 0, 0);
 	private Color passive = new Color(128, 0, 0);
 	private int flag = 0;
 	private LinkedList<Integer> row = new LinkedList<Integer>();
@@ -68,6 +70,24 @@ public class RenderTableBody extends JLabel implements TableCellRenderer {
 		   		label.setForeground(neutro);
 		   	else	
 		   		label.setForeground(passive);
+		}
+		else {			
+			switch(col) {
+				case 0: label.setForeground(normal);
+						break;
+				case 1: label.setForeground(active);
+						break;
+				case 2: label.setForeground(passive);
+						break;
+				case 3: label.setForeground(neutro);
+						break;
+				case 4: label.setForeground(neutro);
+						break;
+				default: label.setForeground(normal);
+			}
+			if (isRow(row)) {
+				label.setFont(new Font("Lucida Grande", Font.BOLD, 12));
+			}
 		}
 		    
 		if (row % 2 == 0) {

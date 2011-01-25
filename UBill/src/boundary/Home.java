@@ -216,7 +216,7 @@ public class Home extends BaseBoundary {
 					a.setUsable(true);
 					a.updateAccount();
 					Login.setAccount(a);
-					main.enableNavigationButtons(true);
+					main.toggleNaviButtons(false, true, true);
 					showAccountInfo(accounts.getAccount(listAccounts.getSelectedValue().toString()));
 				}
 			});

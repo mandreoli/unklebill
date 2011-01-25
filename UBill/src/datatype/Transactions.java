@@ -68,7 +68,7 @@ public class Transactions {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static Transactions loadTransactions(String user, String account, int year, int month, int day) {
+	public static Transactions loadTransactions(String user, String account, int year, int month, int day) {		
 		List<Transaction> transactions = new LinkedList<Transaction>();
 		Transactions loaded = null;
 		
