@@ -18,6 +18,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.JScrollPane;
@@ -336,6 +337,7 @@ public class Management extends BaseBoundary {
 					calculateBalance(ins.getTransaction());
 					delTransBtn.setEnabled(false);
 					modTransBtn.setEnabled(false);
+					showLastCell(entranceTable);					
 				}
 			});
 		}
@@ -354,6 +356,7 @@ public class Management extends BaseBoundary {
 					calculateBalance(ins.getTransaction());
 					delTransBtn.setEnabled(false);
 					modTransBtn.setEnabled(false);
+					showLastCell(exitTable);
 				}
 			});
 		}
@@ -478,7 +481,7 @@ public class Management extends BaseBoundary {
 	private JComboBox getYearBox() {
 		if (yearBox == null) {
 			Vector<Integer> years = new Vector<Integer>();			
-			for (int i = 2010; i < 2061; i++) {
+			for (int i = 2010; i < 2101; i++) {
 				years.add(i);				
 			}
 			yearBox = new JComboBox(years);
@@ -643,7 +646,7 @@ public class Management extends BaseBoundary {
 						}
 						t.updateTransaction();
 						calculateBalance(t);
-						populateTables();
+						populateTables();						
 						Login.getAccount().updateAccount();
 						setEnabledButtons(entranceTable, exitTable);						
 						updateBalanceLabel(balanceLabel);						
@@ -713,7 +716,7 @@ public class Management extends BaseBoundary {
 				addRowsInTables(t);
 			}
 		}
-		
+						
 		updatePartialsAmounts(entranceAmount, exitAmount, entranceTransf, exitTransf);
 	}
 	
@@ -739,7 +742,7 @@ public class Management extends BaseBoundary {
 			if (t.getRefid() == 0 && t.getReference() == null)
 				this.entranceTot = FieldParser.roundDouble(this.entranceTot + t.getPayment());
 			else
-				this.entranceTransfTot = FieldParser.roundDouble(this.entranceTransfTot + t.getPayment());
+				this.entranceTransfTot = FieldParser.roundDouble(this.entranceTransfTot + t.getPayment());			
 		}
 		else {
 			if (t.getRefid() != 0)
@@ -820,7 +823,7 @@ public class Management extends BaseBoundary {
 				}
 			});
 			prevMonthBtn.setToolTipText("Previous month");
-			prevMonthBtn.setIcon(new ImageIcon(Management.class.getResource("/icons/rewind16.png")));
+			prevMonthBtn.setIcon(new ImageIcon(getClass().getResource("/icons/rewind16.png")));
 			prevMonthBtn.setBounds(185, 60, 30, 30);
 		}
 		return prevMonthBtn;
@@ -841,7 +844,7 @@ public class Management extends BaseBoundary {
 				}
 			});
 			nextMonthBtn.setToolTipText("Next month");
-			nextMonthBtn.setIcon(new ImageIcon(Management.class.getResource("/icons/forward16.png")));
+			nextMonthBtn.setIcon(new ImageIcon(getClass().getResource("/icons/forward16.png")));
 			nextMonthBtn.setBounds(215, 60, 30, 30);
 		}
 		return nextMonthBtn;
@@ -854,5 +857,15 @@ public class Management extends BaseBoundary {
 			coinsLabel.setBounds(420, 10, 48, 48);
 		}
 		return coinsLabel;
+	}
+
+	public void showLastCell(JTable table) {
+		int row =  table.getRowCount () - 1;
+		
+		Rectangle rect = table.getCellRect(row, 0, true);
+	    table.scrollRectToVisible(rect);
+	    table.clearSelection();
+	    table.setRowSelectionInterval(row, row);
+	    ((AbstractTableModel) table.getModel()).fireTableDataChanged();
 	}
 }

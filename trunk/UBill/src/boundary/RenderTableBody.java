@@ -24,6 +24,10 @@ public class RenderTableBody extends JLabel implements TableCellRenderer {
 		this.flag = flag;
 	}
 	
+	public RenderTableBody() {
+		this.flag = -1;
+	}
+	
 	public void setRow(int row) {
 		this.row.add(row);
 	}
@@ -59,7 +63,7 @@ public class RenderTableBody extends JLabel implements TableCellRenderer {
 		   	else	
 		   		label.setForeground(active);
 		}
-		else {
+		else if (this.flag == 1){
 		   	if (isRow(row))
 		   		label.setForeground(neutro);
 		   	else	
