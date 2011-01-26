@@ -51,7 +51,7 @@ public class Registration extends BaseBoundary {
 			signinPane.setLayout(null);
 			
 			signLabelImage = new JLabel();
-			signLabelImage.setBounds(40, 40, 128, 128);
+			signLabelImage.setBounds(40, 25, 128, 128);
 			signLabelImage.setIcon(new ImageIcon(getClass().getResource("/icons/uRegister.png")));
 			lockPane.add(signLabelImage);
 			
