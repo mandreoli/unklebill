@@ -19,6 +19,8 @@ public class RenderTableBody extends JLabel implements TableCellRenderer {
 	private Color neutro = new Color(120, 120, 120);
 	private Color normal = new Color(0, 0, 0);
 	private Color passive = new Color(128, 0, 0);
+	private Color highlightDark = new Color(255, 255, 0);
+	private Color highlightLight = new Color(255, 255, 156);
 	private int flag = 0;
 	private LinkedList<Integer> row = new LinkedList<Integer>();
 	
@@ -56,8 +58,22 @@ public class RenderTableBody extends JLabel implements TableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
 		JLabel label = new JLabel("");
 	    label.setHorizontalAlignment(JLabel.LEFT);
+	    label.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 	    label.setText(value.toString());
 	    label.setOpaque(true);
+	    
+	    if (row % 2 == 0) {
+		   	label.setBackground(light);
+		} else {
+			label.setBackground(dark);
+		}
+		    
+		Color c = label.getBackground();
+		if (isSelected) {
+		   	label.setBackground(selected);
+		} else {
+		   	label.setBackground(c);
+		}
 	    
 		if (this.flag == 0) {
 		   	if (isRow(row))
@@ -83,25 +99,37 @@ public class RenderTableBody extends JLabel implements TableCellRenderer {
 						break;
 				case 4: label.setForeground(neutro);
 						break;
+				case 5: label.setFont(new Font("Lucida Grande", Font.BOLD, 11));
+						String[] text = value.toString().split(" ");
+						double num = 0.0;
+						try {
+							num = Double.parseDouble(text[0]);
+						}
+						catch(NumberFormatException nfe) {
+							System.err.println("Number format exception "+nfe);
+						}
+						
+						if (num > 0.0)
+							label.setForeground(active);
+						else if (num < 0.0)
+							label.setForeground(passive);
+						else
+							label.setForeground(neutro);
+						
+						if (row % 2 == 0) {
+						   	label.setBackground(highlightLight);
+						} else {
+							label.setBackground(highlightDark);
+						}
+						
+						break;
 				default: label.setForeground(normal);
 			}
 			if (isRow(row)) {
-				label.setFont(new Font("Lucida Grande", Font.BOLD, 12));
+				label.setBackground(highlightDark);				
+				label.setFont(new Font("Lucida Grande", Font.BOLD, 11));
 			}
-		}
-		    
-		if (row % 2 == 0) {
-		   	label.setBackground(light);
-		} else {
-			label.setBackground(dark);
-		}
-		    
-		Color c = label.getBackground();
-		if (isSelected) {
-		   	label.setBackground(selected);
-		} else {
-		   	label.setBackground(c);
-		}
+		}		
 	        
 	    return label;
 	}
