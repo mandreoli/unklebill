@@ -1,6 +1,7 @@
 package boundary;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
@@ -21,6 +22,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import datatype.Date;
@@ -60,6 +62,13 @@ public class Statitics {
 	private JButton nextYearBtn = null;
 	private JButton reportMonthBtn = null;
 	private JButton reportYearBtn = null;
+	private JLabel accountBalanceLabel = null;
+	private JLabel balanceLabel = null;
+	private Color active = new Color(0, 128, 0);
+	private Color neutro = new Color(0, 0, 0);
+	private Color passive = new Color(128, 0, 0);
+	
+	
 	
 	public Statitics(JPanel mainPane) {		
 		mainPane.add(getManagePane(), BorderLayout.CENTER);
@@ -76,6 +85,8 @@ public class Statitics {
 			statsPane.setSize(new Dimension(480, 435));
 			statsPane.setLayout(null);
 			statsPane.add(getAccountLabel());
+			statsPane.add(getAccountBalanceLabel());
+			statsPane.add(getBalanceLabel());
 			statsPane.add(getTabPane());
 		}
 		return statsPane;
@@ -85,10 +96,37 @@ public class Statitics {
 		if (accountLabel == null) {
 			accountLabel = new JLabel(Login.getAccount().getAccount());			
 			accountLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			accountLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-			accountLabel.setBounds(130, 5, 339, 48);
+			accountLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
+			accountLabel.setBounds(123, 5, 200, 48);
 		}
 		return accountLabel;
+	}
+	
+	private JLabel getAccountBalanceLabel() {
+		if (accountBalanceLabel == null) {
+			accountBalanceLabel = new JLabel("Account balance");
+			accountBalanceLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			accountBalanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			accountBalanceLabel.setBounds(320, 8, 149, 16);
+		}
+		return accountBalanceLabel;
+	}
+	
+	private JLabel getBalanceLabel() {
+		if (balanceLabel == null) {
+			double value = Login.getAccount().getBalance();			
+			balanceLabel = new JLabel(String.valueOf(value)+" "+Login.getAccount().getCurrency());
+			if (value < 0)
+				balanceLabel.setForeground(passive);
+			else if (value > 0)
+				balanceLabel.setForeground(active);
+			else
+				balanceLabel.setForeground(neutro);
+			balanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			balanceLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+			balanceLabel.setBounds(279, 20, 191, 30);
+		}
+		return balanceLabel;
 	}
 	
 	private JTabbedPane getTabPane() {
@@ -114,7 +152,8 @@ public class Statitics {
 			yearPane.add(getYearBox1());
 			yearPane.add(getPrevYearBtn());
 			yearPane.add(getNextYearBtn());
-			yearPane.add(getReportYearBtn());			
+			yearPane.add(getReportYearBtn());
+			populateYearTable();
 		}
 		return yearPane;
 	}
@@ -215,7 +254,7 @@ public class Statitics {
 			monthScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 			monthScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			monthScrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			monthScrollPane.setBounds(new Rectangle(20, 50, 435, 280));	
+			monthScrollPane.setBounds(new Rectangle(20, 50, 435, 305));	
 		}
 		return monthScrollPane;
 	}
@@ -229,12 +268,13 @@ public class Statitics {
                         return false;
                 }       
 			};
-			Object[] headers = new Object[5];
+			Object[] headers = new Object[6];
 			headers[0] = "Day";
 			headers[1] = "Entrance";			
 			headers[2] = "Exit";
 			headers[3] = "T.Entrance";
 			headers[4] = "T.Exit";
+			headers[5] = "Total";
 			monthTableModel.setColumnIdentifiers(headers);			
 		}
 		return monthTableModel;
@@ -247,10 +287,11 @@ public class Statitics {
 			monthTable.setShowGrid(false);
 			monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			monthTable.getColumnModel().getColumn(0).setPreferredWidth(52);
-			monthTable.getColumnModel().getColumn(1).setPreferredWidth(91);			
-			monthTable.getColumnModel().getColumn(2).setPreferredWidth(91);
-			monthTable.getColumnModel().getColumn(3).setPreferredWidth(91);
-			monthTable.getColumnModel().getColumn(4).setPreferredWidth(91);
+			monthTable.getColumnModel().getColumn(1).setPreferredWidth(80);			
+			monthTable.getColumnModel().getColumn(2).setPreferredWidth(80);
+			monthTable.getColumnModel().getColumn(3).setPreferredWidth(80);
+			monthTable.getColumnModel().getColumn(4).setPreferredWidth(80);
+			monthTable.getColumnModel().getColumn(5).setPreferredWidth(80);
 			monthTable.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 
@@ -269,7 +310,7 @@ public class Statitics {
 			yearScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 			yearScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			yearScrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			yearScrollPane.setBounds(new Rectangle(20, 50, 435, 280));	
+			yearScrollPane.setBounds(new Rectangle(20, 50, 435, 305));	
 		}
 		return yearScrollPane;
 	}
@@ -283,12 +324,13 @@ public class Statitics {
                         return false;
                 }       
 			};
-			Object[] headers = new Object[5];
+			Object[] headers = new Object[6];
 			headers[0] = "Month";
 			headers[1] = "Entrance";			
 			headers[2] = "Exit";
 			headers[3] = "T.Entrance";
 			headers[4] = "T.Exit";
+			headers[5] = "Total";
 			yearTableModel.setColumnIdentifiers(headers);			
 		}
 		return yearTableModel;
@@ -300,11 +342,12 @@ public class Statitics {
 			yearTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			yearTable.setShowGrid(false);
 			yearTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			yearTable.getColumnModel().getColumn(0).setPreferredWidth(40);
-			yearTable.getColumnModel().getColumn(1).setPreferredWidth(90);			
-			yearTable.getColumnModel().getColumn(2).setPreferredWidth(90);
-			yearTable.getColumnModel().getColumn(3).setPreferredWidth(90);
-			yearTable.getColumnModel().getColumn(4).setPreferredWidth(90);
+			yearTable.getColumnModel().getColumn(0).setPreferredWidth(55);
+			yearTable.getColumnModel().getColumn(1).setPreferredWidth(80);			
+			yearTable.getColumnModel().getColumn(2).setPreferredWidth(80);
+			yearTable.getColumnModel().getColumn(3).setPreferredWidth(80);
+			yearTable.getColumnModel().getColumn(4).setPreferredWidth(80);
+			yearTable.getColumnModel().getColumn(5).setPreferredWidth(80);
 			yearTable.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 
@@ -313,8 +356,6 @@ public class Statitics {
 			yearRender = new RenderTableBody();
 			for (int i = 0; i < yearTableModel.getColumnCount(); i++)
 				yearTable.getColumn(yearTableModel.getColumnName(i)).setCellRenderer(yearRender);
-			
-			//TODO: popolare
 		}
 		return yearTable;
 	}
@@ -369,6 +410,7 @@ public class Statitics {
 			prevYearBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					yearBox1.setSelectedIndex(yearBox1.getSelectedIndex() - 1);
+					populateYearTable();
 				}
 			});
 			prevYearBtn.setToolTipText("Previous year");
@@ -384,6 +426,7 @@ public class Statitics {
 			nextYearBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					yearBox1.setSelectedIndex(yearBox1.getSelectedIndex() + 1);
+					populateYearTable();
 				}
 			});
 			nextYearBtn.setToolTipText("Next year");
@@ -454,12 +497,10 @@ public class Statitics {
 		return reportYearBtn;
 	}
 	
-	private void populateMonthTable() {
-		monthTableModel.setRowCount(0);
-		int days = Date.getNumDays(Date.getMonth(monthBox.getSelectedItem().toString()));
-		int month = Date.getMonth(monthBox.getSelectedItem().toString());
-		int year = Integer.valueOf(yearBox2.getSelectedItem().toString());
-		Object obj[] = new Object[5];	
+	private void populateYearTable() {
+		yearTableModel.setRowCount(0);
+		int year = Integer.valueOf(yearBox1.getSelectedItem().toString());
+		Object obj[] = new Object[6];
 		double entrance = 0.0;
 		double exit = 0.0;
 		double entranceTransf = 0.0;
@@ -468,6 +509,93 @@ public class Statitics {
 		double exitTot = 0.0;
 		double entranceTransfTot = 0.0;
 		double exitTransfTot = 0.0;
+		double total = 0.0;
+		Transactions ts = null;
+		yearRender.resetRows();
+		
+		for (int month = 1; month <= Month.values().length; month++) {
+			entrance = 0.0;
+			exit = 0.0;			
+			entranceTransf = 0.0;
+			exitTransf = 0.0;
+			total = 0.0;
+			ts = Transactions.loadTransactions(Login.getUser().getUser(), Login.getAccount().getAccount(), year, month);
+			
+			for (Transaction t : ts.getTransactions()) {				
+				if (t.getRefid() != 0) {
+					if (t.getType() == '+') {
+						entranceTransf += t.getPayment();	
+					}
+					else {
+						exitTransf += t.getPayment();
+					}
+				}
+				else {
+					if (t.getType() == '+') {
+						entrance += t.getPayment();
+					}
+					else {
+						exit += t.getPayment();
+					}
+				}
+			}
+			
+			entrance = FieldParser.roundDouble(entrance);
+			exit = FieldParser.roundDouble(exit);
+			entranceTransf = FieldParser.roundDouble(entranceTransf);
+			exitTransf = FieldParser.roundDouble(exitTransf);
+			total = FieldParser.roundDouble(entrance - exit + entranceTransf - exitTransf);	
+			
+			entranceTot += entrance;
+			exitTot += exit;
+			entranceTransfTot += entranceTransf;
+			exitTransfTot += exitTransf;
+			
+			obj[0] = Date.getMonth(month);
+			setRow(1, 0, entrance, obj);
+			setRow(2, 0, exit, obj);
+			setRow(3, 0, entranceTransf, obj);
+			setRow(4, 0, exitTransf, obj);
+			setRow(5, 1, total, obj);
+			
+			yearTableModel.addRow(obj);
+		}
+		
+		entranceTot = FieldParser.roundDouble(entranceTot);
+		exitTot = FieldParser.roundDouble(exitTot);
+		entranceTransfTot = FieldParser.roundDouble(entranceTransfTot);
+		exitTransfTot = FieldParser.roundDouble(exitTransfTot);
+		total = FieldParser.roundDouble(entranceTot - exitTot + entranceTransfTot - exitTransfTot);
+		
+		yearRender.setRow(Month.values().length);
+		
+		obj[0] = "Total";
+		setRow(1, 1, entranceTot, obj);
+		setRow(2, 1, exitTot, obj);
+		setRow(3, 1, entranceTransfTot, obj);
+		setRow(4, 1, exitTransfTot, obj);
+		setRow(5, 1, total, obj);
+		
+		yearTableModel.addRow(obj);
+		
+		showLastCell(yearTable);
+	}
+	
+	private void populateMonthTable() {
+		monthTableModel.setRowCount(0);
+		int days = Date.getNumDays(Date.getMonth(monthBox.getSelectedItem().toString()));
+		int month = Date.getMonth(monthBox.getSelectedItem().toString());
+		int year = Integer.valueOf(yearBox2.getSelectedItem().toString());
+		Object obj[] = new Object[6];	
+		double entrance = 0.0;
+		double exit = 0.0;
+		double entranceTransf = 0.0;
+		double exitTransf = 0.0;
+		double entranceTot = 0.0;
+		double exitTot = 0.0;
+		double entranceTransfTot = 0.0;
+		double exitTransfTot = 0.0;
+		double total = 0.0;
 		Transactions ts = null;
 		monthRender.resetRows();
 				
@@ -505,12 +633,14 @@ public class Statitics {
 			exit = FieldParser.roundDouble(exit);
 			entranceTransf = FieldParser.roundDouble(entranceTransf);
 			exitTransf = FieldParser.roundDouble(exitTransf);
+			total = FieldParser.roundDouble(entrance - exit + entranceTransf - exitTransf);
 			
 			obj[0] = Date.getDay(day);
 			setRow(1, 0, entrance, obj);
 			setRow(2, 0, exit, obj);
 			setRow(3, 0, entranceTransf, obj);
 			setRow(4, 0, exitTransf, obj);
+			setRow(5, 1, total, obj);
 			
 			monthTableModel.addRow(obj);
 		}
@@ -519,6 +649,7 @@ public class Statitics {
 		exitTot = FieldParser.roundDouble(exitTot);
 		entranceTransfTot = FieldParser.roundDouble(entranceTransfTot);
 		exitTransfTot = FieldParser.roundDouble(exitTransfTot);
+		total = FieldParser.roundDouble(entranceTot - exitTot + entranceTransfTot - exitTransfTot);
 		
 		monthRender.setRow(days);
 		
@@ -527,25 +658,39 @@ public class Statitics {
 		setRow(2, days, exitTot, obj);
 		setRow(3, days, entranceTransfTot, obj);
 		setRow(4, days, exitTransfTot, obj);
+		setRow(5, days, total, obj);
 		
 		monthTableModel.addRow(obj);
+		
+		showLastCell(monthTable);
 	}
 	
 	private void setRow(int col, int row, double amount, Object obj[]) {
-		char sign;
+		String sign = null;
 		if (col == 1 || col == 3)
-			sign = '+';
+			sign = "+";
+		else if (col == 2 || col == 4)
+			sign = "-";
+		else if (col == 5 && amount >= 0.0)
+			sign = "+";
 		else
-			sign = '-';
+			sign = "";
+				
+		obj[col] = sign+amount+" "+Login.getAccount().getCurrency();
 		
-		if (amount > 0.0) {			
-			obj[col] = sign+""+amount+" "+Login.getAccount().getCurrency();
-		}
-		else {
-			if (row > 0)
-				obj[col] = sign+"0.0 "+Login.getAccount().getCurrency();
-			else
-				obj[col] = "";
+		if (row == 0 && amount == 0.0)
+			obj[col] = "";
+	}
+	
+	public void showLastCell(JTable table) {
+		int row =  table.getRowCount() - 1;
+		
+		if (table.getRowCount() > 0) {
+			Rectangle rect = table.getCellRect(row, 0, true);
+		    table.scrollRectToVisible(rect);
+		    table.clearSelection();
+		    table.setRowSelectionInterval(row, row);
+		    ((AbstractTableModel) table.getModel()).fireTableDataChanged();
 		}
 	}
 }
