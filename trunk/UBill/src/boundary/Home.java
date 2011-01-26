@@ -314,15 +314,18 @@ public class Home extends BaseBoundary {
 			this.primaryLabel.setText("<html><b>Primary:</b> "+prim+"</html>");
 			
 			double value = account.getBalance();
+			String sign = "";
 			
 			if (value < 0)
 				this.balanceLabel.setForeground(passive);
-			else if (value > 0)
+			else if (value > 0) {
 				this.balanceLabel.setForeground(active);
+				sign = "+";
+			}
 			else
 				this.balanceLabel.setForeground(neutro);
 			
-			this.balanceLabel.setText("<html><b>Current balance</b><br/>"+account.getBalance()+" "+account.getCurrency()+"</html>");
+			this.balanceLabel.setText("<html><b>Current balance</b><br/>"+sign+account.getBalance()+" "+account.getCurrency()+"</html>");
 			this.descrLabel.setText("<html><b>Description</b><br/>"+account.getDescription()+"</html>");
 		}
 		else {

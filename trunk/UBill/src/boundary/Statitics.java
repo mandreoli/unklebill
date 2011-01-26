@@ -114,14 +114,19 @@ public class Statitics {
 	
 	private JLabel getBalanceLabel() {
 		if (balanceLabel == null) {
+			balanceLabel = new JLabel();
 			double value = Login.getAccount().getBalance();			
-			balanceLabel = new JLabel(String.valueOf(value)+" "+Login.getAccount().getCurrency());
+			String sign = "";
 			if (value < 0)
 				balanceLabel.setForeground(passive);
-			else if (value > 0)
+			else if (value > 0) {
+				sign = "+";
 				balanceLabel.setForeground(active);
+			}
 			else
 				balanceLabel.setForeground(neutro);
+			
+			balanceLabel.setText(sign+String.valueOf(value)+" "+Login.getAccount().getCurrency());
 			balanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			balanceLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
 			balanceLabel.setBounds(279, 20, 191, 30);
@@ -286,7 +291,7 @@ public class Statitics {
 			monthTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			monthTable.setShowGrid(false);
 			monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			monthTable.getColumnModel().getColumn(0).setPreferredWidth(52);
+			monthTable.getColumnModel().getColumn(0).setPreferredWidth(40);
 			monthTable.getColumnModel().getColumn(1).setPreferredWidth(80);			
 			monthTable.getColumnModel().getColumn(2).setPreferredWidth(80);
 			monthTable.getColumnModel().getColumn(3).setPreferredWidth(80);
