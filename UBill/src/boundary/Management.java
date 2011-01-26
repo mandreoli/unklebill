@@ -153,7 +153,7 @@ public class Management extends BaseBoundary {
 		if (monthTab == null) {
 			monthTab = new JPanel();
 			monthTab.setLocation(2, 55);
-			monthTab.setSize(new Dimension(475, 376));
+			monthTab.setSize(new Dimension(471, 374));
 			monthTab.setLayout(null);			
 			monthTab.add(getSplitPane());
 			monthTab.add(getMonthBox());
@@ -177,7 +177,7 @@ public class Management extends BaseBoundary {
 			splitPane = new JSplitPane();
 			splitPane.setOneTouchExpandable(true);
 			splitPane.setDividerSize(4);
-			splitPane.setBounds(10, 100, 456, 272);
+			splitPane.setBounds(10, 100, 456, 270);
 			splitPane.setLeftComponent(getEntrancePane());
 			splitPane.setRightComponent(getExitPane());
 			splitPane.setDividerLocation(228);

@@ -95,7 +95,7 @@ public class Home extends BaseBoundary {
 			manageAccountsPane = new JPanel();
 			manageAccountsPane.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
 			manageAccountsPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Manage accounts", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
-			manageAccountsPane.setBounds(6, 230, 468, 200);
+			manageAccountsPane.setBounds(6, 225, 464, 200);
 			manageAccountsPane.setLayout(null);			
 			manageAccountsPane.add(getBtnRemove());
 			manageAccountsPane.add(getBtnAdd());
@@ -390,7 +390,7 @@ public class Home extends BaseBoundary {
 		if (totalBalancePane == null) {
 			totalBalancePane = new JPanel();
 			totalBalancePane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Total balance", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
-			totalBalancePane.setBounds(6, 97, 468, 72);
+			totalBalancePane.setBounds(6, 97, 464, 72);
 			totalBalancePane.setLayout(null);
 			totalBalancePane.add(getTotalLabel());
 			totalBalancePane.add(getTotalBalanceLabel());

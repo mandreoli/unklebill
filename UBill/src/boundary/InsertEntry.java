@@ -101,7 +101,7 @@ public class InsertEntry extends BaseBoundary {
 			exitBtn.setToolTipText("Back");
 			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/error16.png")));
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			exitBtn.setBounds(20, 160, 90, 30);
+			exitBtn.setBounds(20, 157, 90, 30);
 		}
 		return exitBtn;
 	}
@@ -137,7 +137,7 @@ public class InsertEntry extends BaseBoundary {
 			});
 			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/ok16.png")));
 			saveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			saveBtn.setLocation(190, 160);
+			saveBtn.setLocation(190, 157);
 			saveBtn.setEnabled(false);
 			saveBtn.setSize(new Dimension(90, 30));
 			if (this.entry == null) {
