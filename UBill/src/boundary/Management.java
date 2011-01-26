@@ -129,14 +129,19 @@ public class Management extends BaseBoundary {
 	
 	private JLabel getBalanceLabel() {
 		if (balanceLabel == null) {
+			balanceLabel = new JLabel();
 			double value = Login.getAccount().getBalance();			
-			balanceLabel = new JLabel(String.valueOf(value)+" "+Login.getAccount().getCurrency());
+			String sign = "";
 			if (value < 0)
 				balanceLabel.setForeground(passive);
-			else if (value > 0)
+			else if (value > 0) {
+				sign = "+";
 				balanceLabel.setForeground(active);
+			}
 			else
 				balanceLabel.setForeground(neutro);
+			
+			balanceLabel.setText(sign+String.valueOf(value)+" "+Login.getAccount().getCurrency());
 			balanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			balanceLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
 			balanceLabel.setBounds(193, 20, 220, 30);
@@ -760,32 +765,37 @@ public class Management extends BaseBoundary {
 	
 	private void updatePartialsAmounts(JLabel entrance, JLabel exit, JLabel entranceTransf, JLabel exitTransf) {
 		double monthBalance = FieldParser.roundDouble(this.entranceTot - this.exitTot);
+		String sign = "";
 		
 		entrance.setText("+"+String.valueOf(this.entranceTot)+" "+Login.getAccount().getCurrency());
 		exit.setText("-"+String.valueOf(this.exitTot)+" "+Login.getAccount().getCurrency());
 		entranceTransf.setText("+"+String.valueOf(this.entranceTransfTot)+" "+Login.getAccount().getCurrency());
 		exitTransf.setText("-"+String.valueOf(this.exitTransfTot)+" "+Login.getAccount().getCurrency());
 		
-		if (monthBalance > 0)
+		if (monthBalance > 0) {
 			balanceMonthLabel.setForeground(active);
+			sign = "+";
+		}
 		else if (monthBalance < 0)
 			balanceMonthLabel.setForeground(passive);
 		else
 			balanceMonthLabel.setForeground(neutro);
 
-		balanceMonthLabel.setText(String.valueOf(monthBalance)+" "+Login.getAccount().getCurrency());
+		balanceMonthLabel.setText(sign+String.valueOf(monthBalance)+" "+Login.getAccount().getCurrency());
 	}
 	
 	private void updateBalanceLabel(JLabel label) {
-		
-		if (Login.getAccount().getBalance() > 0)
+		String sign = "";
+		if (Login.getAccount().getBalance() > 0) {
+			sign = "+";
 			label.setForeground(active);
+		}
 		else if (Login.getAccount().getBalance() < 0)
 			label.setForeground(passive);
 		else
 			label.setForeground(neutro);
 				
-		label.setText(String.valueOf(Login.getAccount().getBalance())+" "+Login.getAccount().getCurrency());
+		label.setText(sign+String.valueOf(Login.getAccount().getBalance())+" "+Login.getAccount().getCurrency());
 	}
 
 	private JLabel getBalanceMonthLabel() {
