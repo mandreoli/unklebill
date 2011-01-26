@@ -209,7 +209,7 @@ public class ModifyProfile extends BaseBoundary {
 			exitBtn.setToolTipText("Cancel modifies");
 			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/error16.png")));
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			exitBtn.setBounds(20, 200, 90, 30);
+			exitBtn.setBounds(20, 197, 90, 30);
 		}
 		return exitBtn;
 	}
@@ -238,7 +238,7 @@ public class ModifyProfile extends BaseBoundary {
 			saveBtn.setToolTipText("Save modifies");
 			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/ok16.png")));
 			saveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			saveBtn.setLocation(210, 200);
+			saveBtn.setLocation(210, 197);
 			saveBtn.setEnabled(false);
 			saveBtn.setSize(new Dimension(90, 30));
 		}

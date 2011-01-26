@@ -134,7 +134,7 @@ public class InsertMovement extends BaseBoundary {
 			exitBtn.setToolTipText("Back to Payments");
 			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/error16.png")));
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			exitBtn.setBounds(20, 180, 90, 30);
+			exitBtn.setBounds(20, 177, 90, 30);
 		}
 		return exitBtn;
 	}
@@ -194,7 +194,7 @@ public class InsertMovement extends BaseBoundary {
 			});
 			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/ok16.png")));
 			saveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			saveBtn.setLocation(210, 180);
+			saveBtn.setLocation(210, 177);
 			saveBtn.setEnabled(false);
 			saveBtn.setSize(new Dimension(90, 30));
 			if (this.transaction == null) {

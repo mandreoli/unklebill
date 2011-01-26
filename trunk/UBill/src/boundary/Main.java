@@ -211,7 +211,7 @@ public class Main extends BaseBoundary {
 			exitBtn.setToolTipText("Exit from UBill");
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/exit16.png")));
-			exitBtn.setBounds(10, 394, 100, 32);
+			exitBtn.setBounds(10, 390, 100, 32);
 			exitBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int flag = confirm("Are you sure to exit from UBill?");

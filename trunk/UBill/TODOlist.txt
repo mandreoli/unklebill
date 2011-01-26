@@ -1,4 +1,8 @@
 TODO LIST
 
+- eliminazione utente
+- report summary
+- menu "make a donation"
+- nella home mettere le frasi dello zio bill
 - ordinamento tabella click su colonna. Basta cambiare la query ORDER BY
  
