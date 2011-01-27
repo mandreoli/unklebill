@@ -1,3 +1,23 @@
+/**
+ * Copyright 2011 Michele Andreoli
+ * 
+ * This file is part of UnkleBill.
+ *
+ * UnkleBill is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * UnkleBill is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with UnkleBill; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ **/
+
 package boundary;
 
 import java.awt.Dimension;
@@ -38,6 +58,13 @@ public class SplashScreen extends JWindow {
     		mainPane.setSize(new Dimension(this.wWidth, this.wHeight));
 			mainPane.setLayout(null);
 			
+			JLabel licenseLabel = new JLabel("GNU GPL copyright 2011");
+			licenseLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			licenseLabel.setForeground(new Color(51, 102, 204));
+			licenseLabel.setFont(new Font("Courier", Font.BOLD, 12));
+			licenseLabel.setBounds(6, 188, 408, 16);
+			mainPane.add(licenseLabel);
+			
 			JLabel devLabel = new JLabel("UnkleBill v1.0 developed by Michele Andreoli");
 			devLabel.setForeground(new Color(51, 102, 204));
 			devLabel.setFont(new Font("Courier", Font.BOLD, 12));
@@ -46,8 +73,8 @@ public class SplashScreen extends JWindow {
 			mainPane.add(devLabel);
 			
 			JLabel iconLabel = new JLabel("");
-			iconLabel.setIcon(new ImageIcon(getClass().getResource("/icons/UBill_185x185.png")));
-			iconLabel.setBounds(6, 16, 185, 188);
+			iconLabel.setIcon(new ImageIcon(getClass().getResource("/icons/UBill_165x165.png")));
+			iconLabel.setBounds(6, 22, 165, 165);
 			mainPane.add(iconLabel);
 			
 			JLabel titleLabel = new JLabel("I Want Your...");

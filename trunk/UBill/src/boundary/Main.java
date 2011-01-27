@@ -1,3 +1,23 @@
+/**
+ * Copyright 2011 Michele Andreoli
+ * 
+ * This file is part of UnkleBill.
+ *
+ * UnkleBill is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * UnkleBill is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with UnkleBill; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ **/
+
 package boundary;
 
 import java.awt.BorderLayout;
@@ -36,6 +56,9 @@ public class Main extends BaseBoundary {
 	private JButton statBtn = null;
 	private JButton logoutBtn = null;
 	private Main main = null;
+	private JMenu fileMenu = null;
+	private JMenu editMenu = null;
+	private JMenu helpMenu = null;
 	
 	
 	public Main(SplashScreen splash) {
@@ -198,6 +221,7 @@ public class Main extends BaseBoundary {
 		this.transBtn.setEnabled(flag);
 		this.statBtn.setEnabled(flag);
 		this.logoutBtn.setEnabled(flag);
+		this.editMenu.setEnabled(flag);
 	}
 	
 	public void enableLogButtons(boolean flag) {
@@ -230,11 +254,11 @@ public class Main extends BaseBoundary {
 			menuBar = new JMenuBar();			
 			menuBar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 			
-			JMenu fileMenu = new JMenu("File");
+			fileMenu = new JMenu("File");
 			fileMenu.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			JMenu editMenu = new JMenu("Edit");
+			editMenu = new JMenu("Edit");
 			editMenu.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			JMenu helpMenu = new JMenu("?");
+			helpMenu = new JMenu("?");
 			helpMenu.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			
 			JMenuItem exitMenuItem = new JMenuItem("Exit");			
@@ -246,7 +270,13 @@ public class Main extends BaseBoundary {
 			JMenuItem categoryMenuItem = new JMenuItem("Labels");
 			categoryMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			categoryMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/category16.png")));
-			JMenuItem aboutMenuItem = new JMenuItem("About");
+			JMenuItem homeMenuItem = new JMenuItem("Home Page");
+			homeMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			homeMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/internet16.png")));
+			JMenuItem donationMenuItem = new JMenuItem("Donation");
+			donationMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			donationMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/paypal16.png")));
+			JMenuItem aboutMenuItem = new JMenuItem("Credits");
 			aboutMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			aboutMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/info16.png")));
 			
@@ -256,6 +286,8 @@ public class Main extends BaseBoundary {
 			fileMenu.add(exitMenuItem);
 			editMenu.add(profileMenuItem);
 			editMenu.add(categoryMenuItem);
+			helpMenu.add(homeMenuItem);
+			helpMenu.add(donationMenuItem);
 			helpMenu.add(aboutMenuItem);
 			exitMenuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
