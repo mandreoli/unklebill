@@ -24,7 +24,7 @@ public class UBill {
         // log file max size 10K, 3 rolling files, append-on-open
         Handler fileHandler = null;
 		try {
-			fileHandler = new FileHandler("log.txt", 10000, 3, true);
+			fileHandler = new FileHandler(System.getProperty("user.home")+"/.UBill/log.txt", 10000, 3, true);
 		} catch (SecurityException e1) {
 			System.err.println("Security exception: "+e1);
 		} catch (IOException e1) {
