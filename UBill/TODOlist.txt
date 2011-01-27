@@ -1,7 +1,6 @@
 TODO LIST
 
-- invio log file
-- menu "make a donation"
 - nella home mettere le frasi dello zio bill
 - ordinamento tabella click su colonna. Basta cambiare la query ORDER BY
+- invio log file
  
