@@ -1,6 +1,5 @@
 TODO LIST
 
-- eliminazione utente
 - invio log file
 - menu "make a donation"
 - nella home mettere le frasi dello zio bill

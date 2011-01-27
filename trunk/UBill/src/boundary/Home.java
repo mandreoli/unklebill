@@ -57,6 +57,7 @@ public class Home extends BaseBoundary {
 	private JPanel totalBalancePane = null;
 	private JLabel totalBalanceLabel = null;
 	private JLabel userLabel = null;
+	private JButton delUserBtn;
 	
 	
 	
@@ -86,6 +87,7 @@ public class Home extends BaseBoundary {
 			homePane.add(getModAccBtn());
 			homePane.add(getBtnCategory());
 			homePane.add(getTotalBalancePane());
+			homePane.add(getDelUserBtn());
 		}
 		return homePane;
 	}
@@ -435,5 +437,36 @@ public class Home extends BaseBoundary {
 			this.totalBalanceLabel.setForeground(neutro);
 		
 		this.totalBalanceLabel.setText(sign+String.valueOf(FieldParser.roundDouble(total))+" "+Login.getUser().getCurrency());
+	}
+	private JButton getDelUserBtn() {
+		if (delUserBtn == null) {
+			delUserBtn = new JButton("Delete");
+			delUserBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (confirm("Are you sure to delete<br/><b>"+Login.getUser().getName()+"</b>?") == 0) {
+						Accounts accounts = Accounts.loadAccounts(Login.getUser().getUser());
+						if (accounts.getNumAccounts() > 0) {
+							if (abort("You are deleting all<br/>accounts for this user.<br/>Continue anyway?") == 0) {
+								for (Account account : accounts.getAccounts()) {
+									Transactions.deleteTransactions(Login.getUser().getUser(), account.getAccount());
+									accounts.getAccount(account.getAccount()).deleteAccount();
+								}
+								Login.getUser().deleteUser();
+								Login.logout(main, main.getMainPane(), (JPanel)main.getMainPane().getComponent(1));
+							}							
+						}
+						else {
+							Login.getUser().deleteUser();
+							Login.logout(main, main.getMainPane(), (JPanel)main.getMainPane().getComponent(1));
+						}
+					}
+				}
+			});
+			delUserBtn.setIcon(new ImageIcon(getClass().getResource("/icons/delUser16.png")));
+			delUserBtn.setToolTipText("Delete current user");
+			delUserBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			delUserBtn.setBounds(375, 55, 90, 30);
+		}
+		return delUserBtn;
 	}
 }
