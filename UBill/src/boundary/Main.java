@@ -54,7 +54,7 @@ public class Main extends BaseBoundary {
 		if (mainFrame == null) {
 			mainFrame = new JFrame();
 			mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/favico.png")));
-			mainFrame.setTitle("UnkleBill v1.0");
+			mainFrame.setTitle("..::UnkleBill v1.0::.. I want your... bills!");
 			mainFrame.setSize(new Dimension(this.wWidth, this.wHeight));		
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 			mainFrame.setLocation(new Point((d.width-wWidth)/2, (d.height-wHeight)/2));

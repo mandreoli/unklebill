@@ -692,7 +692,7 @@ public class Management extends BaseBoundary {
 			reportBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					File file = new File(Login.getAccount().getAccount()+"_"+monthBox.getSelectedItem().toString()+yearBox.getSelectedItem().toString()+".pdf");
-					new SaveReport(file, monthBox.getSelectedItem().toString(), yearBox.getSelectedItem().toString());
+					new SaveReport(file, monthBox.getSelectedItem().toString(), yearBox.getSelectedItem().toString(), 0);
 				}
 			});
 			reportBtn.setIcon(new ImageIcon(getClass().getResource("/icons/report16.png")));

@@ -1,6 +1,8 @@
 package boundary;
 
+import executor.CreateMonthSummaryReport;
 import executor.CreateReport;
+import executor.CreateYearSummaryReport;
 import executor.ExtFilter;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -26,19 +28,14 @@ public class SaveReport extends BaseBoundary {
 	private File file = null;
 	private String month = null;
 	private String year = null;
+	private int flag = 0;
 	private JFileChooser fileChooser;
 	
-	public SaveReport(File file, String month, String year) {
+	public SaveReport(File file, String month, String year, int flag) {
 		this.file = file;
 		this.month = month;
 		this.year = year;
-		getMainDialog().setVisible(true);
-	}
-	
-	public SaveReport(File file, String year) {
-		this.file = file;
-		this.month = "";
-		this.year = year;
+		this.flag = flag;
 		getMainDialog().setVisible(true);
 	}
 	
@@ -94,7 +91,13 @@ public class SaveReport extends BaseBoundary {
 				        if (command.equals(JFileChooser.APPROVE_SELECTION)) {
 				        		File f = theFileChooser.getSelectedFile();				        		
 				        		try {
-				        			new CreateReport(f.getCanonicalPath(), month, year);
+				        			if (flag == 0)
+				        				new CreateReport(f.getCanonicalPath(), month, year);
+				        			else if (flag == 1)
+				        				new CreateYearSummaryReport(f.getCanonicalPath(), year);
+				        			else
+				        				new CreateMonthSummaryReport(f.getCanonicalPath(), month, year);
+				        			
 				        			ok("Report created with success!");
 									mainDialog.dispose();
 								} catch (IOException e) {
