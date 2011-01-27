@@ -21,6 +21,7 @@
 package boundary;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -36,6 +37,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import javax.swing.ImageIcon;
 import java.awt.Font;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.swing.SwingConstants;
 import datatype.Users;
 
@@ -77,7 +82,7 @@ public class Main extends BaseBoundary {
 		if (mainFrame == null) {
 			mainFrame = new JFrame();
 			mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/favico.png")));
-			mainFrame.setTitle("..::UnkleBill v1.0::.. I want your... bills!");
+			mainFrame.setTitle("UnkleBill v1.0 - I want your... bills!");
 			mainFrame.setSize(new Dimension(this.wWidth, this.wHeight));		
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 			mainFrame.setLocation(new Point((d.width-wWidth)/2, (d.height-wHeight)/2));
@@ -273,10 +278,7 @@ public class Main extends BaseBoundary {
 			JMenuItem homeMenuItem = new JMenuItem("Home Page");
 			homeMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			homeMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/internet16.png")));
-			JMenuItem donationMenuItem = new JMenuItem("Donation");
-			donationMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			donationMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/paypal16.png")));
-			JMenuItem aboutMenuItem = new JMenuItem("Credits");
+			JMenuItem aboutMenuItem = new JMenuItem("About");
 			aboutMenuItem.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			aboutMenuItem.setIcon(new ImageIcon(getClass().getResource("/icons/info16.png")));
 			
@@ -287,7 +289,6 @@ public class Main extends BaseBoundary {
 			editMenu.add(profileMenuItem);
 			editMenu.add(categoryMenuItem);
 			helpMenu.add(homeMenuItem);
-			helpMenu.add(donationMenuItem);
 			helpMenu.add(aboutMenuItem);
 			exitMenuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -308,9 +309,18 @@ public class Main extends BaseBoundary {
 					new ModifyLabels(Login.getUser());
 				}
 			});
+			homeMenuItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						open(new URI("http://www.drelvan.altervista.org/ubill/"));
+					} catch (URISyntaxException e1) {
+						System.err.println("Url syntax error "+e1);
+					}
+				}
+			});
 			aboutMenuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					new About();
 				}
 			});
 		}
@@ -322,4 +332,15 @@ public class Main extends BaseBoundary {
 		transBtn.setEnabled(manage);
 		statBtn.setEnabled(stats);
 	}
+	
+	private void open(URI uri) {
+        if (Desktop.isDesktopSupported()) {
+        	Desktop desktop = Desktop.getDesktop();
+            try {
+            	desktop.browse(uri);
+            }
+            catch (IOException e) {
+            }
+        }
+    }
 }
