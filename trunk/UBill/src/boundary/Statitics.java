@@ -474,7 +474,7 @@ public class Statitics {
 			reportMonthBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					File file = new File(Login.getAccount().getAccount()+"_summary_"+monthBox.getSelectedItem().toString()+yearBox2.getSelectedItem().toString()+".pdf");
-					new SaveReport(file, monthBox.getSelectedItem().toString(), yearBox2.getSelectedItem().toString());
+					new SaveReport(file, monthBox.getSelectedItem().toString(), yearBox2.getSelectedItem().toString(), 2);
 				}
 			});
 			reportMonthBtn.setIcon(new ImageIcon(getClass().getResource("/icons/report16.png")));
@@ -491,7 +491,7 @@ public class Statitics {
 			reportYearBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					File file = new File(Login.getAccount().getAccount()+"_summary_"+yearBox1.getSelectedItem().toString()+".pdf");
-					new SaveReport(file, yearBox1.getSelectedItem().toString());
+					new SaveReport(file, "", yearBox1.getSelectedItem().toString(), 1);
 				}
 			});
 			reportYearBtn.setIcon(new ImageIcon(getClass().getResource("/icons/report16.png")));

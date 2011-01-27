@@ -18,7 +18,7 @@ import datatype.Date;
 import datatype.Transactions;
 
 
-public class CreateReport {
+public class CreateMonthSummaryReport {
 	
 	private Color active = new Color(0, 128, 0);
 	private Color neutro = new Color(128, 128, 128);
@@ -29,7 +29,7 @@ public class CreateReport {
 	private double exitTransf = 0.0;
 	private String month = null;
 	private String year = null;
-	private Font title = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+	private Font title = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
 	private Font parBig = new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL);
 	private Font parBigActive = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, new BaseColor(active));
 	private Font parBigPassive = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, new BaseColor(passive));
@@ -43,7 +43,7 @@ public class CreateReport {
 	private Font dataActiveBold = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, new BaseColor(active));
 	private Font dataNeutroBold = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, new BaseColor(neutro));
 
-	public CreateReport(String filename, String month, String year) {		
+	public CreateMonthSummaryReport(String filename, String month, String year) {		
 		this.month = month;
 		this.year = year;
 		
@@ -54,16 +54,15 @@ public class CreateReport {
 		} catch (FileNotFoundException e1) {
 			System.err.println("File not found");
 		} catch (DocumentException e1) {
-			System.err.println("Error while creating file");
+			System.out.println("Error while creating file");
 		}
 		document.open();		
 
 		PdfPTable t0 = generateTable();
 		PdfPTable t1 = generateTotalsTable();
-		Paragraph p0 = new Paragraph(new Chunk(Login.getAccount().getAccount()+" report", title));
-		Paragraph p1 = new Paragraph(new Chunk(month+" "+year, title));
-		Paragraph p2 = new Paragraph(new Chunk("Account balance: ", parBig));
-		p2.setSpacingBefore(15);
+		Paragraph p0 = new Paragraph(new Chunk("Report of "+Login.getAccount().getAccount()+" for "+month+" "+year, title));
+		Paragraph p1 = new Paragraph(new Chunk("Account balance: ", parBig));
+		p1.setSpacingBefore(15);
 
 		Font f = null;
 		if (Login.getAccount().getBalance() > 0)
@@ -73,17 +72,16 @@ public class CreateReport {
 		else
 			 f = parBigBold;
 
-		Paragraph p3 = new Paragraph(new Chunk(Login.getAccount().getBalance()+" "+Login.getAccount().getCurrency(), f));
+		Paragraph p2 = new Paragraph(new Chunk(Login.getAccount().getBalance()+" "+Login.getAccount().getCurrency(), f));
 		
 		try {
 			document.add(p0);	
 			document.add(p1);
 			document.add(p2);
-			document.add(p3);
 			document.add(t0);
 			document.add(t1);
 		} catch (DocumentException e) {
-			System.err.println("Error while adding paragraph: "+e);
+			System.out.println("Error while adding paragraph: "+e);
 		}
 		
 		document.close();
@@ -96,7 +94,7 @@ public class CreateReport {
 		try {			
 			table.setWidths(width);
 		} catch (DocumentException e) {
-			System.err.println("Error while setting columns width: "+e);
+			System.out.println("Error while setting columns width: "+e);
 		}
 		table.setSpacingBefore(20);
 		
@@ -162,7 +160,7 @@ public class CreateReport {
 		try {			
 			table.setWidths(width);
 		} catch (DocumentException e) {
-			System.err.println("Error while setting columns width: "+e);
+			System.out.println("Error while setting columns width: "+e);
 		}
 		table.setSpacingBefore(20);
 		
