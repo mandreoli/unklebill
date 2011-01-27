@@ -119,6 +119,13 @@ public class User {
 		session.update(this);
 		session.getTransaction().commit();
 	}
+	
+	public void deleteUser() {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.delete(this);
+		session.getTransaction().commit();
+	}
 
 	public void updateUser(String oldUser) {
 		Accounts accounts = Accounts.loadAccounts(oldUser);

@@ -74,7 +74,7 @@ public class Main extends BaseBoundary {
 		return mainFrame;
 	}
 	
-	private JPanel getMainPane() {
+	public JPanel getMainPane() {
 		if (mainPane == null) {
 			mainPane = new JPanel();			
 			mainPane.setLayout(new BorderLayout());			

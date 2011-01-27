@@ -21,6 +21,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
+import javax.swing.JLabel;
 
 
 
@@ -38,6 +39,7 @@ public class ModifyLabels extends BaseBoundary {
 	private JButton modBtn = null;
 	private JButton delBtn = null;
 	private Entries entries = null;
+	private JLabel titleLabel;
 	
 	
 	public ModifyLabels(User user) {
@@ -70,6 +72,7 @@ public class ModifyLabels extends BaseBoundary {
 			mainPane.add(getModBtn());
 			mainPane.add(getDelBtn());
 			mainPane.add(getEntryScroll());
+			mainPane.add(getTitleLabel());
 		}
 		return mainPane;
 	}
@@ -94,7 +97,7 @@ public class ModifyLabels extends BaseBoundary {
 		if (entryScroll == null) {
 			entryScroll = new JScrollPane(getEntryList());
 			entryScroll.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			entryScroll.setBounds(20, 20, 181, 195);
+			entryScroll.setBounds(20, 40, 181, 175);
 		}
 		return entryScroll;
 	}
@@ -111,7 +114,7 @@ public class ModifyLabels extends BaseBoundary {
 			addBtn.setIcon(new ImageIcon(getClass().getResource("/icons/add16.png")));
 			addBtn.setToolTipText("Add new label");
 			addBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			addBtn.setBounds(213, 20, 90, 30);
+			addBtn.setBounds(213, 40, 90, 30);
 		}
 		return addBtn;
 	}
@@ -129,7 +132,7 @@ public class ModifyLabels extends BaseBoundary {
 			modBtn.setIcon(new ImageIcon(getClass().getResource("/icons/edit16.png")));
 			modBtn.setToolTipText("Modify selected label");
 			modBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			modBtn.setBounds(213, 50, 90, 30);
+			modBtn.setBounds(213, 70, 90, 30);
 		}
 		return modBtn;
 	}
@@ -150,7 +153,7 @@ public class ModifyLabels extends BaseBoundary {
 			delBtn.setIcon(new ImageIcon(getClass().getResource("/icons/del16.png")));
 			delBtn.setToolTipText("Delete selected label");
 			delBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			delBtn.setBounds(213, 91, 90, 30);
+			delBtn.setBounds(213, 111, 90, 30);
 		}
 		return delBtn;
 	}
@@ -188,5 +191,14 @@ public class ModifyLabels extends BaseBoundary {
 		entryList.setSelectedIndex(-1);
 		modBtn.setEnabled(false);
 		delBtn.setEnabled(false);
+	}
+	private JLabel getTitleLabel() {
+		if (titleLabel == null) {
+			titleLabel = new JLabel("List of categories");
+			titleLabel.setIcon(new ImageIcon(ModifyLabels.class.getResource("/icons/category16.png")));
+			titleLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			titleLabel.setBounds(20, 18, 150, 15);
+		}
+		return titleLabel;
 	}
 }
