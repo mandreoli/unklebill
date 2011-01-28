@@ -36,7 +36,7 @@ import boundary.SplashScreen;
 public class UBill {
 
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {		
-		
+		/*
 		// initialize logging to go to rolling log file
         LogManager logManager = LogManager.getLogManager();
         logManager.reset();
@@ -70,7 +70,7 @@ public class UBill {
 		logger = Logger.getLogger("stderr");
 		los= new LoggingOutputStream(logger, StdOutErrLevel.STDERR);
 		System.setErr(new PrintStream(los, true));
-		
+		*/
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception e) {
