@@ -528,7 +528,6 @@ public class Home extends BaseBoundary {
 		if (msgLabel == null) {
 			msgLabel = new JLabel("");
 			msgLabel.setBounds(18, 25, 357, 44);
-			msgLabel.setVerticalAlignment(SwingConstants.TOP);
 			msgLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		}
 		return msgLabel;
@@ -543,36 +542,73 @@ public class Home extends BaseBoundary {
 			}
 			else {
 				String msgTot = "";
+				String msgBalance = "";
+				ImageIcon ics = null;
 				double tot = calculateTotalBalance();
 				double balance = Login.getAccount().getBalance();
-				if (tot > 0.0) {
-					if (tot > 5000)
-						msgTot = "The amount of your accounts is very strong.";
+				
+				if (tot >= 0.0 && balance >= 0.0) {
+					ics = new ImageIcon(getClass().getResource("/icons/UBill_up64.png"));
+					
+					if (tot > 10000)
+						msgTot = "The total amount of your accounts is very strong, you'll want to become a bank!";
+					else if (tot > 0)
+						msgTot = "The total amount of your accounts is ok.";
 					else
-						msgTot = "The amount of your accounts is ok.";
-				}
-				else if (tot < 0.0) {
-					if (tot < 1000)
-						msgTot = "The amount of your accounts is very bad.";
+						msgTot = "Be careful, the total amount of your accounts is unsafe.";
+					
+					if (balance > 2000)
+						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is very safe!";
+					else if (balance > 0)
+						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is good.";
 					else
-						msgTot = "The amount of your accounts is bad.";
+						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is unsafe.";
 				}
-				else {
-					msgTot = "";
+				else if (tot >= 0.0 && balance < 0.0) {
+					ics = new ImageIcon(getClass().getResource("/icons/UBill_up64.png"));
+					
+					if (tot > 10000)
+						msgTot = "The total amount of your accounts is very strong, you'll want to become a bank!";
+					else if (tot > 0)
+						msgTot = "The total amount of your accounts is ok.";
+					else
+						msgTot = "Be careful, the total amount of your accounts is unsafe.";
+					
+					if (balance < -1000)
+						msgBalance = "Attention, watch the balance of "+Login.getAccount().getAccount()+" account, is terrible!";
+					else
+						msgBalance = "Attention, the balance of "+Login.getAccount().getAccount()+" account is not good.";
+				}
+				else if (tot < 0.0 && balance >= 0.0) {
+					ics = new ImageIcon(getClass().getResource("/icons/UBill_down64.png"));
+					if (tot < -5000)
+						msgTot = "Be careful, watch the total amount of your accounts, is terrible!";
+					else
+						msgTot = "Be careful, the total amount of your accounts is not good.";
+					
+					if (balance > 2000)
+						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is very safe!";
+					else if (balance > 0)
+						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is good.";
+					else
+						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is unsafe.";
+				}
+				else if (tot < 0.0 && balance < 0.0) {
+					ics = new ImageIcon(getClass().getResource("/icons/UBill_down64.png"));
+					
+					if (tot < -5000)
+						msgTot = "Be careful, watch the total amount of your accounts, is terrible!";
+					else
+						msgTot = "Be careful, the total amount of your accounts is not good.";
+					
+					if (balance < -1000)
+						msgBalance = "Attention, watch the balance of "+Login.getAccount().getAccount()+" account, is terrible!";
+					else
+						msgBalance = "Attention, the balance of "+Login.getAccount().getAccount()+" account is not good.";
 				}
 				
-				if (balance > 0.0) {
-					this.uncleLabel.setIcon(new ImageIcon(getClass().getResource("/icons/UBill_up64.png")));
-					this.msgLabel.setText("<html>"+msgTot+"</html>");
-				}
-				else if (balance < 0.0) {
-					this.uncleLabel.setIcon(new ImageIcon(getClass().getResource("/icons/UBill_down64.png")));
-					this.msgLabel.setText("<html>down"+msgTot+"</html>");
-				}
-				else {
-					this.uncleLabel.setIcon(new ImageIcon(getClass().getResource("/icons/UBill64.png")));
-					this.msgLabel.setText("<html>zero"+msgTot+"</html>");
-				}
+				this.uncleLabel.setIcon(ics);
+				this.msgLabel.setText("<html>"+msgTot+"<br/>"+msgBalance+"</html>");
 			}
 		}
 		else {
