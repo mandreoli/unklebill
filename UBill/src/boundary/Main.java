@@ -143,6 +143,7 @@ public class Main extends BaseBoundary {
 	private JButton getHomeBtn() {
 		if (homeBtn == null) {
 			homeBtn = new JButton("Home");
+			homeBtn.setToolTipText("Manage your accounts and your profile");
 			homeBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			homeBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			homeBtn.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -164,6 +165,7 @@ public class Main extends BaseBoundary {
 	private JButton getTransBtn() {
 		if (transBtn == null) {
 			transBtn = new JButton("Payments");
+			transBtn.setToolTipText("Manage transactions for selected account");
 			transBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			transBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			transBtn.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -186,6 +188,7 @@ public class Main extends BaseBoundary {
 	private JButton getStatBtn() {
 		if (statBtn == null) {
 			statBtn = new JButton("Summary");
+			statBtn.setToolTipText("View summary of the year or of the month");
 			statBtn.setIcon(new ImageIcon(getClass().getResource("/icons/stats48.png")));
 			statBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
 			statBtn.setHorizontalTextPosition(SwingConstants.CENTER);

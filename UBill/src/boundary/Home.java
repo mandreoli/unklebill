@@ -48,6 +48,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
 import store.Account;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class Home extends BaseBoundary {
@@ -78,8 +80,9 @@ public class Home extends BaseBoundary {
 	private JLabel totalBalanceLabel = null;
 	private JLabel userLabel = null;
 	private JButton delUserBtn;
-	
-	
+	private JLabel uncleLabel;
+	private JLabel msgBackgroundLabel;
+	private JLabel msgLabel;
 	
 	public Home(JPanel mainPane, Main main) {
 		this.main = main;
@@ -96,8 +99,7 @@ public class Home extends BaseBoundary {
 			homePane.setLocation(new Point(120, 0));
 			homePane.setSize(new Dimension(480, 435));
 			homePane.setLayout(null);
-			homePane.add(getManageAccountsPane());
-			
+			homePane.add(getManageAccountsPane());		
 			userLabel = new JLabel(" "+Login.getUser().getName());
 			userLabel.setIcon(new ImageIcon(getClass().getResource("/icons/user24.png")));
 			userLabel.setFont(new Font("Lucida Grande", Font.BOLD, 24));
@@ -108,6 +110,7 @@ public class Home extends BaseBoundary {
 			homePane.add(getBtnCategory());
 			homePane.add(getTotalBalancePane());
 			homePane.add(getDelUserBtn());
+			refreshMsg();
 		}
 		return homePane;
 	}
@@ -117,8 +120,11 @@ public class Home extends BaseBoundary {
 			manageAccountsPane = new JPanel();
 			manageAccountsPane.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
 			manageAccountsPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Manage accounts", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
-			manageAccountsPane.setBounds(6, 225, 464, 200);
+			manageAccountsPane.setBounds(6, 165, 464, 260);
 			manageAccountsPane.setLayout(null);			
+			manageAccountsPane.add(getMsgLabel());
+			manageAccountsPane.add(getMsgBackgroundLabel());
+			manageAccountsPane.add(getUncleLabel());
 			manageAccountsPane.add(getBtnRemove());
 			manageAccountsPane.add(getBtnAdd());
 			manageAccountsPane.add(getShowBtn());
@@ -134,27 +140,27 @@ public class Home extends BaseBoundary {
 		accountLabel = new JLabel("");
 		accountLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		accountLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-		accountLabel.setBounds(209, 15, 253, 32);
+		accountLabel.setBounds(209, 78, 253, 32);
 		
 		createLabel = new JLabel("");
 		createLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		createLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		createLabel.setBounds(209, 44, 253, 16);
+		createLabel.setBounds(209, 107, 253, 16);
 		
 		primaryLabel = new JLabel("");
 		primaryLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		primaryLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		primaryLabel.setBounds(209, 63, 253, 16);
+		primaryLabel.setBounds(209, 125, 253, 16);
 		
 		descrLabel = new JLabel("");
 		descrLabel.setVerticalAlignment(SwingConstants.TOP);
 		descrLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		descrLabel.setBounds(209, 127, 253, 62);
+		descrLabel.setBounds(209, 187, 253, 62);
 		
 		balanceLabel = new JLabel("");
 		balanceLabel.setVerticalAlignment(SwingConstants.TOP);
 		balanceLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		balanceLabel.setBounds(209, 90, 253, 30);
+		balanceLabel.setBounds(209, 150, 253, 30);
 		
 		manageAccountsPane.add(accountLabel);
 		manageAccountsPane.add(createLabel);
@@ -167,7 +173,7 @@ public class Home extends BaseBoundary {
 		if (scrollAccountPane == null) {
 			scrollAccountPane = new JScrollPane(getListAccounts());
 			scrollAccountPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			scrollAccountPane.setBounds(10, 50, 150, 113);
+			scrollAccountPane.setBounds(10, 110, 150, 113);
 			scrollAccountPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		}
 		return scrollAccountPane;
@@ -176,6 +182,15 @@ public class Home extends BaseBoundary {
 	private JList getListAccounts() {
 		if (listAccounts == null) {
 			listAccounts = new JList();			
+			listAccounts.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (e.getClickCount() == 2) {
+						showAccountInfo(accounts.getAccount(listAccounts.getSelectedValue().toString()));
+						refreshMsg();
+					}
+				}
+			});
 			listAccounts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			listAccounts.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
@@ -199,7 +214,7 @@ public class Home extends BaseBoundary {
 		if (this.accounts.getNumAccounts() > 0)
 			this.listAccounts.setListData(this.accounts.getAccountsNames().toArray());		
 		else
-			this.listAccounts.setListData(new Object[0]);
+			this.listAccounts.setListData(new Object[0]);			
 		
 		Account account = Account.loadDefaultAccount(Login.getUser().getUser());
 		if (account != null) {
@@ -208,8 +223,9 @@ public class Home extends BaseBoundary {
 			this.listAccounts.setSelectedValue(Login.getAccount().getAccount(), true);
 		}
 		
-		showAccountInfo(Login.getAccount());		
+		showAccountInfo(Login.getAccount());
 		this.listAccounts.repaint();
+		refreshMsg();
 	}
 	
 	private JButton getModBtn() {
@@ -224,7 +240,7 @@ public class Home extends BaseBoundary {
 			modBtn.setEnabled(false);
 			modBtn.setIcon(new ImageIcon(getClass().getResource("/icons/modAccount24.png")));
 			modBtn.setToolTipText("Edit account");
-			modBtn.setBounds(165, 85, 32, 32);
+			modBtn.setBounds(165, 145, 32, 32);
 		}
 		return modBtn;
 	}
@@ -233,19 +249,15 @@ public class Home extends BaseBoundary {
 		if (showBtn == null) {
 			showBtn = new JButton("");
 			showBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {					
-					Account a = accounts.getAccount(listAccounts.getSelectedValue().toString());					
-					a.setUsable(true);
-					a.updateAccount();
-					Login.setAccount(a);
-					main.toggleNaviButtons(false, true, true);
+				public void actionPerformed(ActionEvent e) {										
 					showAccountInfo(accounts.getAccount(listAccounts.getSelectedValue().toString()));
+					refreshMsg();
 				}
 			});
 			showBtn.setEnabled(false);
 			showBtn.setToolTipText("Show account details");
 			showBtn.setIcon(new ImageIcon(getClass().getResource("/icons/viewAccount24.png")));
-			showBtn.setBounds(165, 50, 32, 32);
+			showBtn.setBounds(165, 110, 32, 32);
 		}
 		return showBtn;
 	}
@@ -264,7 +276,7 @@ public class Home extends BaseBoundary {
 			btnAdd.setHorizontalTextPosition(SwingConstants.RIGHT);
 			btnAdd.setIcon(new ImageIcon(getClass().getResource("/icons/add16.png")));
 			btnAdd.setToolTipText("Add an account");
-			btnAdd.setBounds(10, 165, 75, 29);
+			btnAdd.setBounds(10, 225, 75, 29);
 		}
 		return btnAdd;
 	}
@@ -306,7 +318,7 @@ public class Home extends BaseBoundary {
 			btnRemove.setHorizontalTextPosition(SwingConstants.LEFT);
 			btnRemove.setIcon(new ImageIcon(getClass().getResource("/icons/del16.png")));
 			btnRemove.setToolTipText("Remove selected account");
-			btnRemove.setBounds(85, 165, 75, 29);
+			btnRemove.setBounds(85, 225, 75, 29);
 			btnRemove.setEnabled(false);
 		}
 		return btnRemove;
@@ -317,13 +329,18 @@ public class Home extends BaseBoundary {
 			listLabel = new JLabel("Created accounts");
 			listLabel.setIcon(new ImageIcon(Home.class.getResource("/icons/accounts16.png")));
 			listLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			listLabel.setBounds(10, 25, 150, 24);
+			listLabel.setBounds(10, 85, 150, 24);
 		}
 		return listLabel;
 	}
 	
-	private void showAccountInfo(Account account) {
+	private void showAccountInfo(Account account) {				
 		if (account != null) {
+			account.setUsable(true);
+			account.updateAccount();
+			Login.setAccount(account);
+			main.toggleNaviButtons(false, true, true);
+			
 			Date date = new Date(account.getCreation());
 			String text = Date.getMonth(date.getMonth())+" "+Date.getDay(date.getDay())+", "+date.getYear();
 			String prim = "NO";
@@ -352,7 +369,7 @@ public class Home extends BaseBoundary {
 		}
 		else {
 			this.accountLabel.setText("No primary account");			
-			this.createLabel.setText("<html>Select an account and set it to primary</html>");
+			this.createLabel.setText("<html>Select an account and set it as primary</html>");
 			this.primaryLabel.setText("<html></html>");
 			this.balanceLabel.setText("<html></html>");
 			this.descrLabel.setText("<html></html>");
@@ -412,7 +429,7 @@ public class Home extends BaseBoundary {
 		if (totalBalancePane == null) {
 			totalBalancePane = new JPanel();
 			totalBalancePane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Total balance", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
-			totalBalancePane.setBounds(6, 97, 464, 72);
+			totalBalancePane.setBounds(6, 90, 464, 72);
 			totalBalancePane.setLayout(null);
 			totalBalancePane.add(getTotalLabel());
 			totalBalancePane.add(getTotalBalanceLabel());
@@ -488,5 +505,79 @@ public class Home extends BaseBoundary {
 			delUserBtn.setBounds(375, 55, 90, 30);
 		}
 		return delUserBtn;
+	}
+	
+	private JLabel getUncleLabel() {
+		if (uncleLabel == null) {
+			uncleLabel = new JLabel("");
+			uncleLabel.setBounds(390, 15, 64, 64);
+		}
+		return uncleLabel;
+	}
+	
+	private JLabel getMsgBackgroundLabel() {
+		if (msgBackgroundLabel == null) {
+			msgBackgroundLabel = new JLabel("");
+			msgBackgroundLabel.setBounds(5, 15, 384, 64);
+			msgBackgroundLabel.setIcon(new ImageIcon(getClass().getResource("/icons/smoke.png")));
+		}
+		return msgBackgroundLabel;
+	}
+	
+	private JLabel getMsgLabel() {
+		if (msgLabel == null) {
+			msgLabel = new JLabel("");
+			msgLabel.setBounds(18, 25, 357, 44);
+			msgLabel.setVerticalAlignment(SwingConstants.TOP);
+			msgLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
+		}
+		return msgLabel;
+	}
+	
+	private void refreshMsg() {
+		
+		if (this.accounts.getNumAccounts() > 0) {
+			if (Login.getAccount() == null) {
+				this.uncleLabel.setIcon(new ImageIcon(getClass().getResource("/icons/UBill64.png")));
+				this.msgLabel.setText("<html>Select an account and set it as primary with a double click.<br/>After that you can start to add transactions in the <i>Payments</i> tab on the left.</html>");
+			}
+			else {
+				String msgTot = "";
+				double tot = calculateTotalBalance();
+				double balance = Login.getAccount().getBalance();
+				if (tot > 0.0) {
+					if (tot > 5000)
+						msgTot = "The amount of your accounts is very strong.";
+					else
+						msgTot = "The amount of your accounts is ok.";
+				}
+				else if (tot < 0.0) {
+					if (tot < 1000)
+						msgTot = "The amount of your accounts is very bad.";
+					else
+						msgTot = "The amount of your accounts is bad.";
+				}
+				else {
+					msgTot = "";
+				}
+				
+				if (balance > 0.0) {
+					this.uncleLabel.setIcon(new ImageIcon(getClass().getResource("/icons/UBill_up64.png")));
+					this.msgLabel.setText("<html>"+msgTot+"</html>");
+				}
+				else if (balance < 0.0) {
+					this.uncleLabel.setIcon(new ImageIcon(getClass().getResource("/icons/UBill_down64.png")));
+					this.msgLabel.setText("<html>down"+msgTot+"</html>");
+				}
+				else {
+					this.uncleLabel.setIcon(new ImageIcon(getClass().getResource("/icons/UBill64.png")));
+					this.msgLabel.setText("<html>zero"+msgTot+"</html>");
+				}
+			}
+		}
+		else {
+			this.uncleLabel.setIcon(new ImageIcon(getClass().getResource("/icons/UBill64.png")));
+			this.msgLabel.setText("<html>Nice to meet you <b>"+Login.getUser().getName()+"</b>!<br/>My name is UnkleBill, I'll help you in the difficult choices.<br/>Now you can create and manage one or more accounts.</html>");
+		}
 	}
 }
