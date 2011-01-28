@@ -119,11 +119,11 @@ public class Management extends BaseBoundary {
 			managePane.setLocation(new Point(120, 0));
 			managePane.setSize(new Dimension(480, 435));
 			managePane.setLayout(null);
+			managePane.add(getCoinsLabel());
 			managePane.add(getAccountLabel());
 			managePane.add(getBalanceLabel());
 			managePane.add(getAccountBalanceLabel());
 			managePane.add(getMonthTab());
-			managePane.add(getCoinsLabel());
 		}
 		return managePane;
 	}
@@ -172,7 +172,7 @@ public class Management extends BaseBoundary {
 	private JPanel getMonthTab() {
 		if (monthTab == null) {
 			monthTab = new JPanel();
-			monthTab.setLocation(2, 55);
+			monthTab.setLocation(2, 52);
 			monthTab.setSize(new Dimension(471, 374));
 			monthTab.setLayout(null);			
 			monthTab.add(getSplitPane());

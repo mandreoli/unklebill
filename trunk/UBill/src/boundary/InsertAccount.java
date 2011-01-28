@@ -211,7 +211,7 @@ public class InsertAccount extends BaseBoundary {
 			exitBtn.setToolTipText("Back to home");
 			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/error16.png")));
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			exitBtn.setBounds(20, 200, 90, 30);
+			exitBtn.setBounds(20, 198, 90, 30);
 		}
 		return exitBtn;
 	}
@@ -260,7 +260,7 @@ public class InsertAccount extends BaseBoundary {
 			}
 			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/ok16.png")));
 			saveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			saveBtn.setLocation(210, 200);
+			saveBtn.setLocation(210, 198);
 			saveBtn.setEnabled(false);
 			saveBtn.setSize(new Dimension(90, 30));
 		}
