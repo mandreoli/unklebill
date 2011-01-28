@@ -120,7 +120,7 @@ public class Home extends BaseBoundary {
 			manageAccountsPane = new JPanel();
 			manageAccountsPane.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
 			manageAccountsPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Manage accounts", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
-			manageAccountsPane.setBounds(6, 165, 464, 260);
+			manageAccountsPane.setBounds(6, 162, 464, 260);
 			manageAccountsPane.setLayout(null);			
 			manageAccountsPane.add(getMsgLabel());
 			manageAccountsPane.add(getMsgBackgroundLabel());
