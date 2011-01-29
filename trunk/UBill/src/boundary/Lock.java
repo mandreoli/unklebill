@@ -102,7 +102,7 @@ public class Lock extends BaseBoundary {
 			lockTitleLabel = new JLabel("Unkle Bill says:");
 			lockTitleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 			lockTitleLabel.setBounds(190, 30, 250, 41);
-			lockPane.add(lockTitleLabel);			
+			lockPane.add(lockTitleLabel);
 		}
 		return lockPane;
 	}
@@ -166,6 +166,7 @@ public class Lock extends BaseBoundary {
 			loginPane.add(pwdText);
 			
 			loginBtn = new JButton("Login");
+			loginBtn.setMnemonic(KeyEvent.VK_ENTER);
 			loginBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {								
 					if (Login.checkUser(userText.getText(), pwdText.getPassword())) {
