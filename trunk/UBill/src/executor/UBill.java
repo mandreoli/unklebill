@@ -27,10 +27,8 @@ import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
 import boundary.SplashScreen;
 
 public class UBill {
@@ -68,7 +66,7 @@ public class UBill {
 		System.setOut(new PrintStream(los, true));
 		
 		logger = Logger.getLogger("stderr");
-		los= new LoggingOutputStream(logger, StdOutErrLevel.STDERR);
+		los = new LoggingOutputStream(logger, StdOutErrLevel.STDERR);
 		System.setErr(new PrintStream(los, true));
 		
 		try {
@@ -76,7 +74,7 @@ public class UBill {
         } catch (Exception e) {
         	UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
         }
-        new SplashScreen();
+		new SplashScreen();
 	}
 
 }

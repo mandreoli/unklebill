@@ -32,10 +32,6 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 
-import org.hibernate.Session;
-
-import util.HibernateUtil;
-
 public class SplashScreen extends JWindow {
 
 	private static final long serialVersionUID = 1L;
@@ -48,7 +44,7 @@ public class SplashScreen extends JWindow {
     	setSize(new Dimension(this.wWidth, this.wHeight));		
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation(new Point((d.width-wWidth)/2, (d.height-wHeight)/2));
-		start();		
+		start();
     }
     
     private JPanel getMainPane() {
@@ -96,8 +92,6 @@ public class SplashScreen extends JWindow {
     private void start() {
     	setVisible(true);
         try {
-        	@SuppressWarnings("unused")
-			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         	Main main = new Main(this);
     		main.START();    		
         } catch (Exception e) {

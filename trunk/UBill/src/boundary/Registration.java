@@ -100,7 +100,7 @@ public class Registration extends BaseBoundary {
 			registerBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (User.checkFreeUser(userText.getText(), pwdText.getPassword())) {
-						User user = new User(userText.getText(), new String(pwdText.getPassword()), nameText.getText(), null, null, "EUR", false);					
+						User user = new User(userText.getText(), new String(pwdText.getPassword()), nameText.getText(), null, null, "EUR", "ENG", false);					
 						user.saveUser();
 						ok("Congratulations!<br/>"+nameText.getText()+" is with us!");
 						

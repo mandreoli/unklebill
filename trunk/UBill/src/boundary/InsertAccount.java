@@ -298,7 +298,7 @@ public class InsertAccount extends BaseBoundary {
 			currencyBox.setBounds(210, 131, 90, 27);
 			currencyBox.setSelectedItem(Login.getUser().getCurrency());
 			if (this.account != null) {	
-				currencyBox.setSelectedItem(this.account.getCurrency());
+				currencyBox.setSelectedItem(Currency.valueOf(this.account.getCurrency()));
 			}
 		}
 		return currencyBox;

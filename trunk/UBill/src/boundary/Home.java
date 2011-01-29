@@ -393,6 +393,7 @@ public class Home extends BaseBoundary {
 				public void actionPerformed(ActionEvent e) {
 					new ModifyProfile(Login.getUser());
 					userLabel.setText(" "+Login.getUser().getName());
+					updateBalanceLabel();
 				}
 			});
 		}
@@ -548,7 +549,7 @@ public class Home extends BaseBoundary {
 				double balance = Login.getAccount().getBalance();
 				
 				if (tot >= 0.0 && balance >= 0.0) {
-					ics = new ImageIcon(getClass().getResource("/icons/UBill_up64.png"));
+					ics = new ImageIcon(getClass().getResource("/icons/UBill_up_gg64.png"));
 					
 					if (tot > 10000)
 						msgTot = "The total amount of your accounts is very strong, you'll want to become a bank!";
@@ -558,14 +559,14 @@ public class Home extends BaseBoundary {
 						msgTot = "Be careful, the total amount of your accounts is unsafe.";
 					
 					if (balance > 2000)
-						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is very safe!";
+						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is very safe!";
 					else if (balance > 0)
-						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is good.";
+						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is good.";
 					else
-						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is unsafe.";
+						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is unsafe.";
 				}
 				else if (tot >= 0.0 && balance < 0.0) {
-					ics = new ImageIcon(getClass().getResource("/icons/UBill_up64.png"));
+					ics = new ImageIcon(getClass().getResource("/icons/UBill_up_gr64.png"));
 					
 					if (tot > 10000)
 						msgTot = "The total amount of your accounts is very strong, you'll want to become a bank!";
@@ -575,26 +576,26 @@ public class Home extends BaseBoundary {
 						msgTot = "Be careful, the total amount of your accounts is unsafe.";
 					
 					if (balance < -1000)
-						msgBalance = "Attention, watch the balance of "+Login.getAccount().getAccount()+" account, is terrible!";
+						msgBalance = "Attention, watch the balance of <b>"+Login.getAccount().getAccount()+"</b> account, is terrible!";
 					else
-						msgBalance = "Attention, the balance of "+Login.getAccount().getAccount()+" account is not good.";
+						msgBalance = "Attention, the balance of <b>"+Login.getAccount().getAccount()+"</b> account is not good.";
 				}
 				else if (tot < 0.0 && balance >= 0.0) {
-					ics = new ImageIcon(getClass().getResource("/icons/UBill_down64.png"));
+					ics = new ImageIcon(getClass().getResource("/icons/UBill_down_rg64.png"));
 					if (tot < -5000)
 						msgTot = "Be careful, watch the total amount of your accounts, is terrible!";
 					else
 						msgTot = "Be careful, the total amount of your accounts is not good.";
 					
 					if (balance > 2000)
-						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is very safe!";
+						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is very safe!";
 					else if (balance > 0)
-						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is good.";
+						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is good.";
 					else
-						msgBalance = "The balance of "+Login.getAccount().getAccount()+" account is unsafe.";
+						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is unsafe.";
 				}
 				else if (tot < 0.0 && balance < 0.0) {
-					ics = new ImageIcon(getClass().getResource("/icons/UBill_down64.png"));
+					ics = new ImageIcon(getClass().getResource("/icons/UBill_down_rr64.png"));
 					
 					if (tot < -5000)
 						msgTot = "Be careful, watch the total amount of your accounts, is terrible!";
@@ -602,9 +603,9 @@ public class Home extends BaseBoundary {
 						msgTot = "Be careful, the total amount of your accounts is not good.";
 					
 					if (balance < -1000)
-						msgBalance = "Attention, watch the balance of "+Login.getAccount().getAccount()+" account, is terrible!";
+						msgBalance = "Attention, watch the balance of <b>"+Login.getAccount().getAccount()+"</b> account, is terrible!";
 					else
-						msgBalance = "Attention, the balance of "+Login.getAccount().getAccount()+" account is not good.";
+						msgBalance = "Attention, the balance of <b>"+Login.getAccount().getAccount()+"</b> account is not good.";
 				}
 				
 				this.uncleLabel.setIcon(ics);
