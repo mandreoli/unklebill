@@ -14,6 +14,7 @@
     <property name="address" column="ADDRESS"/>
     <property name="mail" column="MAIL"/>
     <property name="currency" column="CURRENCY"/>
+    <property name="lang" column="LANG"/>
     <property name="auto" column="AUTO"/>
   </class>
 </hibernate-mapping>

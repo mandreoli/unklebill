@@ -40,10 +40,8 @@ import java.awt.Font;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import javax.swing.SwingConstants;
 import datatype.Users;
-
 import executor.Login;
 
 public class Main extends BaseBoundary {
@@ -89,7 +87,7 @@ public class Main extends BaseBoundary {
 			mainFrame.setResizable(false);
 			mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			mainFrame.setJMenuBar(getMenuBar());
-			mainFrame.setContentPane(getMainPane());			
+			mainFrame.setContentPane(getMainPane());		
 			mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
 				public void windowClosing(java.awt.event.WindowEvent e) {
 					int flag = confirm("Are you sure to exit from UBill?");
@@ -336,7 +334,7 @@ public class Main extends BaseBoundary {
 		statBtn.setEnabled(stats);
 	}
 	
-	private void open(URI uri) {
+	private void open(URI uri) { 
         if (Desktop.isDesktopSupported()) {
         	Desktop desktop = Desktop.getDesktop();
             try {

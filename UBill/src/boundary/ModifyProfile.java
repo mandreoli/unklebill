@@ -41,6 +41,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import datatype.Currency;
+import datatype.Language;
 import executor.FieldParser;
 import executor.Login;
 import store.User;
@@ -50,7 +51,7 @@ import store.User;
 public class ModifyProfile extends BaseBoundary {
 	
 	private int wWidth = 320;
-	private int wHeight = 260;
+	private int wHeight = 280;
 	private JDialog mainDialog = null;
 	private JPanel mainPane = null;
 	private JButton exitBtn = null;
@@ -64,6 +65,8 @@ public class ModifyProfile extends BaseBoundary {
 	private JComboBox currencyBox = null;
 	private JCheckBox autoCheck = null;
 	private User user = null;
+	private JLabel langLabel = null;
+	private JComboBox langBox = null;
 	
 	
 	public ModifyProfile(User user) {
@@ -198,9 +201,10 @@ public class ModifyProfile extends BaseBoundary {
 			mainPane.add(pwd2Text);
 			
 			currencyBox = new JComboBox(Currency.values());
+			currencyBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			currencyBox.setBounds(118, 157, 80, 24);
 			currencyBox.setToolTipText("Default currency");
-			currencyBox.setSelectedItem(user.getCurrency());
+			currencyBox.setSelectedItem(Currency.valueOf(user.getCurrency()));
 			mainPane.add(currencyBox);
 			
 			autoCheck = new JCheckBox();
@@ -212,8 +216,20 @@ public class ModifyProfile extends BaseBoundary {
 			autoCheck.setBounds(194, 156, 98, 24);
 			mainPane.add(autoCheck);
 			
-			catchTypedField(userText, pwdText, pwd2Text, nameText);
+			langLabel = new JLabel("Language");
+			langLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			langLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			langLabel.setBounds(45, 189, 69, 16);
+			mainPane.add(langLabel);
 			
+			langBox = new JComboBox(Language.values());
+			langBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+			langBox.setToolTipText("Select your language");
+			langBox.setBounds(118, 185, 80, 24);
+			langBox.setSelectedItem(Language.valueOf(user.getLang()));	
+			mainPane.add(langBox);
+			
+			catchTypedField(userText, pwdText, pwd2Text, nameText);
 		}
 		return mainPane;
 	}
@@ -229,7 +245,7 @@ public class ModifyProfile extends BaseBoundary {
 			exitBtn.setToolTipText("Cancel modifies");
 			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/error16.png")));
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			exitBtn.setBounds(20, 197, 90, 30);
+			exitBtn.setBounds(20, 217, 90, 30);
 		}
 		return exitBtn;
 	}
@@ -244,9 +260,10 @@ public class ModifyProfile extends BaseBoundary {
 						user.setName(nameText.getText());
 						user.setUser(userText.getText());
 						user.setPassword(new String(pwdText.getPassword()));
-						user.setCurrency(currencyBox.getSelectedItem().toString());
+						user.setCurrency(currencyBox.getSelectedItem().toString());	
+						user.setLang(langBox.getSelectedItem().toString());
 						user.setAuto(autoCheck.isSelected());
-						user.updateUser(oldUser);			
+						user.updateUser(oldUser);		
 						ok("Profile updated with success!");
 						Login.setUser(user);
 						mainDialog.dispose();						
@@ -258,7 +275,7 @@ public class ModifyProfile extends BaseBoundary {
 			saveBtn.setToolTipText("Save modifies");
 			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/ok16.png")));
 			saveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			saveBtn.setLocation(210, 197);
+			saveBtn.setLocation(210, 217);
 			saveBtn.setEnabled(false);
 			saveBtn.setSize(new Dimension(90, 30));
 		}

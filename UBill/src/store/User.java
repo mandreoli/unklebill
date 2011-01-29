@@ -35,23 +35,25 @@ public class User {
 	private String address = null;
 	private String mail = null;
 	private String currency = null;
+	private String lang = null;
 	private boolean auto = false;
 	
 	public User() {
 		
 	}
 	
-	public User(String user, String password, String name, String address, String mail, String currency, boolean auto) {
+	public User(String user, String password, String name, String address, String mail, String currency, String lang, boolean auto) {
 		this.user = user;
 		this.password = password;
 		this.name = name;
 		this.address = address;
 		this.mail = mail;
 		this.currency = currency;
+		this.lang = lang;
 		this.auto = auto;
 	}
 	
-	public User(int id, String user, String password, String name, String address, String mail, String currency, boolean auto) {
+	public User(int id, String user, String password, String name, String address, String mail, String currency, String lang, boolean auto) {
 		this.id = id;
 		this.user = user;
 		this.password = password;
@@ -59,6 +61,7 @@ public class User {
 		this.address = address;
 		this.mail = mail;
 		this.currency = currency;
+		this.lang = lang;
 		this.auto = auto;
 	}
 
@@ -118,6 +121,14 @@ public class User {
 		return this.currency;
 	}
 
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
+
+	public String getLang() {
+		return this.lang;
+	}
+
 	public void setAuto(boolean auto) {
 		this.auto = auto;
 	}
@@ -174,7 +185,7 @@ public class User {
 		
 		User u = null;
 		if (loaded != null)
-			u = new User(loaded.getId(), loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getAddress(), loaded.getMail(), loaded.getCurrency(), loaded.isAuto()); 
+			u = new User(loaded.getId(), loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getAddress(), loaded.getMail(), loaded.getCurrency(), loaded.getLang(), loaded.isAuto()); 
 		
 		return u;
 	}
@@ -187,7 +198,7 @@ public class User {
 		
 		User u = null;
 		if (loaded != null)
-			u = new User(loaded.getId(), loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getAddress(), loaded.getMail(), loaded.getCurrency(), loaded.isAuto()); 
+			u = new User(loaded.getId(), loaded.getUser(), loaded.getPassword(), loaded.getName(), loaded.getAddress(), loaded.getMail(), loaded.getCurrency(), loaded.getLang(), loaded.isAuto()); 
 		
 		return u;
 	}
