@@ -35,8 +35,11 @@ import javax.swing.JButton;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.AbstractAction;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
@@ -358,15 +361,26 @@ public class Management extends BaseBoundary {
 			addEntranceBtn.setIcon(new ImageIcon(getClass().getResource("/icons/entrance16.png")));
 			addEntranceBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					InsertTransaction ins = new InsertTransaction(0, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
-					calculateBalance(ins.getTransaction());
-					delTransBtn.setEnabled(false);
-					modTransBtn.setEnabled(false);
-					showLastCell(entranceTable);					
+					entranceActionPerformed();
 				}
+			});
+			managePane.getInputMap().put(KeyStroke.getKeyStroke("F1"), "");
+			managePane.getActionMap().put("", new AbstractAction() {
+				private static final long serialVersionUID = 1L;
+				public void actionPerformed(ActionEvent e) {
+			    	entranceActionPerformed();
+			    }
 			});
 		}
 		return addEntranceBtn;
+	}
+	
+	private void entranceActionPerformed() {
+		InsertTransaction ins = new InsertTransaction(0, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
+		calculateBalance(ins.getTransaction());
+		delTransBtn.setEnabled(false);
+		modTransBtn.setEnabled(false);
+		showLastCell(entranceTable);
 	}
 	
 	private JButton getAddExitBtn() {
