@@ -20,6 +20,7 @@
 
 package executor;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.logging.FileHandler;
@@ -40,9 +41,10 @@ public class UBill {
         logManager.reset();
 
         // log file max size 10K, 3 rolling files, append-on-open
+        createDir(System.getProperty("user.home")+"/.UBill/");
         Handler fileHandler = null;
-		try {
-			fileHandler = new FileHandler(System.getProperty("user.home")+"/.UBill/log.txt", 10000, 3, true);
+		try {			
+			fileHandler = new FileHandler(System.getProperty("user.home")+"/.UBill/log", 10000, 3, true);
 		} catch (SecurityException e1) {
 			System.err.println("Security exception: "+e1);
 		} catch (IOException e1) {
@@ -76,5 +78,16 @@ public class UBill {
         }
 		new SplashScreen();
 	}
+	
+	private static void createDir(String path) {
+	    String dir = path;
+	    boolean success = (new File(dir)).mkdir();
 
+	    if (success) {
+	    	System.out.println("Created dir: "+dir);
+	    }
+	    else {
+	    	System.err.println("Error while creating dir: "+dir);
+	    }
+	}
 }

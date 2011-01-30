@@ -545,43 +545,60 @@ public class Home extends BaseBoundary {
 				String msgTot = "";
 				String msgBalance = "";
 				ImageIcon ics = null;
+				int zeroB = 0;
+				int zeroA = 0;
 				double tot = calculateTotalBalance();
 				double balance = Login.getAccount().getBalance();
 				
-				if (tot >= 0.0 && balance >= 0.0) {
-					ics = new ImageIcon(getClass().getResource("/icons/UBill_up_gg64.png"));
-					
+				if (tot >= 0.0 && balance >= 0.0) {					
 					if (tot > 10000)
 						msgTot = "The total amount of your accounts is very strong, you'll want to become a bank!";
 					else if (tot > 0)
 						msgTot = "The total amount of your accounts is ok.";
-					else
+					else {
 						msgTot = "Be careful, the total amount of your accounts is unsafe.";
+						zeroA++;
+					}
 					
 					if (balance > 2000)
 						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is very safe!";
 					else if (balance > 0)
 						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is good.";
-					else
+					else {
 						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is unsafe.";
-				}
-				else if (tot >= 0.0 && balance < 0.0) {
-					ics = new ImageIcon(getClass().getResource("/icons/UBill_up_gr64.png"));
+						zeroB++;
+					}
 					
+					if (zeroA == 0 && zeroB == 0)
+						ics = new ImageIcon(getClass().getResource("/icons/UBill_up_gg64.png"));
+					else if (zeroA == 0 && zeroB == 1)
+						ics = new ImageIcon(getClass().getResource("/icons/UBill_up_gy64.png"));
+					else if (zeroA == 0 && zeroB == 1)
+						ics = new ImageIcon(getClass().getResource("/icons/UBill_up_yg64.png"));
+					else
+						ics = new ImageIcon(getClass().getResource("/icons/UBill_up_yy64.png"));
+				}
+				else if (tot >= 0.0 && balance < 0.0) {		
 					if (tot > 10000)
 						msgTot = "The total amount of your accounts is very strong, you'll want to become a bank!";
 					else if (tot > 0)
 						msgTot = "The total amount of your accounts is ok.";
-					else
+					else {
 						msgTot = "Be careful, the total amount of your accounts is unsafe.";
+						zeroA++;
+					}
 					
 					if (balance < -1000)
 						msgBalance = "Attention, watch the balance of <b>"+Login.getAccount().getAccount()+"</b> account, is terrible!";
 					else
 						msgBalance = "Attention, the balance of <b>"+Login.getAccount().getAccount()+"</b> account is not good.";
+					
+					if (zeroA == 1)
+						ics = new ImageIcon(getClass().getResource("/icons/UBill_up_yr64.png"));
+					else
+						ics = new ImageIcon(getClass().getResource("/icons/UBill_up_gr64.png"));
 				}
 				else if (tot < 0.0 && balance >= 0.0) {
-					ics = new ImageIcon(getClass().getResource("/icons/UBill_down_rg64.png"));
 					if (tot < -5000)
 						msgTot = "Be careful, watch the total amount of your accounts, is terrible!";
 					else
@@ -591,12 +608,17 @@ public class Home extends BaseBoundary {
 						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is very safe!";
 					else if (balance > 0)
 						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is good.";
-					else
+					else {
+						zeroB++;
 						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is unsafe.";
-				}
-				else if (tot < 0.0 && balance < 0.0) {
-					ics = new ImageIcon(getClass().getResource("/icons/UBill_down_rr64.png"));
+					}
 					
+					if (zeroB == 1)
+						ics = new ImageIcon(getClass().getResource("/icons/UBill_up_ry64.png"));
+					else
+						ics = new ImageIcon(getClass().getResource("/icons/UBill_up_rg64.png"));
+				}
+				else if (tot < 0.0 && balance < 0.0) {			
 					if (tot < -5000)
 						msgTot = "Be careful, watch the total amount of your accounts, is terrible!";
 					else
@@ -606,6 +628,8 @@ public class Home extends BaseBoundary {
 						msgBalance = "Attention, watch the balance of <b>"+Login.getAccount().getAccount()+"</b> account, is terrible!";
 					else
 						msgBalance = "Attention, the balance of <b>"+Login.getAccount().getAccount()+"</b> account is not good.";
+				
+					ics = new ImageIcon(getClass().getResource("/icons/UBill_up_rr64.png"));
 				}
 				
 				this.uncleLabel.setIcon(ics);
