@@ -35,7 +35,8 @@ import javax.swing.JButton;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -364,7 +365,7 @@ public class Management extends BaseBoundary {
 					entranceActionPerformed();
 				}
 			});
-			managePane.getInputMap().put(KeyStroke.getKeyStroke("F1"), "");
+			managePane.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.CTRL_DOWN_MASK), addEntranceBtn);
 			managePane.getActionMap().put("", new AbstractAction() {
 				private static final long serialVersionUID = 1L;
 				public void actionPerformed(ActionEvent e) {
@@ -545,7 +546,7 @@ public class Management extends BaseBoundary {
 		if (yearBox.getSelectedItem().toString().equals("2010") && monthBox.getSelectedIndex() == 0) {
 			prevMonthBtn.setEnabled(false);
 		}
-		else if (yearBox.getSelectedItem().toString().equals("2060") && monthBox.getSelectedIndex() == 11) {
+		else if (yearBox.getSelectedItem().toString().equals("2100") && monthBox.getSelectedIndex() == 11) {
 			nextMonthBtn.setEnabled(false);
 		}
 		else {
