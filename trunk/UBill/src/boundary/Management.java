@@ -35,12 +35,8 @@ import javax.swing.JButton;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent;
-import javax.swing.AbstractAction;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
@@ -57,7 +53,6 @@ import datatype.Month;
 import datatype.Transactions;
 import store.Account;
 import store.Transaction;
-
 
 public class Management extends BaseBoundary {
 	
@@ -127,7 +122,8 @@ public class Management extends BaseBoundary {
 			managePane.add(getAccountLabel());
 			managePane.add(getBalanceLabel());
 			managePane.add(getAccountBalanceLabel());
-			managePane.add(getMonthTab());
+			managePane.add(getMonthTab());	
+
 		}
 		return managePane;
 	}
@@ -362,26 +358,15 @@ public class Management extends BaseBoundary {
 			addEntranceBtn.setIcon(new ImageIcon(getClass().getResource("/icons/entrance16.png")));
 			addEntranceBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					entranceActionPerformed();
+					InsertTransaction ins = new InsertTransaction(0, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
+					calculateBalance(ins.getTransaction());
+					delTransBtn.setEnabled(false);
+					modTransBtn.setEnabled(false);
+					showLastCell(entranceTable);
 				}
-			});
-			managePane.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.CTRL_DOWN_MASK), addEntranceBtn);
-			managePane.getActionMap().put("", new AbstractAction() {
-				private static final long serialVersionUID = 1L;
-				public void actionPerformed(ActionEvent e) {
-			    	entranceActionPerformed();
-			    }
 			});
 		}
 		return addEntranceBtn;
-	}
-	
-	private void entranceActionPerformed() {
-		InsertTransaction ins = new InsertTransaction(0, Date.getMonth(monthBox.getSelectedItem().toString()), Integer.valueOf(yearBox.getSelectedItem().toString()));
-		calculateBalance(ins.getTransaction());
-		delTransBtn.setEnabled(false);
-		modTransBtn.setEnabled(false);
-		showLastCell(entranceTable);
 	}
 	
 	private JButton getAddExitBtn() {

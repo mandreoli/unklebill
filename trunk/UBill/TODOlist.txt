@@ -1,4 +1,3 @@
 TODO LIST
 
-- invio login e shortcut
 - ordinamento tabella click su colonna. Basta cambiare la query ORDER BY

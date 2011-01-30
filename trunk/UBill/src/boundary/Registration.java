@@ -38,6 +38,8 @@ import executor.Login;
 import store.User;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import com.swtdesigner.FocusTraversalOnArray;
+import java.awt.Component;
 
 
 public class Registration extends BaseBoundary {
@@ -217,6 +219,7 @@ public class Registration extends BaseBoundary {
 			iconLabel.setIcon(new ImageIcon(getClass().getResource("/icons/user24.png")));
 			iconLabel.setBounds(10, 20, 24, 24);
 			signinPane.add(iconLabel);
+			signinPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{nameText, userText, pwdText, pwd2Text, registerBtn, prevBtn}));
 		}
 		return signinPane;
 	}

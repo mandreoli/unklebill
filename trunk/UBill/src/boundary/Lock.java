@@ -41,6 +41,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import com.swtdesigner.FocusTraversalOnArray;
+import java.awt.Component;
 
 public class Lock extends BaseBoundary {
 	
@@ -198,6 +200,7 @@ public class Lock extends BaseBoundary {
 			newBtn.setToolTipText("Add a new user");
 			newBtn.setBounds(20, 140, 90, 30);
 			loginPane.add(newBtn);
+			loginPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{userText, pwdText, loginBtn, newBtn}));
 		}
 		return loginPane;
 	}		
