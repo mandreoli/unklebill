@@ -95,7 +95,7 @@ public class Main extends BaseBoundary {
 						getMainFrame().dispose();
 						splash.dispose();
 				}
-			});			
+			});
 		}
 		return mainFrame;
 	}

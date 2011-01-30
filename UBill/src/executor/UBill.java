@@ -84,10 +84,10 @@ public class UBill {
 	    boolean success = (new File(dir)).mkdir();
 
 	    if (success) {
-	    	System.out.println("Created dir: "+dir);
+	    	System.out.println("Check directory "+dir+": CREATED");
 	    }
 	    else {
-	    	System.err.println("Error while creating dir: "+dir);
+	    	System.out.println("Check directory "+dir+": OK");
 	    }
 	}
 }
