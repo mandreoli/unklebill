@@ -313,7 +313,7 @@ public class Main extends BaseBoundary {
 			homeMenuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						open(new URI("http://www.drelvan.altervista.org/ubill/"));
+						open(new URI("http://www.unklebill.altervista.org/"));
 					} catch (URISyntaxException e1) {
 						System.err.println("Url syntax error "+e1);
 					}
