@@ -75,7 +75,7 @@ public class ErrorLog extends BaseBoundary {
 			mainDialog.setResizable(false);
 			mainDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);			
 			mainDialog.setContentPane(getMainPane());
-			mainDialog.setModal(true);
+			mainDialog.setModal(false);
 		}
 		return mainDialog;
 	}
@@ -198,5 +198,9 @@ public class ErrorLog extends BaseBoundary {
 			btnCopy.setBounds(115, 217, 90, 30);
 		}
 		return btnCopy;
+	}
+	
+	public void setErrorText(String record) {
+		this.textArea.setText(record);
 	}
 }

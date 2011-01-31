@@ -34,8 +34,10 @@ class LoggingOutputStream extends ByteArrayOutputStream {
     
     private String lineSeparator;
     
-    private Logger logger;
-    private Level level;
+    private Logger logger = null;
+    private Level level = null;
+    private ErrorLog er = null;
+    private String oldRecord = null;
     
     /**
      * Constructor
@@ -46,7 +48,7 @@ class LoggingOutputStream extends ByteArrayOutputStream {
         super();
         this.logger = logger;
         this.level = level;
-        lineSeparator = System.getProperty("line.separator");
+        lineSeparator = System.getProperty("line.separator");        
     }
     
     /**
@@ -55,7 +57,7 @@ class LoggingOutputStream extends ByteArrayOutputStream {
      * @throws java.io.IOException in case of error
      */
     public void flush() throws IOException {
-
+    	
         String record;
         synchronized(this) {
             super.flush();
@@ -68,6 +70,11 @@ class LoggingOutputStream extends ByteArrayOutputStream {
         }
 
         logger.logp(level, "", "", record);
-        new ErrorLog(record);
+        oldRecord += record;
+        if (this.er == null)
+        	this.er = new ErrorLog(oldRecord);
+        else {        	
+        	this.er.setErrorText(oldRecord);
+        }
     }
 }

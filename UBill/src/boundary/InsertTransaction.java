@@ -467,8 +467,10 @@ public class InsertTransaction extends BaseBoundary {
 			causalBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					InsertEntry ins = new InsertEntry();
-					categoryBox.addItem(ins.getEntry().getName());
-					categoryBox.setSelectedItem(ins.getEntry().getName());
+					//if (ins.getEntry() != null) {
+						categoryBox.addItem(ins.getEntry().getName());
+						categoryBox.setSelectedItem(ins.getEntry().getName());
+					//}
 				}
 			});
 			causalBtn.setToolTipText("Add new category");
