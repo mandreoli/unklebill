@@ -21,7 +21,6 @@
 package datatype;
 
 public enum Language {
-	ENG,
-	ITA
+	ENG
 }
 
