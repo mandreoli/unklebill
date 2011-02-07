@@ -556,20 +556,20 @@ public class Home extends BaseBoundary {
 				
 				if (tot >= 0.0 && balance >= 0.0) {					
 					if (tot > 10000)
-						msgTot = "The total amount of your accounts is very strong, you'll want to become a bank!";
+						msgTot = lang.home_accountMsg[0];
 					else if (tot > 0)
-						msgTot = "The total amount of your accounts is ok.";
+						msgTot = lang.home_accountMsg[1];
 					else {
-						msgTot = "Be careful, the total amount of your accounts is unsafe.";
+						msgTot = lang.home_accountMsg[2];
 						zeroA++;
 					}
 					
 					if (balance > 2000)
-						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is very safe!";
+						msgBalance = lang.home_balanceMsg[0]+" <b>"+Login.getAccount().getAccount()+"</b> "+lang.home_balanceMsg[1];
 					else if (balance > 0)
-						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is good.";
+						msgBalance = lang.home_balanceMsg[0]+" <b>"+Login.getAccount().getAccount()+"</b> "+lang.home_balanceMsg[2];
 					else {
-						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is unsafe.";
+						msgBalance = lang.home_balanceMsg[0]+" <b>"+Login.getAccount().getAccount()+"</b> "+lang.home_balanceMsg[3];
 						zeroB++;
 					}
 					
@@ -584,18 +584,18 @@ public class Home extends BaseBoundary {
 				}
 				else if (tot >= 0.0 && balance < 0.0) {		
 					if (tot > 10000)
-						msgTot = "The total amount of your accounts is very strong, you'll want to become a bank!";
+						msgTot = lang.home_accountMsg[0];
 					else if (tot > 0)
-						msgTot = "The total amount of your accounts is ok.";
+						msgTot = lang.home_accountMsg[1];
 					else {
-						msgTot = "Be careful, the total amount of your accounts is unsafe.";
+						msgTot = lang.home_accountMsg[2];
 						zeroA++;
 					}
 					
 					if (balance < -1000)
-						msgBalance = "Attention, watch the balance of <b>"+Login.getAccount().getAccount()+"</b> account, is terrible!";
+						msgBalance = lang.home_balanceMsg[4]+" <b>"+Login.getAccount().getAccount()+"</b> "+lang.home_balanceMsg[6];
 					else
-						msgBalance = "Attention, the balance of <b>"+Login.getAccount().getAccount()+"</b> account is not good.";
+						msgBalance = lang.home_balanceMsg[5]+" <b>"+Login.getAccount().getAccount()+"</b> "+lang.home_balanceMsg[7];
 					
 					if (zeroA == 1)
 						ics = new ImageIcon(getClass().getResource("/icons/UBill_up_yr64.png"));
@@ -604,17 +604,17 @@ public class Home extends BaseBoundary {
 				}
 				else if (tot < 0.0 && balance >= 0.0) {
 					if (tot < -5000)
-						msgTot = "Be careful, watch the total amount of your accounts, is terrible!";
+						msgTot = lang.home_accountMsg[3];
 					else
-						msgTot = "Be careful, the total amount of your accounts is not good.";
+						msgTot = lang.home_accountMsg[4];
 					
 					if (balance > 2000)
-						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is very safe!";
+						msgBalance = lang.home_balanceMsg[0]+" <b>"+Login.getAccount().getAccount()+"</b> "+lang.home_balanceMsg[1];
 					else if (balance > 0)
-						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is good.";
+						msgBalance = lang.home_balanceMsg[0]+" <b>"+Login.getAccount().getAccount()+"</b> "+lang.home_balanceMsg[2];
 					else {
+						msgBalance = lang.home_balanceMsg[0]+" <b>"+Login.getAccount().getAccount()+"</b> "+lang.home_balanceMsg[3];
 						zeroB++;
-						msgBalance = "The balance of <b>"+Login.getAccount().getAccount()+"</b> account is unsafe.";
 					}
 					
 					if (zeroB == 1)
@@ -624,14 +624,14 @@ public class Home extends BaseBoundary {
 				}
 				else if (tot < 0.0 && balance < 0.0) {			
 					if (tot < -5000)
-						msgTot = "Be careful, watch the total amount of your accounts, is terrible!";
+						msgTot = lang.home_accountMsg[3];
 					else
-						msgTot = "Be careful, the total amount of your accounts is not good.";
+						msgTot = lang.home_accountMsg[4];
 					
 					if (balance < -1000)
-						msgBalance = "Attention, watch the balance of <b>"+Login.getAccount().getAccount()+"</b> account, is terrible!";
+						msgBalance = lang.home_balanceMsg[4]+" <b>"+Login.getAccount().getAccount()+"</b> "+lang.home_balanceMsg[6];
 					else
-						msgBalance = "Attention, the balance of <b>"+Login.getAccount().getAccount()+"</b> account is not good.";
+						msgBalance = lang.home_balanceMsg[5]+" <b>"+Login.getAccount().getAccount()+"</b> "+lang.home_balanceMsg[7];
 				
 					ics = new ImageIcon(getClass().getResource("/icons/UBill_up_rr64.png"));
 				}
@@ -642,7 +642,7 @@ public class Home extends BaseBoundary {
 		}
 		else {
 			this.uncleLabel.setIcon(new ImageIcon(getClass().getResource("/icons/UBill64.png")));
-			this.msgLabel.setText("<html>Nice to meet you <b>"+Login.getUser().getName()+"</b>!<br/>My name is UnkleBill, I'll help you in the difficult choices.<br/>Now you can create and manage one or more accounts.</html>");
+			this.msgLabel.setText("<html>"+lang.home_welcomeMsg[0]+" <b>"+Login.getUser().getName()+"</b>!<br/>"+lang.home_welcomeMsg[1]+".</html>");
 		}
 	}
 }

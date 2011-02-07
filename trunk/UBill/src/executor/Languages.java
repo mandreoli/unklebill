@@ -60,6 +60,9 @@ public class Languages {
 	public String home_titleManageAcc = null;
 	public String[] home_delBtnMsg = new String[4];
 	public String[] home_delUserBtnMsg = new String[2];
+	public String[] home_welcomeMsg = new String[2];
+	public String[] home_accountMsg = new String[5];
+	public String[] home_balanceMsg = new String[8];
 	
 	public Languages(String lang) {
 		this.lang = lang;
@@ -121,6 +124,21 @@ public class Languages {
 		home_delBtnMsg[3] = "You are deleting all<br/>transtactions for this account.<br/>Continue anyway?";
 		home_delUserBtnMsg[0] = "Are you sure to delete";
 		home_delUserBtnMsg[1] = "You are deleting all<br/>accounts for this user.<br/>Continue anyway?";
+		home_welcomeMsg[0] = "Nice to meet you";
+		home_welcomeMsg[1] = "My name is UnkleBill, I'll help you in the difficult choices.<br/>Now you can create and manage one or more accounts";
+		home_accountMsg[0] = "The total amount of your accounts is very strong, you'll want to become a bank!";
+		home_accountMsg[1] = "The total amount of your accounts is ok.";
+		home_accountMsg[2] = "Be careful, the total amount of your accounts is unsafe.";
+		home_accountMsg[3] = "Be careful, watch the total amount of your accounts, is terrible!";
+		home_accountMsg[4] = "Be careful, the total amount of your accounts is not good.";
+		home_balanceMsg[0] = "The balance of";
+		home_balanceMsg[1] = "account is very safe!";
+		home_balanceMsg[2] = "account is good.";
+		home_balanceMsg[3] = "account is unsafe.";
+		home_balanceMsg[4] = "Attention, watch the balance of";
+		home_balanceMsg[5] = "Attention, the balance of";
+		home_balanceMsg[6] = "account, is terrible!";
+		home_balanceMsg[7] = "account is not good.";
 	}
 	
 	private void setItalianLang() {
@@ -162,5 +180,20 @@ public class Languages {
 		home_delBtnMsg[3] = "Stai cancellando tutte le <br/>transazioni di questo conto.<br/>Continuare?";
 		home_delUserBtnMsg[0] = "Se sicuro di cancellare";
 		home_delUserBtnMsg[1] = "Stai cancellando tutti i <br/>conti di questo utente.<br/>Continuare?";
+		home_welcomeMsg[0] = "Piacere di conoscerti";
+		home_welcomeMsg[1] = "Il mio nome è UnkleBill, Ti aiuterò nelle scelte difficili.<br/>Adesso potrai creare e gestire uno o più conti";
+		home_accountMsg[0] = "Il saldo totale dei tuoi conti è vreramente alto, diventerai una banca!";
+		home_accountMsg[1] = "Il saldo totale dei tuoi conti è ok.";
+		home_accountMsg[2] = "Fai attenzione il saldo totale dei tuoi conti non è sicuro.";
+		home_accountMsg[3] = "Fai attenzione il saldo totale dei tuoi conti è terribile!";
+		home_accountMsg[4] = "Fai attenzione il saldo totale dei tuoi conti non è buono.";
+		home_balanceMsg[0] = "Il bilancio di";
+		home_balanceMsg[1] = "è veramente sicuro.";
+		home_balanceMsg[2] = "è buono.";
+		home_balanceMsg[3] = "non è sicuro.";
+		home_balanceMsg[4] = "Attenzione, guarda il bilancio di";
+		home_balanceMsg[5] = "Attenzione, il bilancio di";
+		home_balanceMsg[6] = "è terribile!";
+		home_balanceMsg[7] = "non è buono.";
 	}
 }
