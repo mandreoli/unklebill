@@ -28,6 +28,7 @@ import datatype.Accounts;
 import datatype.Date;
 import datatype.Transactions;
 import executor.FieldParser;
+import executor.Languages;
 import executor.Login;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
@@ -79,14 +80,17 @@ public class Home extends BaseBoundary {
 	private JPanel totalBalancePane = null;
 	private JLabel totalBalanceLabel = null;
 	private JLabel userLabel = null;
-	private JButton delUserBtn;
-	private JLabel uncleLabel;
-	private JLabel msgBackgroundLabel;
-	private JLabel msgLabel;
+	private JButton delUserBtn = null;
+	private JLabel uncleLabel = null;
+	private JLabel msgBackgroundLabel = null;
+	private JLabel msgLabel = null;
+	private Languages lang = Login.getLang();
+	
 	
 	public Home(JPanel mainPane, Main main) {
 		this.main = main;
 		mainPane.add(getHomePane(), BorderLayout.CENTER);
+		this.setLanguage(lang);
 	}
 	
 	/**
@@ -119,7 +123,7 @@ public class Home extends BaseBoundary {
 		if (manageAccountsPane == null) {
 			manageAccountsPane = new JPanel();
 			manageAccountsPane.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
-			manageAccountsPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Manage accounts", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
+			manageAccountsPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), lang.home_titleManageAcc, TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
 			manageAccountsPane.setBounds(6, 162, 464, 260);
 			manageAccountsPane.setLayout(null);			
 			manageAccountsPane.add(getMsgLabel());
@@ -239,7 +243,7 @@ public class Home extends BaseBoundary {
 			});
 			modBtn.setEnabled(false);
 			modBtn.setIcon(new ImageIcon(getClass().getResource("/icons/modAccount24.png")));
-			modBtn.setToolTipText("Edit account");
+			modBtn.setToolTipText(lang.home_modBtnTip);
 			modBtn.setBounds(165, 145, 32, 32);
 		}
 		return modBtn;
@@ -255,7 +259,7 @@ public class Home extends BaseBoundary {
 				}
 			});
 			showBtn.setEnabled(false);
-			showBtn.setToolTipText("Show account details");
+			showBtn.setToolTipText(lang.home_showBtnTip);
 			showBtn.setIcon(new ImageIcon(getClass().getResource("/icons/viewAccount24.png")));
 			showBtn.setBounds(165, 110, 32, 32);
 		}
@@ -264,7 +268,7 @@ public class Home extends BaseBoundary {
 	
 	private JButton getBtnAdd() {
 		if (btnAdd == null) {
-			btnAdd = new JButton("Add");
+			btnAdd = new JButton(lang.home_addBtn);
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					new InsertAccount();
@@ -275,7 +279,7 @@ public class Home extends BaseBoundary {
 			btnAdd.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnAdd.setHorizontalTextPosition(SwingConstants.RIGHT);
 			btnAdd.setIcon(new ImageIcon(getClass().getResource("/icons/add16.png")));
-			btnAdd.setToolTipText("Add an account");
+			btnAdd.setToolTipText(lang.home_addBtnTip);
 			btnAdd.setBounds(10, 225, 75, 29);
 		}
 		return btnAdd;
@@ -283,7 +287,7 @@ public class Home extends BaseBoundary {
 	
 	private JButton getBtnRemove() {
 		if (btnRemove == null) {
-			btnRemove = new JButton("Del");			
+			btnRemove = new JButton(lang.home_delBtn);			
 			btnRemove.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					boolean isPrimary = false;
@@ -292,12 +296,12 @@ public class Home extends BaseBoundary {
 					
 					if (Login.getAccount() != null && account.getAccount().equals(Login.getAccount().getAccount())) {
 							isPrimary = true;
-							primaryString = "This is your primary account.<br/>";
+							primaryString = lang.home_delBtnMsg[0]+".<br/>";
 					}
 					
-					if (confirm("You are deleting <b>"+listAccounts.getSelectedValue().toString()+"</b>.<br/>"+primaryString+"Are you sure?") == 0) {						
+					if (confirm(lang.home_delBtnMsg[1]+" <b>"+listAccounts.getSelectedValue().toString()+"</b>.<br/>"+primaryString+lang.home_delBtnMsg[2]) == 0) {						
 						if (Transactions.loadTransactions(Login.getUser().getUser(), account.getAccount()).getNumTransactions() > 0) {
-							if (abort("You are deleting all<br/>transtactions for this account.<br/>Continue anyway?") == 0) {
+							if (abort(lang.home_delBtnMsg[3]) == 0) {
 								Transactions.deleteTransactions(Login.getUser().getUser(), account.getAccount());
 								accounts.getAccount(account.getAccount()).deleteAccount();								
 							}
@@ -317,7 +321,7 @@ public class Home extends BaseBoundary {
 			btnRemove.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnRemove.setHorizontalTextPosition(SwingConstants.LEFT);
 			btnRemove.setIcon(new ImageIcon(getClass().getResource("/icons/del16.png")));
-			btnRemove.setToolTipText("Remove selected account");
+			btnRemove.setToolTipText(lang.home_delBtnTip);
 			btnRemove.setBounds(85, 225, 75, 29);
 			btnRemove.setEnabled(false);
 		}
@@ -326,7 +330,7 @@ public class Home extends BaseBoundary {
 	
 	private JLabel getListLabel() {
 		if (listLabel == null) {
-			listLabel = new JLabel("Created accounts");
+			listLabel = new JLabel(lang.home_labelList);
 			listLabel.setIcon(new ImageIcon(Home.class.getResource("/icons/accounts16.png")));
 			listLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			listLabel.setBounds(10, 85, 150, 24);
@@ -343,14 +347,14 @@ public class Home extends BaseBoundary {
 			
 			Date date = new Date(account.getCreation());
 			String text = Date.getMonth(date.getMonth())+" "+Date.getDay(date.getDay())+", "+date.getYear();
-			String prim = "NO";
+			String prim = lang.no;
 			
 			if (account.isUsable())
-				prim = "YES";
+				prim = lang.yes;
 			
 			this.accountLabel.setText(account.getAccount());
-			this.createLabel.setText("<html><b>Last modified:</b>  "+text+"</html>");
-			this.primaryLabel.setText("<html><b>Primary:</b> "+prim+"</html>");
+			this.createLabel.setText("<html><b>"+lang.home_createLabel+":</b>  "+text+"</html>");
+			this.primaryLabel.setText("<html><b>"+lang.home_primaryLabel+":</b> "+prim+"</html>");
 			
 			double value = account.getBalance();
 			String sign = "";
@@ -364,12 +368,12 @@ public class Home extends BaseBoundary {
 			else
 				this.balanceLabel.setForeground(neutro);
 			
-			this.balanceLabel.setText("<html><b>Current balance</b><br/>"+sign+account.getBalance()+" "+account.getCurrency()+"</html>");
-			this.descrLabel.setText("<html><b>Description</b><br/>"+account.getDescription()+"</html>");
+			this.balanceLabel.setText("<html><b>"+lang.home_balanceLabel+"</b><br/>"+sign+account.getBalance()+" "+account.getCurrency()+"</html>");
+			this.descrLabel.setText("<html><b>"+lang.home_descrLabel+"</b><br/>"+account.getDescription()+"</html>");
 		}
 		else {
-			this.accountLabel.setText("No primary account");			
-			this.createLabel.setText("<html>Select an account and set it as primary</html>");
+			this.accountLabel.setText(lang.home_primaryWarning);			
+			this.createLabel.setText("<html>"+lang.home_primaryWarningTip+"</html>");
 			this.primaryLabel.setText("<html></html>");
 			this.balanceLabel.setText("<html></html>");
 			this.descrLabel.setText("<html></html>");
@@ -384,9 +388,9 @@ public class Home extends BaseBoundary {
 	
 	private JButton getModAccBtn() {
 		if (modAccBtn == null) {
-			modAccBtn = new JButton("Profile");
+			modAccBtn = new JButton(lang.home_modAccBtn);
 			modAccBtn.setIcon(new ImageIcon(getClass().getResource("/icons/setting16.png")));
-			modAccBtn.setToolTipText("Modify your profile");
+			modAccBtn.setToolTipText(lang.home_modAccBtnTip);
 			modAccBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			modAccBtn.setBounds(15, 55, 90, 30);
 			modAccBtn.addActionListener(new ActionListener() {
@@ -402,14 +406,14 @@ public class Home extends BaseBoundary {
 	
 	private JButton getBtnCategory() {
 		if (btnCategory == null) {
-			btnCategory = new JButton("Labels");
+			btnCategory = new JButton(lang.home_categBtn);
 			btnCategory.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					new ModifyLabels(Login.getUser());
 				}
 			});
 			btnCategory.setIcon(new ImageIcon(getClass().getResource("/icons/category16.png")));
-			btnCategory.setToolTipText("Manage your categories");
+			btnCategory.setToolTipText(lang.home_categBtnTip);
 			btnCategory.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnCategory.setBounds(105, 55, 90, 30);
 		}
@@ -429,7 +433,7 @@ public class Home extends BaseBoundary {
 	private JPanel getTotalBalancePane() {
 		if (totalBalancePane == null) {
 			totalBalancePane = new JPanel();
-			totalBalancePane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Total balance", TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
+			totalBalancePane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), lang.home_titleTotalBalance, TitledBorder.LEFT, TitledBorder.TOP, new Font("Lucida Grande", Font.PLAIN, 12), Color.DARK_GRAY));
 			totalBalancePane.setBounds(6, 90, 464, 72);
 			totalBalancePane.setLayout(null);
 			totalBalancePane.add(getTotalLabel());
@@ -441,7 +445,7 @@ public class Home extends BaseBoundary {
 	private JLabel getTotalBalanceLabel() {
 		if (totalBalanceLabel == null) {
 			totalBalanceLabel = new JLabel("");
-			totalBalanceLabel.setToolTipText("This is the total of your accounts");
+			totalBalanceLabel.setToolTipText(lang.home_totalBalanceTip);
 			totalBalanceLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
 			totalBalanceLabel.setBounds(57, 18, 210, 48);
 			updateBalanceLabel();
@@ -478,13 +482,13 @@ public class Home extends BaseBoundary {
 	}
 	private JButton getDelUserBtn() {
 		if (delUserBtn == null) {
-			delUserBtn = new JButton("Delete");
+			delUserBtn = new JButton(lang.home_delUserBtn);
 			delUserBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (confirm("Are you sure to delete<br/><b>"+Login.getUser().getName()+"</b>?") == 0) {
+					if (confirm(lang.home_delUserBtnMsg[0]+"<br/><b>"+Login.getUser().getName()+"</b>?") == 0) {
 						Accounts accounts = Accounts.loadAccounts(Login.getUser().getUser());
 						if (accounts.getNumAccounts() > 0) {
-							if (abort("You are deleting all<br/>accounts for this user.<br/>Continue anyway?") == 0) {
+							if (abort(lang.home_delUserBtnMsg[1]) == 0) {
 								for (Account account : accounts.getAccounts()) {
 									Transactions.deleteTransactions(Login.getUser().getUser(), account.getAccount());
 									accounts.getAccount(account.getAccount()).deleteAccount();
@@ -501,7 +505,7 @@ public class Home extends BaseBoundary {
 				}
 			});
 			delUserBtn.setIcon(new ImageIcon(getClass().getResource("/icons/delUser16.png")));
-			delUserBtn.setToolTipText("Delete current user");
+			delUserBtn.setToolTipText(lang.home_delUserBtnTip);
 			delUserBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			delUserBtn.setBounds(375, 55, 90, 30);
 		}

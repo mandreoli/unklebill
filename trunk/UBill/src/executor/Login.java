@@ -32,6 +32,7 @@ public class Login {
 	
 	private static User user = null;		
 	private static Account account = null;
+	private static Languages lang = null;
 	
 	public static boolean checkUser(String username, char[] pwd) {
 		User loadedUser = User.loadUser(username, new String(pwd));
@@ -39,7 +40,7 @@ public class Login {
 		if (loadedUser == null)
 			return false;
 		
-		user = loadedUser;
+		setUser(loadedUser);
 		
 		return true;
 	}
@@ -53,7 +54,7 @@ public class Login {
 	}
 	
 	public static void logout(Main main, JPanel mainPane, JPanel panel) {
-		Login.user = null;
+		Login.user = null;		
 		main.enableNavigationButtons(false);
 		mainPane.remove(panel);
 		new Lock(mainPane, main);
@@ -62,10 +63,15 @@ public class Login {
 
 	public static void setUser(User user) {
 		Login.user = user;
+		Login.lang = new Languages(user.getLang());
 	}
 
 	public static User getUser() {
 		return user;
+	}
+	
+	public static Languages getLang() {
+		return lang;
 	}
 
 	public static void setAccount(Account account) {

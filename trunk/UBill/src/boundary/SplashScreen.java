@@ -61,7 +61,7 @@ public class SplashScreen extends JWindow {
 			licenseLabel.setBounds(6, 188, 408, 16);
 			mainPane.add(licenseLabel);
 			
-			JLabel devLabel = new JLabel("UnkleBill v1.0 developed by Michele Andreoli");
+			JLabel devLabel = new JLabel("UnkleBill v1.1 developed by Michele Andreoli");
 			devLabel.setForeground(new Color(51, 102, 204));
 			devLabel.setFont(new Font("Courier", Font.BOLD, 12));
 			devLabel.setHorizontalAlignment(SwingConstants.CENTER);
