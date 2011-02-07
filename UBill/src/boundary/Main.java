@@ -63,10 +63,9 @@ public class Main extends BaseBoundary {
 	private JMenu editMenu = null;
 	private JMenu helpMenu = null;
 	
-	
 	public Main(SplashScreen splash) {
 		this.splash = splash;
-		this.main = this;
+		this.main = this;		
 	}
 	
 	public void START() {		
@@ -80,7 +79,7 @@ public class Main extends BaseBoundary {
 		if (mainFrame == null) {
 			mainFrame = new JFrame();
 			mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/favico.png")));
-			mainFrame.setTitle("UnkleBill v1.0 - I want your... bills!");
+			mainFrame.setTitle("UnkleBill v1.1 - I want your... bills!");
 			mainFrame.setSize(new Dimension(this.wWidth, this.wHeight));		
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 			mainFrame.setLocation(new Point((d.width-wWidth)/2, (d.height-wHeight)/2));
@@ -106,13 +105,13 @@ public class Main extends BaseBoundary {
 			mainPane.setLayout(new BorderLayout());			
 			mainPane.add(getLeftPane(), BorderLayout.WEST);
 			enableNavigationButtons(false);
-			Users users = Users.loadUsers();
+			Users users = Users.loadUsers();			
 			if (users.getNumUsers() == 1) {
 				if (!users.getUsers().getFirst().isAuto())
 					new Lock(mainPane, this);
 				else {
 					Login.setUser(users.getUsers().getFirst());
-					Login.login(main, mainPane, new JPanel());				
+					Login.login(main, mainPane, new JPanel());					
 				}
 			}
 			else
