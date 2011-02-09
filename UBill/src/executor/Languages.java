@@ -38,23 +38,17 @@ public class Languages {
 	
 	public String home_modBtnTip = null;
 	public String home_showBtnTip = null;
-	public String home_addBtn = null;
-	public String home_addBtnTip = null;
-	public String home_delBtn = null;
-	public String home_delBtnTip = null;
+	public String[] home_addBtn = new String[2];
+	public String[] home_delBtn = new String[2];
 	public String home_labelList = null;	
 	public String home_createLabel = null;
 	public String home_primaryLabel = null;
 	public String home_balanceLabel = null;
 	public String home_descrLabel = null;
-	public String home_primaryWarning = null;
-	public String home_primaryWarningTip = null;
-	public String home_modAccBtn = null;
-	public String home_modAccBtnTip = null;
-	public String home_categBtn = null;
-	public String home_categBtnTip = null;
-	public String home_delUserBtn = null;
-	public String home_delUserBtnTip = null;
+	public String[] home_primaryWarning = new String[2];
+	public String[] home_modAccBtn = new String[2];
+	public String[] home_categBtn = new String[2];
+	public String[] home_delUserBtn = new String[2];
 	public String home_totalBalanceTip = null;
 	public String home_titleTotalBalance = null;
 	public String home_titleManageAcc = null;
@@ -63,6 +57,15 @@ public class Languages {
 	public String[] home_welcomeMsg = new String[2];
 	public String[] home_accountMsg = new String[5];
 	public String[] home_balanceMsg = new String[8];
+	
+	public String[] account_title = new String[2];
+	public String[] account_name = new String[2];
+	public String[] account_descr = new String[2];
+	public String[] account_balance = new String[2];
+	public String[] account_primary = new String[2];
+	public String[] account_cancelBtn = new String[2];
+	public String[] account_saveBtn = new String[4];
+	public String[] account_msg = new String[3];
 	
 	public Languages(String lang) {
 		this.lang = lang;
@@ -98,23 +101,23 @@ public class Languages {
 		
 		home_modBtnTip = "Edit account";
 		home_showBtnTip = "Show account details";
-		home_addBtn = "Add";
-		home_addBtnTip = "Add new account";
-		home_delBtn = "Del";
-		home_delBtnTip = "Remove selected account";
+		home_addBtn[0] = "Add";
+		home_addBtn[1] = "Add new account";
+		home_delBtn[0] = "Del";
+		home_delBtn[1] = "Remove selected account";
 		home_labelList = "Created accounts";		
 		home_createLabel = "Last modified";
 		home_primaryLabel = "Primary";
 		home_balanceLabel = "Current balance";
 		home_descrLabel = "Description";
-		home_primaryWarning = "No primary account";
-		home_primaryWarningTip = "Select an account and set it as primary";
-		home_modAccBtn = "Profile";
-		home_modAccBtnTip = "Modify your profile";
-		home_categBtn = "Labels";
-		home_categBtnTip = "Manage your categories";
-		home_delUserBtn = "Delete";
-		home_delUserBtnTip = "Delete current user";
+		home_primaryWarning[0] = "No primary account";
+		home_primaryWarning[1] = "Select an account and set it as primary";
+		home_modAccBtn[0] = "Profile";
+		home_modAccBtn[1] = "Modify your profile";
+		home_categBtn[0] = "Labels";
+		home_categBtn[1] = "Manage your categories";
+		home_delUserBtn[0] = "Delete";
+		home_delUserBtn[1] = "Delete current user";
 		home_totalBalanceTip = "This is the total of your accounts";
 		home_titleTotalBalance = "Total balance";
 		home_titleManageAcc = "Manage accounts";
@@ -139,6 +142,26 @@ public class Languages {
 		home_balanceMsg[5] = "Attention, the balance of";
 		home_balanceMsg[6] = "account, is terrible!";
 		home_balanceMsg[7] = "account is not good.";
+		
+		account_title[0] = "Add new account";
+		account_title[1] = "Modify this account";
+		account_name[0] = "Account name";
+		account_name[1] = "Unique account name";
+		account_descr[0] = "Description";
+		account_descr[1] = "Optional description";
+		account_balance[0] = "Balance";
+		account_balance[1] = "Current balance";
+		account_primary[0] = "Primary  ";
+		account_primary[1] = "Set default account";
+		account_cancelBtn[0] = "Cancel";
+		account_cancelBtn[1] = "Back to home";
+		account_saveBtn[0] = "Add";
+		account_saveBtn[1] = "Add this account";
+		account_saveBtn[2] = "Modify";
+		account_saveBtn[3] = "Modify this account";
+		account_msg[0] = "Account added<br/>with success.";
+		account_msg[1] = "Account modified<br/>with success.";
+		account_msg[2] = "The account name<br/>is already in use!";
 	}
 	
 	private void setItalianLang() {
@@ -154,23 +177,23 @@ public class Languages {
 		
 		home_modBtnTip = "Modifica conto";
 		home_showBtnTip = "Mostra dettagli conto";
-		home_addBtn = "Agg";
-		home_addBtnTip = "Aggiungi nuovo conto";
-		home_delBtn = "Rim";
-		home_delBtnTip = "Rimuovi conto selezionato";
+		home_addBtn[0] = "Agg";
+		home_addBtn[1] = "Aggiungi nuovo conto";
+		home_delBtn[0] = "Rim";
+		home_delBtn[1] = "Rimuovi conto selezionato";
 		home_labelList = "Conti creati";
 		home_createLabel = "Ultima modifica";
 		home_primaryLabel = "Primario";
 		home_balanceLabel = "Bilancio corrente";
 		home_descrLabel = "Descrizione";
-		home_primaryWarning = "Nessun conto primario";
-		home_primaryWarningTip = "Seleziona un conto e impostalo come primario";
-		home_modAccBtn = "Profilo";
-		home_modAccBtnTip = "Modifica il tuo profilo";
-		home_categBtn = "Cat.";
-		home_categBtnTip = "Gestisci le tue categorie";
-		home_delUserBtn = "Elimina";
-		home_delUserBtnTip = "Elimina questo profilo";
+		home_primaryWarning[0] = "Nessun conto primario";
+		home_primaryWarning[1] = "Seleziona un conto e impostalo come primario";
+		home_modAccBtn[0] = "Profilo";
+		home_modAccBtn[1] = "Modifica il tuo profilo";
+		home_categBtn[0] = "Categ.";
+		home_categBtn[1] = "Gestisci le tue categorie";
+		home_delUserBtn[0] = "Elimina";
+		home_delUserBtn[1] = "Elimina questo profilo";
 		home_totalBalanceTip = "Questo è il totale dei tuoi conti";
 		home_titleTotalBalance = "Bilancio totale";
 		home_titleManageAcc = "Gestisci conti";
@@ -195,5 +218,25 @@ public class Languages {
 		home_balanceMsg[5] = "Attenzione, il bilancio di";
 		home_balanceMsg[6] = "è terribile!";
 		home_balanceMsg[7] = "non è buono.";
+		
+		account_title[0] = "Aggiungi nuovo conto";
+		account_title[1] = "Modifica questo conto";
+		account_name[0] = "Nome conto";
+		account_name[1] = "Nome univoco del conto";
+		account_descr[0] = "Descrizione";
+		account_descr[1] = "Descrizione opzionale";
+		account_balance[0] = "Bilancio";
+		account_balance[1] = "Bilancio corrente";
+		account_primary[0] = "Primario  ";
+		account_primary[1] = "Imposta come conto primario";
+		account_cancelBtn[0] = "Chiudi";
+		account_cancelBtn[1] = "Ritorna alla home";
+		account_saveBtn[0] = "Salva";
+		account_saveBtn[1] = "Aggiungi questo conto";
+		account_saveBtn[2] = "Modifica";
+		account_saveBtn[3] = "Modifica questo conto";
+		account_msg[0] = "Conto aggiunto<br/>con successo.";
+		account_msg[1] = "Conto modificato<br/>con successo.";
+		account_msg[2] = "Il nome di questo conto<br/>è già in uso!";
 	}
 }

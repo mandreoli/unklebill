@@ -46,6 +46,16 @@ public class FieldParser {
 		return true;
 	}
 	
+	public static boolean checkCustomUserSpace(String user, int min, int max) {
+		String text = user.trim();
+		String regex = "^[A-Za-z0-9_\\s]{"+min+","+max+"}";
+		
+		if (!Pattern.matches(regex, text))
+			return false;
+		
+		return true;
+	}
+	
 	public static boolean checkPassword(char[] password) {
 		String text = new String(password);
 		String regex = "^[A-Za-z0-9]{4,15}";

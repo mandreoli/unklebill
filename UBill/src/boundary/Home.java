@@ -268,7 +268,7 @@ public class Home extends BaseBoundary {
 	
 	private JButton getBtnAdd() {
 		if (btnAdd == null) {
-			btnAdd = new JButton(lang.home_addBtn);
+			btnAdd = new JButton(lang.home_addBtn[0]);
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					new InsertAccount();
@@ -279,7 +279,7 @@ public class Home extends BaseBoundary {
 			btnAdd.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnAdd.setHorizontalTextPosition(SwingConstants.RIGHT);
 			btnAdd.setIcon(new ImageIcon(getClass().getResource("/icons/add16.png")));
-			btnAdd.setToolTipText(lang.home_addBtnTip);
+			btnAdd.setToolTipText(lang.home_addBtn[1]);
 			btnAdd.setBounds(10, 225, 75, 29);
 		}
 		return btnAdd;
@@ -287,7 +287,7 @@ public class Home extends BaseBoundary {
 	
 	private JButton getBtnRemove() {
 		if (btnRemove == null) {
-			btnRemove = new JButton(lang.home_delBtn);			
+			btnRemove = new JButton(lang.home_delBtn[0]);			
 			btnRemove.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					boolean isPrimary = false;
@@ -321,7 +321,7 @@ public class Home extends BaseBoundary {
 			btnRemove.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnRemove.setHorizontalTextPosition(SwingConstants.LEFT);
 			btnRemove.setIcon(new ImageIcon(getClass().getResource("/icons/del16.png")));
-			btnRemove.setToolTipText(lang.home_delBtnTip);
+			btnRemove.setToolTipText(lang.home_delBtn[1]);
 			btnRemove.setBounds(85, 225, 75, 29);
 			btnRemove.setEnabled(false);
 		}
@@ -372,8 +372,8 @@ public class Home extends BaseBoundary {
 			this.descrLabel.setText("<html><b>"+lang.home_descrLabel+"</b><br/>"+account.getDescription()+"</html>");
 		}
 		else {
-			this.accountLabel.setText(lang.home_primaryWarning);			
-			this.createLabel.setText("<html>"+lang.home_primaryWarningTip+"</html>");
+			this.accountLabel.setText(lang.home_primaryWarning[0]);			
+			this.createLabel.setText("<html>"+lang.home_primaryWarning[1]+"</html>");
 			this.primaryLabel.setText("<html></html>");
 			this.balanceLabel.setText("<html></html>");
 			this.descrLabel.setText("<html></html>");
@@ -388,9 +388,9 @@ public class Home extends BaseBoundary {
 	
 	private JButton getModAccBtn() {
 		if (modAccBtn == null) {
-			modAccBtn = new JButton(lang.home_modAccBtn);
+			modAccBtn = new JButton(lang.home_modAccBtn[0]);
 			modAccBtn.setIcon(new ImageIcon(getClass().getResource("/icons/setting16.png")));
-			modAccBtn.setToolTipText(lang.home_modAccBtnTip);
+			modAccBtn.setToolTipText(lang.home_modAccBtn[1]);
 			modAccBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			modAccBtn.setBounds(15, 55, 90, 30);
 			modAccBtn.addActionListener(new ActionListener() {
@@ -406,14 +406,14 @@ public class Home extends BaseBoundary {
 	
 	private JButton getBtnCategory() {
 		if (btnCategory == null) {
-			btnCategory = new JButton(lang.home_categBtn);
+			btnCategory = new JButton(lang.home_categBtn[0]);
 			btnCategory.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					new ModifyLabels(Login.getUser());
 				}
 			});
 			btnCategory.setIcon(new ImageIcon(getClass().getResource("/icons/category16.png")));
-			btnCategory.setToolTipText(lang.home_categBtnTip);
+			btnCategory.setToolTipText(lang.home_categBtn[1]);
 			btnCategory.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			btnCategory.setBounds(105, 55, 90, 30);
 		}
@@ -482,7 +482,7 @@ public class Home extends BaseBoundary {
 	}
 	private JButton getDelUserBtn() {
 		if (delUserBtn == null) {
-			delUserBtn = new JButton(lang.home_delUserBtn);
+			delUserBtn = new JButton(lang.home_delUserBtn[0]);
 			delUserBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (confirm(lang.home_delUserBtnMsg[0]+"<br/><b>"+Login.getUser().getName()+"</b>?") == 0) {
@@ -505,7 +505,7 @@ public class Home extends BaseBoundary {
 				}
 			});
 			delUserBtn.setIcon(new ImageIcon(getClass().getResource("/icons/delUser16.png")));
-			delUserBtn.setToolTipText(lang.home_delUserBtnTip);
+			delUserBtn.setToolTipText(lang.home_delUserBtn[1]);
 			delUserBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			delUserBtn.setBounds(375, 55, 90, 30);
 		}
