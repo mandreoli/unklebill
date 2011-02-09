@@ -41,6 +41,7 @@ import store.Account;
 import datatype.Currency;
 import datatype.Date;
 import executor.FieldParser;
+import executor.Languages;
 import executor.Login;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -65,11 +66,12 @@ public class InsertAccount extends BaseBoundary {
 	private JCheckBox primaryBox = null;
 	private Account account = null;
 	private JComboBox currencyBox = null;
-
+	private Languages lang = Login.getLang();
 	
 	
 	public InsertAccount() {
 		getMainDialog().setVisible(true);
+		this.setLanguage(lang);
 	}
 	
 	/**
@@ -85,9 +87,9 @@ public class InsertAccount extends BaseBoundary {
 			mainDialog = new JDialog();
 			mainDialog.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/favico.png")));
 			if (this.account != null)
-				mainDialog.setTitle("Modify this account");
+				mainDialog.setTitle(lang.account_title[1]);
 			else
-				mainDialog.setTitle("Add new account");
+				mainDialog.setTitle(lang.account_title[0]);
 			mainDialog.setSize(new Dimension(this.wWidth, this.wHeight));		
 			Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 			mainDialog.setLocation(new Point((d.width-wWidth)/2, (d.height-wHeight)/2));
@@ -108,22 +110,22 @@ public class InsertAccount extends BaseBoundary {
 			mainPane.add(getExitBtn());
 			mainPane.add(getSaveBtn());
 			
-			JLabel nameLabel = new JLabel("Account name");
+			JLabel nameLabel = new JLabel(lang.account_name[0]);
 			nameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			nameLabel.setFont(new Font("Lucida Grande", Font.BOLD, 12));
-			nameLabel.setToolTipText("Unique account name");
+			nameLabel.setToolTipText(lang.account_name[1]);
 			nameLabel.setBounds(20, 18, 90, 16);
 			mainPane.add(nameLabel);
 			
-			JLabel descrLabel = new JLabel("Description");
-			descrLabel.setToolTipText("Optional description");
+			JLabel descrLabel = new JLabel(lang.account_descr[0]);
+			descrLabel.setToolTipText(lang.account_descr[1]);
 			descrLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			descrLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			descrLabel.setBounds(6, 44, 104, 16);
 			mainPane.add(descrLabel);
 			
-			JLabel balanceLabel = new JLabel("Balance");
-			balanceLabel.setToolTipText("Current balance");
+			JLabel balanceLabel = new JLabel(lang.account_balance[0]);
+			balanceLabel.setToolTipText(lang.account_balance[1]);
 			balanceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			balanceLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			balanceLabel.setBounds(6, 137, 104, 16);
@@ -140,7 +142,6 @@ public class InsertAccount extends BaseBoundary {
 						nameText.setBackground(errorColor);
 				}
 			});
-			nameText.setToolTipText("Account name");
 			nameText.setFont(new Font("Lucida Grande", Font.BOLD, 12));
 			nameText.setBounds(120, 12, 180, 27);
 			mainPane.add(nameText);
@@ -166,7 +167,6 @@ public class InsertAccount extends BaseBoundary {
 						descrText.setBackground(errorColor);
 				}
 			});
-			descrText.setToolTipText("Optional description");
 			if (this.account != null) {
 				descrText.setText(this.account.getDescription());
 			}
@@ -184,7 +184,6 @@ public class InsertAccount extends BaseBoundary {
 						balanceText.setBackground(errorColor);
 				}
 			});
-			balanceText.setToolTipText("Beginning balance");
 			balanceText.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			balanceText.setColumns(10);
 			balanceText.setBounds(120, 131, 90, 27);
@@ -202,13 +201,13 @@ public class InsertAccount extends BaseBoundary {
 
 	private JButton getExitBtn() {
 		if (exitBtn == null) {
-			exitBtn = new JButton("Cancel");
+			exitBtn = new JButton(lang.account_cancelBtn[0]);
 			exitBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					getMainDialog().dispose();
 				}
 			});
-			exitBtn.setToolTipText("Back to home");
+			exitBtn.setToolTipText(lang.account_cancelBtn[1]);
 			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/error16.png")));
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			exitBtn.setBounds(20, 198, 90, 30);
@@ -226,11 +225,11 @@ public class InsertAccount extends BaseBoundary {
 						if (Account.checkFreeAccount(nameText.getText(), Login.getUser().getUser())) {
 							Account account = new Account(nameText.getText(), Login.getUser().getUser(), descrText.getText(), pay, Date.getCurrentDate(), currencyBox.getSelectedItem().toString(), primaryBox.isSelected());
 							account.saveAccount();
-							ok("Account added<br/>with success.");
+							ok(lang.account_msg[0]);
 							mainDialog.dispose();
 						}
 						else
-							fail("The account name<br/>is already in use!");
+							fail(lang.account_msg[2]);
 					}
 					else {
 						if (Account.checkUpdatableAccount(Login.getUser().getUser(), nameText.getText(), account.getId())) {
@@ -242,21 +241,21 @@ public class InsertAccount extends BaseBoundary {
 							account.setCreation(Date.getCurrentDate());
 							account.setCurrency(currencyBox.getSelectedItem().toString());
 							account.updateAccount(oldAccount);						
-							ok("Account modified<br/>with success.");
+							ok(lang.account_msg[1]);
 							mainDialog.dispose();
 						}
 						else
-							fail("The account name<br/>is already in use!");
+							fail(lang.account_msg[2]);
 					}
 				}
 			});
 			if (this.account == null) {
-				saveBtn.setToolTipText("Add this account");
-				saveBtn.setText("Add");
+				saveBtn.setToolTipText(lang.account_saveBtn[1]);
+				saveBtn.setText(lang.account_saveBtn[0]);
 			}
 			else {
-				saveBtn.setToolTipText("Modify this account");
-				saveBtn.setText("Modify");
+				saveBtn.setToolTipText(lang.account_saveBtn[3]);
+				saveBtn.setText(lang.account_saveBtn[2]);
 			}
 			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/ok16.png")));
 			saveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
@@ -279,8 +278,8 @@ public class InsertAccount extends BaseBoundary {
 	
 	private JCheckBox getPrimaryBox() {
 		if (primaryBox == null) {
-			primaryBox = new JCheckBox("Primary  ");
-			primaryBox.setToolTipText("Set default account");
+			primaryBox = new JCheckBox(lang.account_primary[0]);
+			primaryBox.setToolTipText(lang.account_primary[1]);
 			primaryBox.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			primaryBox.setHorizontalTextPosition(SwingConstants.LEFT);
 			primaryBox.setHorizontalAlignment(SwingConstants.RIGHT);

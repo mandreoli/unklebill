@@ -193,7 +193,7 @@ public class InsertEntry extends BaseBoundary {
 				@Override
 				public void keyReleased(KeyEvent e) {
 					catchTypedField(categoryText, descrText);
-					if (FieldParser.checkCustomUser(categoryText.getText(), 2, 25))
+					if (FieldParser.checkCustomUserSpace(categoryText.getText(), 2, 25))
 						categoryText.setBackground(normalColor);
 					else
 						categoryText.setBackground(errorColor);
@@ -253,7 +253,7 @@ public class InsertEntry extends BaseBoundary {
 	}
 	
 	private void catchTypedField(JTextField category, JTextArea descr) {
-		if (FieldParser.checkCustomUser(category.getText(), 2, 25)) {
+		if (FieldParser.checkCustomUserSpace(category.getText(), 2, 25)) {
 			saveBtn.setEnabled(true);
 		}
 		else {			 
