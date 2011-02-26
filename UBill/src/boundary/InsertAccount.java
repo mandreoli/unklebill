@@ -201,13 +201,13 @@ public class InsertAccount extends BaseBoundary {
 
 	private JButton getExitBtn() {
 		if (exitBtn == null) {
-			exitBtn = new JButton(lang.account_cancelBtn[0]);
+			exitBtn = new JButton(lang.cancelBtn[0]);
 			exitBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					getMainDialog().dispose();
 				}
 			});
-			exitBtn.setToolTipText(lang.account_cancelBtn[1]);
+			exitBtn.setToolTipText(lang.cancelBtn[1]);
 			exitBtn.setIcon(new ImageIcon(getClass().getResource("/icons/error16.png")));
 			exitBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 			exitBtn.setBounds(20, 198, 90, 30);
@@ -250,12 +250,12 @@ public class InsertAccount extends BaseBoundary {
 				}
 			});
 			if (this.account == null) {
-				saveBtn.setToolTipText(lang.account_saveBtn[1]);
-				saveBtn.setText(lang.account_saveBtn[0]);
+				saveBtn.setToolTipText(lang.saveBtn[1]);
+				saveBtn.setText(lang.saveBtn[0]);
 			}
 			else {
-				saveBtn.setToolTipText(lang.account_saveBtn[3]);
-				saveBtn.setText(lang.account_saveBtn[2]);
+				saveBtn.setToolTipText(lang.saveBtn[3]);
+				saveBtn.setText(lang.saveBtn[2]);
 			}
 			saveBtn.setIcon(new ImageIcon(getClass().getResource("/icons/ok16.png")));
 			saveBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));

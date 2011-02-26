@@ -135,7 +135,7 @@ public class InsertEntry extends BaseBoundary {
 						if (Entry.checkFreeEntry(Login.getUser().getUser(), categoryText.getText())) {
 							entry = new Entry(categoryText.getText(), Login.getUser().getUser(), descrText.getText());
 							entry.saveEntry();
-							ok("Category added<br/>with success.");
+							//ok("Category added<br/>with success.");
 							mainDialog.dispose();						
 						}
 						else

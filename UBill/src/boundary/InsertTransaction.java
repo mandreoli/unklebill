@@ -185,7 +185,7 @@ public class InsertTransaction extends BaseBoundary {
 						Transaction trans = new Transaction(Login.getUser().getUser(), Login.getAccount().getAccount(), categoryBox.getSelectedItem().toString(), type, pay, year, month, Integer.valueOf(dateText.getText()), 0, null);
 						transaction = trans;
 						trans.saveTransaction();
-						ok("Transaction added<br/>with success.");
+						//ok("Transaction added<br/>with success.");
 						mainDialog.dispose();
 					}
 					else {											

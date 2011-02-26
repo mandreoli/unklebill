@@ -175,7 +175,7 @@ public class InsertMovement extends BaseBoundary {
 						ft.setReference(toBox.getSelectedItem().toString());
 						ft.updateTransaction();
 						
-						ok("<html>Transfer from <b>"+ft.getAccount()+"</b> to <b>"+tt.getAccount()+"</b><br/>executed with success!</html>");
+						//ok("<html>Transfer from <b>"+ft.getAccount()+"</b> to <b>"+tt.getAccount()+"</b><br/>executed with success!</html>");
 						mainDialog.dispose();
 					}
 					else {
