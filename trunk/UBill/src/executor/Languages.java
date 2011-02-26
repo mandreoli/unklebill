@@ -25,10 +25,14 @@ import datatype.Language;
 public class Languages {
 	
 	private String lang = null;
-		
+	
+	/* COMMON */
 	public String yes = null;
 	public String no = null;
+	public String[] cancelBtn = new String[2];
+	public String[] saveBtn = new String[4];
 	
+	/* BASE BOUNDARY */
 	public String base_phrase = null;
 	public String base_abort = null;
 	public String base_ok = null;
@@ -36,6 +40,7 @@ public class Languages {
 	public String base_warning = null;
 	public String base_confirm = null;
 	
+	/* HOME TAB */
 	public String home_modBtnTip = null;
 	public String home_showBtnTip = null;
 	public String[] home_addBtn = new String[2];
@@ -58,14 +63,29 @@ public class Languages {
 	public String[] home_accountMsg = new String[5];
 	public String[] home_balanceMsg = new String[8];
 	
+	/* INSERT ACCOUNT */
 	public String[] account_title = new String[2];
 	public String[] account_name = new String[2];
 	public String[] account_descr = new String[2];
 	public String[] account_balance = new String[2];
-	public String[] account_primary = new String[2];
-	public String[] account_cancelBtn = new String[2];
-	public String[] account_saveBtn = new String[4];
+	public String[] account_primary = new String[2];	
 	public String[] account_msg = new String[3];
+	
+	/* MODIFY PROFILE */
+	
+	/* MODIFY LABELS */
+	
+	/* INSERT ENTRY */
+	
+	/* PAYMENTS TAB */
+	
+	/* INSERT TRANSACTION */
+	
+	/* INSERT MOVEMENTS */
+	
+	/* SUMMARY TAB */
+	
+	/* ERROR LOG */
 	
 	public Languages(String lang) {
 		this.lang = lang;
@@ -89,16 +109,23 @@ public class Languages {
 	
 
 	private void setEnglishLang() {
+		/* COMMON */
 		yes = "Yes";
 		no = "No";
-		
+		cancelBtn[0] = "Cancel";
+		cancelBtn[1] = "Close without save";
+		saveBtn[0] = "Add";
+		saveBtn[1] = "Save and close";
+		saveBtn[2] = "Modify";
+		saveBtn[3] = "Modify and close";
+		/* BASE BOUNDARY */
 		base_phrase = "UnkleBill says";
 		base_abort = "Abort";
 		base_ok = "Success";
 		base_warning = "Warning";
 		base_fail = "Error";
 		base_confirm = "Confirm";
-		
+		/* HOME TAB */
 		home_modBtnTip = "Edit account";
 		home_showBtnTip = "Show account details";
 		home_addBtn[0] = "Add";
@@ -142,7 +169,7 @@ public class Languages {
 		home_balanceMsg[5] = "Attention, the balance of";
 		home_balanceMsg[6] = "account, is terrible!";
 		home_balanceMsg[7] = "account is not good.";
-		
+		/* INSERT ACCOUNT */
 		account_title[0] = "Add new account";
 		account_title[1] = "Modify this account";
 		account_name[0] = "Account name";
@@ -152,29 +179,30 @@ public class Languages {
 		account_balance[0] = "Balance";
 		account_balance[1] = "Current balance";
 		account_primary[0] = "Primary  ";
-		account_primary[1] = "Set default account";
-		account_cancelBtn[0] = "Cancel";
-		account_cancelBtn[1] = "Back to home";
-		account_saveBtn[0] = "Add";
-		account_saveBtn[1] = "Add this account";
-		account_saveBtn[2] = "Modify";
-		account_saveBtn[3] = "Modify this account";
+		account_primary[1] = "Set default account";		
 		account_msg[0] = "Account added<br/>with success.";
 		account_msg[1] = "Account modified<br/>with success.";
 		account_msg[2] = "The account name<br/>is already in use!";
 	}
 	
 	private void setItalianLang() {
+		/* COMMON */
 		yes = "Sì";
 		no = "No";
-		
+		cancelBtn[0] = "Chiudi";
+		cancelBtn[1] = "Chiudi senza salvare";
+		saveBtn[0] = "Salva";
+		saveBtn[1] = "Salva e chiudi";
+		saveBtn[2] = "Modifica";
+		saveBtn[3] = "Modifica e chiudi";
+		/* BASE BOUNDARY */
 		base_phrase = "UnkleBill dice";
 		base_abort = "Annulla";
 		base_ok = "Successo";
 		base_warning = "Attenzione";
 		base_fail = "Errore";
 		base_confirm = "Conferma";
-		
+		/* HOME TAB */
 		home_modBtnTip = "Modifica conto";
 		home_showBtnTip = "Mostra dettagli conto";
 		home_addBtn[0] = "Agg";
@@ -218,7 +246,7 @@ public class Languages {
 		home_balanceMsg[5] = "Attenzione, il bilancio di";
 		home_balanceMsg[6] = "è terribile!";
 		home_balanceMsg[7] = "non è buono.";
-		
+		/* INSERT ACCOUNT */
 		account_title[0] = "Aggiungi nuovo conto";
 		account_title[1] = "Modifica questo conto";
 		account_name[0] = "Nome conto";
@@ -229,12 +257,6 @@ public class Languages {
 		account_balance[1] = "Bilancio corrente";
 		account_primary[0] = "Primario  ";
 		account_primary[1] = "Imposta come conto primario";
-		account_cancelBtn[0] = "Chiudi";
-		account_cancelBtn[1] = "Ritorna alla home";
-		account_saveBtn[0] = "Salva";
-		account_saveBtn[1] = "Aggiungi questo conto";
-		account_saveBtn[2] = "Modifica";
-		account_saveBtn[3] = "Modifica questo conto";
 		account_msg[0] = "Conto aggiunto<br/>con successo.";
 		account_msg[1] = "Conto modificato<br/>con successo.";
 		account_msg[2] = "Il nome di questo conto<br/>è già in uso!";

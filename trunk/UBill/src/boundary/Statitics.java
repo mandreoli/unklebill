@@ -228,7 +228,8 @@ public class Statitics {
 			yearBox1.setSelectedItem(date.getYear());
 			yearBox1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					checkPrevNextMonthBtn(yearBox1, 1);			
+					checkPrevNextMonthBtn(yearBox1, 1);
+					populateYearTable();
 				}
 			});			
 		}
@@ -243,7 +244,8 @@ public class Statitics {
 			yearBox2.setSelectedItem(date.getYear());
 			yearBox2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					checkPrevNextMonthBtn(yearBox2, 2);					
+					checkPrevNextMonthBtn(yearBox2, 2);	
+					populateMonthTable();
 				}
 			});			
 		}
@@ -267,6 +269,7 @@ public class Statitics {
 			monthBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					checkPrevNextMonthBtn(yearBox2, 2);
+					populateMonthTable();
 				}
 			});			
 		}
